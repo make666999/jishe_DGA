@@ -1,5 +1,5 @@
 import psutil
-import socket
+
 
 # 获取系统的网络连接信息，筛选IPv4地址的列表
 

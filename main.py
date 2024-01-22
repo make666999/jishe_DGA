@@ -1,15 +1,8 @@
-from Tools.mongo_tools import mongo_link
+from Tools.client_tools import keep_client_savedata
 
 if __name__ == '__main__':
-    ##获取主机网络连接
 
-    ##存入数据库
 
-    db = mongo_link.mongo_link_database("DGA")
-    res = db.insert_one({"URL": "www,baidu.com", "type": "True"})
-    print("插入成功，文档ID：", res.inserted_id)
+    #获得当前主机建立的连接、IP访问日志（log）、维持实时会话表（now）
+    keep_client_savedata.keep_client_save_ip_now_log()
 
-    documents = db.find()
-    # 打印每个文档
-    for doc in documents:
-        print(doc)
