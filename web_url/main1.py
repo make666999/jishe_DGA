@@ -6,7 +6,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.websockets import WebSocket
 from typing import List
-from motor.motor_asyncio import AsyncIOMotorClient
+
 
 app = FastAPI()
 
