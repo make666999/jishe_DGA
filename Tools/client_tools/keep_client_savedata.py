@@ -64,15 +64,15 @@ def keep_client_save_ip_now_log():
 
         # 处理关闭的连接
         if closed_connections:
-            delete_data = []
+            delete_data = {"$or": []}
 
             for conn in closed_connections:
 
                 remote_addr = f'{conn.raddr.ip}'
-                delete_data.append({ "remote_address": remote_addr})
-            print("连接已关闭：", delete_data)
-            db_now.delete_many({"$or": delete_data})
-
+                delete_data["$or"].append({"Remote_Address": remote_addr})
+            print("连接已关闭：", delete_data["$or"])
+            result = db_now.delete_many(delete_data)
+            print(f'{result.deleted_count} 条文档已删除')
         # 更新上一次的连接信息
         last_connections = connections
 
