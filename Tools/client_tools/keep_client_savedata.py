@@ -77,4 +77,4 @@ def keep_client_save_ip_now_log():
         last_connections = connections
 
         # 等待一段时间后再次检查连接信息
-
+        time.sleep(1)
