@@ -3,12 +3,13 @@ from queue import Queue
 import time
 from Tools.client_tools import get_loc_ip
 from Tools.mongo_tools import mongo_link
-import threading
 from concurrent.futures import ThreadPoolExecutor
+
+from Tools.model_use_tools import predict_domain
 # 记录上一次的连接信息
 content_queue = Queue()
-db_now = mongo_link.mongo_link_database("DGA_IP_now")
-db_log = mongo_link.mongo_link_database("DGA_IP_log")
+db_now = mongo_link.mongo_link_database("DGA_Domain_Now")
+db_log = mongo_link.mongo_link_database("DGA_Domain_Log")
 def get_domain(ip):
     try:
         # Get the hostname from the IP address
@@ -18,22 +19,25 @@ def get_domain(ip):
         # Return the original IP address if no hostname is found
         return ip
 def process_connection(conn):
-    remote_addr = f'{conn.raddr.ip}:{conn.raddr.port}'
+    remote_addr = f'{conn.raddr.ip}'
     status = conn.status
     domain = get_domain(conn.raddr.ip)
+
     if domain != conn.raddr.ip:
+
+        converted_domain = predict_domain.Predict_Domain(domain)
+
         data = {
-            "remote_address": remote_addr,
-            "remote_domain": domain,
-            "status": status,
-            "timestamp": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+            "Remote_Address": remote_addr,
+            "Remote_Domain": domain,
+            "Domain_Type": converted_domain,  # 添加转换后的域名
+            "Status": status,
+            "Timestamp": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         }
         content_queue.put(data)
 
 def keep_client_save_ip_now_log():
 
-    db_now = mongo_link.mongo_link_database("DGA_IP_now")
-    db_log = mongo_link.mongo_link_database("DGA_IP_log")
     db_now.delete_many({})
     db_log.delete_many({})
     last_connections = set()
@@ -49,23 +53,24 @@ def keep_client_save_ip_now_log():
 
         # 处理新建立的连接
         if new_connections:
-            new_data = []
-            print("发现新连接：", len(new_connections))
             for conn in new_connections:
                 executor.submit(process_connection, conn)
             while not content_queue.empty():
+
                 item = content_queue.get()
+                print("发现新连接：" + str(item))
                 db_now.insert_one(item)
                 db_log.insert_one(item)
 
         # 处理关闭的连接
         if closed_connections:
             delete_data = []
-            print("连接已关闭：", len(closed_connections))
+
             for conn in closed_connections:
 
-                remote_addr = f'{conn.raddr.ip}:{conn.raddr.port}'
+                remote_addr = f'{conn.raddr.ip}'
                 delete_data.append({ "remote_address": remote_addr})
+            print("连接已关闭：", delete_data)
             db_now.delete_many({"$or": delete_data})
 
         # 更新上一次的连接信息
