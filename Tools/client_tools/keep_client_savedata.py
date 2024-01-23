@@ -1,6 +1,5 @@
 import socket
 from queue import Queue
-import psutil
 import time
 from Tools.client_tools import get_loc_ip
 from Tools.mongo_tools import mongo_link
