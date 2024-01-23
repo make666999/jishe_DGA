@@ -7,8 +7,6 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 # 记录上一次的连接信息
 content_queue = Queue()
-db_now = mongo_link.mongo_link_database("DGA_IP_now")
-db_log = mongo_link.mongo_link_database("DGA_IP_log")
 def get_domain(ip):
     try:
         # Get the hostname from the IP address
