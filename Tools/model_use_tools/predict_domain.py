@@ -10,7 +10,7 @@ import math
 from Model.Train_Model.Train_Transformer_R_SKNET import Transformer
 name = "Transformer+R_SKNET"  ###准确率最高
 current_directory = os.getcwd()
-model_path = f"./Model/Model_File/{name}.pth"
+model_path = os.path.abspath(os.path.join(os.getcwd(), "Model", "Model_File", f"{name}.pth"))
 png_path = f"./png/{name}.png"
 logpath = f"./log/{name}.csv"
 embedding_dim = 64  # 嵌入词向量的纬度
