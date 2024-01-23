@@ -854,6 +854,7 @@ def test(model):
         }).to(device)
 
         for i, (inputs, labels) in enumerate(test_loader):
+            print(inputs)
             y_label = labels.to(device).view(-1)
 
             X = inputs.to(device)
