@@ -67,7 +67,7 @@ def Predict_Domain():
 
     if os.path.exists(model_path):
         model.eval()
-        model.load_state_dict(torch.load(model_path))
+        model.load_state_dict(torch.load(model_path,device))
         return model
 
     else:

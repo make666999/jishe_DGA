@@ -3,7 +3,8 @@ from pymongo import MongoClient
 import geoip2.database
 # 创建 MongoClient 对象，指定 MongoDB 的数据库、集合
 
-reader_path = os.path.abspath(os.path.join("Model", "Data","city_db", "GeoLite2-City.mmdb"))
+# reader_path = os.path.abspath(os.path.join(".","Model", "Data","city_db", "GeoLite2-City.mmdb"))
+reader_path="./Model/Data/city_db/GeoLite2-City.mmdb"
 reader=geoip2.database.Reader(reader_path)
 def mongo_link_database(database_name):
     client = MongoClient("mongodb://8c630x9121.goho.co:23593")
