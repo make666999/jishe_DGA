@@ -9,8 +9,8 @@ import torch.nn.functional as F
 import math
 from Model.Train_Model.Train_Transformer_R_SKNET import Transformer
 name = "Transformer+R_SKNET"  ###准确率最高
-current_directory = os.getcwd()
-model_path = os.path.abspath(os.path.join(os.getcwd(), "Model", "Model_File", f"{name}.pth"))
+
+model_path = os.path.abspath(os.path.join("Model", "Model_File","Transformer+R_SKNET.pth"))
 png_path = f"./png/{name}.png"
 logpath = f"./log/{name}.csv"
 embedding_dim = 64  # 嵌入词向量的纬度
@@ -62,13 +62,14 @@ def encoder(domain,L):
     domain=torch.from_numpy(domain).to(torch.int32)
 
     return domain
-def Predict_Domain(domain):
+def Predict_Domain():
     # 模型构建
 
     if os.path.exists(model_path):
         model.eval()
         model.load_state_dict(torch.load(model_path))
-        return predict_domain(model,domain)
+        return model
+
     else:
         return "REEOR"
 # url=input()
