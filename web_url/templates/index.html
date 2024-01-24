@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rolling Screen</title>
+    <style>
+        /* Add your CSS styles for the rolling screen here */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #2d2d2d;
+            text-align: left;
+            padding: 8px;
+            transition: background-color 0.5s, opacity 0.5s;
+        }
+        th {
+            background-color: #4d4d4d;
+            color: #ffffff;
+        }
+        tbody tr.fade-out {
+            background-color: #ffcccb;
+            opacity: 0.5;
+        }
+        tbody tr.fade-in {
+            background-color: #cbffcb;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <table id="rolling-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Remote Address</th>
+                <th>Remote Domain</th>
+                <th>Domain Type</th>
+                <th>Status</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        const socket = new WebSocket('ws://192.168.78.71:8000/ws');
+        let currentData = null;
+
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            const rollingTableBody = document.querySelector('#rolling-table tbody');
+
+            if (JSON.stringify(data) === JSON.stringify(currentData)) {
+                return;
+            }
+
+            currentData = data;
+
+            rollingTableBody.innerHTML = '';
+
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                row.className = 'fade-in';
+
+                for (const key in item) {
+                    if (item.hasOwnProperty(key)) {
+                        const cell = document.createElement('td');
+                        cell.textContent = item[key];
+                        row.appendChild(cell);
+                    }
+                }
+
+                rollingTableBody.appendChild(row);
+
+                requestAnimationFrame(() => {
+                    row.classList.remove('fade-in');
+                });
+            });
+
+            const existingRowCount = rollingTableBody.childElementCount;
+
+            if (existingRowCount > data.length) {
+                const disappearingRowCount = existingRowCount - data.length;
+                const lastRows = rollingTableBody.querySelectorAll('tr:nth-last-child(-n+' + disappearingRowCount + ')');
+
+                lastRows.forEach(row => {
+                    row.classList.add('fade-out');
+                });
+
+                requestAnimationFrame(() => {
+                    lastRows.forEach(row => {
+                        row.remove();
+                    });
+                });
+            }
+        };
+    </script>
+</body>
+</html>
