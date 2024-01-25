@@ -1,11 +1,14 @@
 import os
 from pymongo import MongoClient
 import geoip2.database
+import socket
 # 创建 MongoClient 对象，指定 MongoDB 的数据库、集合
 
-reader_path = os.path.abspath(os.path.join("Model", "Data","city_db", "GeoLite2-City.mmdb"))
+# reader_path = os.path.abspath(os.path.join("Model", "Data","city_db", "GeoLite2-City.mmdb"))
+reader_path="./Model/Data/city_db/GeoLite2-City.mmdb"
 reader=geoip2.database.Reader(reader_path)
 def mongo_link_database(database_name):
+
     client = MongoClient("mongodb://8c630x9121.goho.co:23593")
     # 选择数据库
     db = client["DGA"]
@@ -13,7 +16,8 @@ def mongo_link_database(database_name):
     collection = db[database_name]
     return collection
 def mongo_link_log():
-    return mongo_link_database("DGA_Domain_Log")
+    hostname = socket.gethostname()
+    return mongo_link_database(hostname)
 
 def get_ip_loc(ip):
     try:
