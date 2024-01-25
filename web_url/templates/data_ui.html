@@ -3,11 +3,9 @@
 <head>
 <meta charset="utf-8">
 <title>交通大数据分析平台</title>
-
-<script src="./static/ditu/js/echarts.min.js"></script>
-<script src="./static/ditu/js/visual.js"></script>
 <link rel="stylesheet" type="text/css" href="./static/ditu/css/visual.css">
 <script src="./static/ditu/js/echarts.min.js"></script>
+<script src="./static/ditu/js/visual.js"></script>
 <script src="./static/ditu/js/china.js"></script>
 <script src="./static/ditu/js/chartMap.js"></script>
 </head>
@@ -41,8 +39,21 @@
 	<script type="text/javascript">
 	var myChart2 = echarts.init(document.getElementById('main2'));
     myChart2.setOption(option2);
+	 const socket = new WebSocket('ws://192.168.78.71:8000/city_map');
+        let currentData = null;
+
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            const rollingTableBody = document.querySelector('#rolling-table tbody');
+
+            if (JSON.stringify(data) === JSON.stringify(currentData)) {
+                return;
+            }
+
+            currentData = data;
+			allDataParam=data
 	var myChart8 = echarts.init(document.getElementById('main8'));
-    myChart8.setOption(option8);
+    myChart8.setOption(option8.processData(allDataParam));}
 	</script>
 </body>
 </html>
