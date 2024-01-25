@@ -1,0 +1,325 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>交通大数据分析平台</title>
+<!--设置是否为缩放模式 -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 新 Bootstrap 核心 CSS 文件 -->
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<meta name="description" content="NFTLeo">
+<meta name="author" content="creatives">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<!-- Google Fonts -->
+<link href="./static/css/css2.css" rel="stylesheet">
+<!-- !Google Fonts -->
+
+<!-- Styles -->
+<link type="text/css" rel="stylesheet" href="./static/css/plugins.css">
+<link type="text/css" rel="stylesheet" href="./static/css/style1.css">
+<!-- !Styles -->
+
+
+<!--echarts JS-->
+<script src="./static/ditu/js/echarts.min.js"></script>
+<!-- 轮播swiper文件 -->
+<link rel="stylesheet" type="text/css" href="./static/ditu/css/swiper.min.css">
+<script src="./static/ditu/js/swiper.min.js"></script>
+<!--界面样式-->
+<script src="./static/ditu/js/visual.js"></script>
+
+<link rel="stylesheet" type="text/css" href="./static/ditu/css/visual.css">
+
+
+
+
+
+<script src="./static/ditu/js/echarts.min.js"></script>
+
+
+<script src="./static/ditu/js/china.js"></script>
+<script src="./static/ditu/js/chartMap.js"></script>
+<link rel="stylesheet" type="text/css" href="./static/ditu/css/visual.css">
+
+
+    <!-- Google Fonts -->
+<link href="./static/css/css2.css" rel="stylesheet">
+<!-- !Google Fonts -->
+
+<!-- css files -->
+<link rel="stylesheet" href="./static/css/style.css" type="text/css" media="all" />
+<!-- //css files -->
+<link rel="stylesheet" href="./static/css/fontawesome-all.css">
+<!-- Font-Awesome-Icons-CSS -->
+
+<!-- Styles -->
+<link type="text/css" rel="stylesheet" href="./static/css/plugins.css">
+<link type="text/css" rel="stylesheet" href="./static/css/style1.css">
+
+
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <style type="text/css">
+        .content {
+            width: 300px;
+            margin: 50px 50px;
+
+        }
+
+        .header {
+            line-height: 20px;
+            width: 680px;
+        }
+
+        .data {
+            height: 250px;
+            width: 680px;
+        }
+        .table{
+            width:1000px;
+            margin-bottom:1rem;
+            color:#212529;
+            overflow-y: scroll;
+        }
+
+    </style>
+
+
+</head>
+<body class="ksh">
+
+
+
+
+<div class="nav_overlay"></div>
+	<div class="NFTLeo_fn_nav">
+		<div class="trigger is-active">
+			<div class="trigger_in">
+				<span class="text">关闭</span>
+				<span class="hamb">
+					<span class="hamb_a"></span>
+					<span class="hamb_b"></span>
+					<span class="hamb_c"></span>
+				</span>
+			</div>
+		</div>
+		<div class="nav_content">
+			<div class="nav_menu">
+				<ul>
+					<li class="menu-item menu-item-has-children">
+						<a href="/">主页</a>
+
+					</li>
+					<li class="menu-item"><a href="{{ url_for('qa.updata') }}">展示</a></li>
+					<li class="menu-item"><a href="#">查询</a></li>
+
+                    {% if user %}
+                        <li class="menu-item"><a>{{ user.username }}</a></li>
+                        <li class="menu-item"><a href="{{ url_for('userdata.logout') }}">退出登录</a></li>
+                    {% else %}
+                        <li class="menu-item"><a href="{{ url_for('userdata.login') }}">登录</a></li>
+                        <li class="menu-item"><a href="{{ url_for('userdata.register') }}">注册</a></li>
+                    {% endif %}
+				</ul>
+			</div>
+		</div>
+
+		<!-- Nav Footer -->
+		<div class="nav_footer">
+			<div class="nf_left">
+				<p>&copy; 2023.CHZU<a target="_blank"></a></p>
+			</div>
+
+		</div>
+		<!-- !Nav Footer -->
+
+	</div>
+	<!-- !Right Navigation -->
+
+	<!-- Header -->
+	<header class="NFTLeo_fn_header">
+		<div class="container">
+			<div class="header_in">
+
+				<div class="logo">
+					<a href="/"><img src="./static/picture/logo.png" alt=""></a>
+				</div>
+
+
+                <h4 class="fn_title"><a href="#about">关于产品</a></h4>
+                <h4 class="fn_title"><a href="#services">优势展示</a></h4>
+                <h4 class="fn_title"><a href="#drop">功能介绍</a></h4>
+				<div class="trigger">
+					<div class="trigger_in">
+
+						<span class="fn_title" style="font-size: 25px;">菜单</span>
+                        <span class="hamb">
+							<span class="hamb_a"></span>
+							<span class="hamb_b"></span>
+							<span class="hamb_c"></span>
+						</span>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</header>
+	<!-- !Header -->
+
+
+
+
+
+	<div class="visual" style="margin-top: 100px">
+		<div class="visual_con">
+			<div class="visual_conBot">
+				<img class="visual_conBot_l" src="./static/ditu/images/ksh42.png">
+				<img class="visual_conBot_2" src="./static/ditu/images/ksh43.png">
+				<img class="visual_conBot_3" src="./static/ditu/images/ksh44.png">
+				<img class="visual_conBot_4" src="./static/ditu/images/ksh45.png">
+				<div class="visual_chart_text">
+					<h1>流量数据攻击路径映射</h1>
+				</div>
+				<div class="visual_chart" id="main8"></div>
+			</div>
+		</div>
+
+        		<div class="visual_left" style="margin-left: 100px">
+
+			<div class="visual_box">
+				<div class="visual_title">
+					<span>网络攻击分析趋势图</span>
+				</div>
+				<div class="visual_chart" id="main2">
+				</div>
+			</div>
+
+		</div>
+
+
+	<!-- content -->
+    <section class="counts section-bg">
+      <div class="container" style="width: 30%;height: 30%;">
+
+	<div class="visual_left1" style="margin-top: -380px;margin-left: 50px">
+            <span style="color: #fbfcfc">实时流量监控</span>
+
+        <div class="header row">
+            <div class="col-md-2" style="color: #fbfcfc">IP</div>
+            <div class="col-md-2" style="color: #fbfcfc">源端口</div>
+            <div class="col-md-2" style="color: #fbfcfc">目标IP</div>
+            <div class="col-md-2" style="color: #fbfcfc">目标端口</div>
+            <div class="col-md-2" style="color: #fbfcfc">协议号</div>
+            <div class="col-md-2" style="color: #fbfcfc">标签</div>
+
+        </div>
+    <div class="data">
+            <div class="data-content" style="rgba(0,0,0,0.5)">
+                <table class="table table-hover" style="color: #fbfcfc">
+
+                </table>
+            </div>
+            <div class="data-footer"></div>
+        </div>
+	<!-- //content -->
+
+	<!-- Jquery -->
+	<script src="./static/js/jquery-3.3.1.min.js"></script>
+	<!-- //Jquery -->
+
+	<!-- effect js -->
+	<script src="./static/js/canva_moving_effect.js"></script>
+	<!-- //effect js -->
+
+
+</div>
+<!-- !Main -->
+    </div>
+
+
+</section>
+</div>
+<!-- Scripts -->
+<script type="text/javascript">
+
+        var a = JSON.parse('{{ a | tojson | safe }}');
+        var b = JSON.parse('{{ b | tojson | safe }}');
+        var e = JSON.parse('{{ e | tojson | safe }}');
+        var d = JSON.parse('{{ d | tojson | safe }}');
+        var c = JSON.parse('{{ c | tojson | safe }}');
+        var f = JSON.parse('{{ f | tojson | safe }}');
+        var html = '';
+
+        for(var i = 0; i < d.length; i++) {
+            html += '<tr>';
+            html += '<td>' + a[i] + '</td>';
+            html += '<td>' + b[i] + '</td>';
+            html += '<td>' + c[i] + '</td>';
+            html += '<td>' + d[i] + '</td>';
+            html += '<td>' + e[i] + '</td>';
+            html += '<td>' + f[i] + '</td>';
+            html += '</tr>';
+    }
+
+
+
+        $('.table').html(html);
+$('td').addClass('col-md-2');
+$('.data').css('overflow', 'auto');
+
+var dataDOM = $('.data')[0];
+var dataContentDOM = $('.data-content')[0];
+var dataFooterDOM = $('.data-footer')[0];
+var height = dataDOM.offsetTop + dataDOM.offsetHeight;
+var isScrollingToEnd = false; // Add a variable to track scrolling to the end
+
+setInterval(function() {
+    if (dataFooterDOM.offsetTop - dataDOM.scrollTop - height <= 0) {
+        if (!isScrollingToEnd) {
+            isScrollingToEnd = true; // Set flag to true when scrolling to the end
+            // You can add any additional logic here when scrolling reaches the end
+        }
+    } else {
+        dataDOM.scrollTop++;
+        isScrollingToEnd = false; // Reset the flag when scrolling away from the end
+    }
+}, 20);
+
+
+    </script>
+<script type="text/javascript" src="./static/js/jquery.js"></script>
+<script type="text/javascript" src="./static/js/plugins.js"></script>
+<script type="text/javascript" src="./static/js/init.js"></script>
+   <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<!-- !Scripts -->
+
+
+
+
+
+
+	<script type="text/javascript">
+
+	var myChart2 = echarts.init(document.getElementById('main2'));
+    myChart2.setOption(option2);
+
+	var myChart8 = echarts.init(document.getElementById('main8'));
+    myChart8.setOption(option8);
+	</script>
+
+
+
+<!-- Scripts -->
+<script type="text/javascript" src="./static/js/jquery.js"></script>
+<script type="text/javascript" src="./static/js/plugins.js"></script>
+<script type="text/javascript" src="./static/js/init.js"></script>
+<!-- !Scripts -->
+
+</body>
+</html>
