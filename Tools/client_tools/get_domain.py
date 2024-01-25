@@ -5,6 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from scapy.all import sniff
 from scapy.layers.dns import DNS
+from scapy.layers.inet import IP
 
 from Tools.database_tools import dababase_use
 from Tools.model_use_tools import predict_domain
@@ -13,20 +14,24 @@ db_log = dababase_use.mongo_link_log()
 
 model=predict_domain.Predict_Domain()
 
-def process_connection(domain, type, ip=None):
+def process_connection(domain,dst_ip,loc_ip, type, domain_ip=None):
     domain = domain.decode("utf-8").strip(".")
-    converted_domain = predict_domain.predict_domain(model,domain)
-    loc=dababase_use.get_ip_loc(ip)
+    domain_type = predict_domain.predict_domain(model,domain)
+    loc=dababase_use.get_ip_loc(domain_ip)
+
     data = {
         "DNS_Type": type,
-        "Remote_Address": ip,
+        "Loc_Address": loc_ip,
+        "DNS_Address": dst_ip,
+        "Domain_Address": domain_ip,
         "Remote_Domain": domain,
-        "Domain_Type": converted_domain,
+        "Domain_Type": domain_type,
         "Loc_Data": loc,
         "Timestamp": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     }
     db_log.insert_one(data)
-    print("新增数据：", data)
+    print("\n[*] 新增连接: %s <- %s - 解析域名: %s : %s - 域名检查结果: %s - 时间: %s" % (
+        dst_ip, loc_ip, domain, domain_ip,domain_type,time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 
 
 def dns_callback(packet):
@@ -38,7 +43,7 @@ def dns_callback(packet):
             src_domain = dnsrr.rrname
             if dnsrr.type == 1 or dnsrr.type == 28:
 
-                process_connection(src_domain, "response", dnsrr.rdata)
+                process_connection(src_domain,packet[IP].dst,packet[IP].src, "response", dnsrr.rdata)
             else:
                 continue
         else:
