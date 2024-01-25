@@ -1,59 +1,63 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>交通大数据分析平台</title>
-<link rel="stylesheet" type="text/css" href="./static/ditu/css/visual.css">
-<script src="./static/ditu/js/echarts.min.js"></script>
-<script src="./static/ditu/js/visual.js"></script>
-<script src="./static/ditu/js/china.js"></script>
-<script src="./static/ditu/js/chartMap.js"></script>
+
+    <meta charset="utf-8">
+    <title>交通大数据分析平台</title>
+    <link rel="stylesheet" type="text/css" href="./static/ditu/css/visual.css">
+    <script src="./static/global.js"></script>
+    <script src="./static/ditu/js/echarts.min.js"></script>
+    <script src="./static/ditu/js/visual.js"></script>
+    <script src="./static/ditu/js/china.js"></script>
+    <script src="./static/ditu/js/chartMap.js"></script>
+
 </head>
 <body class="ksh">
-	<div class="visual" style="margin-top: 100px">
-<!--		路径映射-->
-		<div class="visual_con">
-			<div class="visual_conBot">
-				<img class="visual_conBot_l" src="./static/ditu/images/ksh42.png">
-				<img class="visual_conBot_2" src="./static/ditu/images/ksh43.png">
-				<img class="visual_conBot_3" src="./static/ditu/images/ksh44.png">
-				<img class="visual_conBot_4" src="./static/ditu/images/ksh45.png">
-				<div class="visual_chart_text">
-					<h1>流量数据攻击路径映射</h1>
-				</div>
-				<div class="visual_chart" id="main8"></div>
-			</div>
-		</div>
-<!--		趋势图-->
-		<div class="visual_left" style="margin-left: 100px">
-			<div class="visual_box">
-				<div class="visual_title">
-					<span>网络攻击分析趋势图</span>
-				</div>
-				<div class="visual_chart" id="main2">
-				</div>
-			</div>
-		</div>
+<div class="visual" style="margin-top: 100px">
+    <!--		路径映射-->
+    <div class="visual_con">
+        <div class="visual_conBot">
+            <img class="visual_conBot_l" src="./static/ditu/images/ksh42.png">
+            <img class="visual_conBot_2" src="./static/ditu/images/ksh43.png">
+            <img class="visual_conBot_3" src="./static/ditu/images/ksh44.png">
+            <img class="visual_conBot_4" src="./static/ditu/images/ksh45.png">
+            <div class="visual_chart_text">
+                <h1>流量数据攻击路径映射</h1>
+            </div>
+            <div class="visual_chart" id="main8"></div>
+        </div>
+    </div>
+    <!--		趋势图-->
+    <div class="visual_left" style="margin-left: 100px">
+        <div class="visual_box">
+            <div class="visual_title">
+                <span>网络攻击分析趋势图</span>
+            </div>
+            <div class="visual_chart" id="main2">
+            </div>
+        </div>
+    </div>
 </div>
 <!-- Scripts -->
-	<script type="text/javascript">
-	var myChart2 = echarts.init(document.getElementById('main2'));
+<script type="text/javascript">
+    var myChart2 = echarts.init(document.getElementById('main2'));
     myChart2.setOption(option2);
-	 const socket = new WebSocket('ws://192.168.78.71:8000/city_map');
-        let currentData = null;
 
-        socket.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            const rollingTableBody = document.querySelector('#rolling-table tbody');
+    let currentData = null;
 
-            if (JSON.stringify(data) === JSON.stringify(currentData)) {
-                return;
-            }
+    socket_city_map.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        const rollingTableBody = document.querySelector('#rolling-table tbody');
 
-            currentData = data;
-			allDataParam=data
-	var myChart8 = echarts.init(document.getElementById('main8'));
-    myChart8.setOption(option8.processData(allDataParam));}
-	</script>
+        if (JSON.stringify(data) === JSON.stringify(currentData)) {
+            return;
+        }
+
+        currentData = data;
+        allDataParam = data
+        var myChart8 = echarts.init(document.getElementById('main8'));
+        myChart8.setOption(option8.processData(allDataParam));
+    }
+</script>
 </body>
 </html>
