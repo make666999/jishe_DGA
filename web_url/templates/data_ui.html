@@ -9,6 +9,8 @@
     <script src="./static/ditu/js/echarts.min.js"></script>
     <script src="./static/ditu/js/visual.js"></script>
     <script src="./static/ditu/js/china.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/map/js/world.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/echarts/map/js/china.js"></script>
 
 
 </head>
@@ -40,8 +42,122 @@
 </div>
 <!-- Scripts -->
 <script type="text/javascript">
-    var myChart2 = echarts.init(document.getElementById('main2'));
-    myChart2.setOption(option2);
+    let currentTime = null;
+    const socket_Time = new WebSocket(`ws://${ipAddress}/count_per_six_seconds`);
+    socket_Time.onmessage = (event) => {
+        try {
+        const time_data = JSON.parse(event.data);
+
+
+        console.log(time_data);
+        var myChart2 = echarts.init(document.getElementById('main2'));
+         option2 = {
+    tooltip: {//鼠标指上时的标线
+        trigger: 'axis',
+        axisPointer: {
+            lineStyle: {
+                color: '#fff'
+            }
+        }
+    },
+    legend: {
+        icon: 'rect',
+        itemWidth: 14,
+        itemHeight: 5,
+        itemGap: 13,
+        data: ['ddos'],
+        right: '10px',
+        top: '0px',
+        textStyle: {
+            fontSize: 12,
+            color: '#fff'
+        }
+    },
+    grid: {
+        x: 35,
+        y: 25,
+        x2: 8,
+        y2: 25,
+    },
+    xAxis: [{
+        type: 'category',
+        boundaryGap: false,
+        axisLine: {
+            lineStyle: {
+                color: '#57617B'
+            }
+        },
+        axisLabel: {
+            textStyle: {
+                color:'#fff',
+            },
+        },
+        data :time_data.data
+
+    }],
+    yAxis: [{
+        type: 'value',
+        axisTick: {
+            show: false
+        },
+        axisLine: {
+            lineStyle: {
+                color: '#57617B'
+            }
+        },
+        axisLabel: {
+            margin: 10,
+            textStyle: {
+                fontSize: 14
+            },
+            textStyle: {
+                color:'#fff',
+            },
+        },
+        splitLine: {
+            lineStyle: {
+                color: '#57617B'
+            }
+        }
+    }],
+    series: [{
+        name: 'ddos',
+        type: 'line',
+        smooth: true,
+        lineStyle: {
+            normal: {
+                width: 2
+            }
+        },
+        areaStyle: {
+            normal: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                    offset: 0,
+                    color: 'rgba(137, 189, 27, 0.3)'
+                }, {
+                    offset: 0.8,
+                    color: 'rgba(137, 189, 27, 0)'
+                }], false),
+                shadowColor: 'rgba(0, 0, 0, 0.1)',
+                shadowBlur: 10
+            }
+        },
+        itemStyle: {
+            normal: {
+                color: 'rgb(137,189,27)'
+            }
+        },
+        data: time_data.count
+    }
+       ]
+};
+        myChart2.setOption(option2);
+    } catch (error) {
+        console.error("JSON 解析错误：", error);
+    }
+
+    }
+
 
     let currentData = null;
     const socket_city_map = new WebSocket(`ws://${ipAddress}/city_map`);
@@ -873,7 +989,8 @@ var i =0
 
 
 
-for ( i=0;i<3;i++){
+for ( i=0;i<3;i++)
+{
 var allData = allDataParam;
 var option8 = {
   title: {
@@ -894,7 +1011,7 @@ var option8 = {
     }
   },
   geo: {
-    map: 'china',
+    map: 'world',
     label: {
       emphasis: {
         show: false
