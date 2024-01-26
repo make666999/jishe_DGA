@@ -10,6 +10,34 @@
     <link rel="stylesheet" href="./static/css/style.css">
     <link rel="stylesheet" href="./static/css/id.css">
     <style>
+        body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif; /* 使用 Google Fonts 提供的 Poppins 字体 */
+}
+
+.layout {
+  display: flex;
+  height: 100vh; /* 使用视口高度作为布局的高度 */
+}
+
+#sidebar {
+  flex: 0 0 250px; /* 固定宽度的侧边栏 */
+  overflow-y: auto; /* 如果内容溢出，启用纵向滚动条 */
+}
+
+.wrapper {
+  flex: 1; /* 自适应宽度的主要内容区域 */
+  overflow-y: auto; /* 如果内容溢出，启用纵向滚动条 */
+  padding: 20px; /* 添加内边距，以与表格保持距离 */
+}
+
+#rolling-table {
+  width: 100%; /* 表格宽度占满父容器 */
+  margin-top: 20px; /* 顶部外边距 */
+}
+
+/* 其他样式不变 */
+
         /* Add your CSS styles for the rolling screen here */
         table {
             border-collapse: collapse;
@@ -33,17 +61,28 @@
             background-color: #cbffcb;
             opacity: 1;
         }
+        .first-frontend {
+  flex: 1; /* 占据剩余空间，自适应宽度 */
+  display: flex;
+  flex-direction: column;
+}
+
+#rolling-table {
+  flex: 1; /* 让表格占据.flex容器的所有可用空间 */
+  width: 100%;
+  margin-top: 20px;
+  overflow-y: auto; /* 如果表格内容过多，启用纵向滚动条 */
+}
     </style>
 </head>
 <body>
-    <!-- partial:index.partial.html -->
+    <!-- partial:index.partial -->
     <div class="layout has-sidebar fixed-sidebar fixed-header">
         <aside id="sidebar" class="sidebar break-point-sm has-bg-image">
-    <a id="btn-collapse" class="sidebar-collapser"><i class="ri-arrow-left-s-line"></i></a>
     <div class="sidebar-layout">
       <div class="sidebar-header">
         <div class="pro-sidebar-logo">
-          <a href="./index.html">
+          <a href="./index">
             <h5>DGA域名检测系统</h5>
           </a>
         </div>
@@ -52,7 +91,7 @@
         <nav class="menu open-current-submenu">
           <ul>
             <li class="menu-item sub-menu">
-              <a href="./home.html">
+              <a href="./home">
                 <span class="menu-icon">
                   <i class="ri-vip-diamond-fill"></i>
                 </span>
@@ -62,7 +101,7 @@
           </ul>
           <ul>
             <li class="menu-item sub-menu">
-              <a href="./database.html">
+              <a href="./database">
                 <span class="menu-icon">
                   <i class="ri-bar-chart-2-fill"></i>
                 </span>
@@ -70,7 +109,7 @@
               </a>
             </li>
             <li class="menu-item sub-menu">
-              <a href="./type.html">
+              <a href="./type">
                 <span class="menu-icon">
                   <i class="ri-global-fill"></i>
                 </span>
@@ -130,9 +169,9 @@
     </div>
   </aside>
         <div id="overlay" class="overlay"></div>
-        <div class="wrapper">
-            <header>数据库域名</header>
-        </div>
+<!--        <div class="wrapper">-->
+<!--            <header>数据库域名</header>-->
+<!--        </div>-->
         <!-- 导航栏右侧显示的内容 -->
         <div class="first-frontend">
             <table id="rolling-table">
@@ -141,6 +180,9 @@
                         <th>ID</th>
                         <th>Remote Address</th>
                         <th>Remote Domain</th>
+                        <th>Domain Type</th>
+                        <th>Status</th>
+                        <th>Timestamp</th>
                         <th>Domain Type</th>
                         <th>Status</th>
                         <th>Timestamp</th>

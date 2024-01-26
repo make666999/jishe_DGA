@@ -100,6 +100,6 @@ async def read_root(request: Request):
 async def read_root(request: Request):
     return templates.TemplateResponse("database.html", {"request": request})
 
-@app.get("/type")
+@app.get("/database")
 async def read_root(request: Request):
-    return templates.TemplateResponse("type.html", {"request": request})
+    return templates.TemplateResponse("database.html", {"request": request})
