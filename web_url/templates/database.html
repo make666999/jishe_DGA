@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动态抓取</title>
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css'>
+    <link rel='stylesheet' href='https://unpkg.com/css-pro-layout@1.1.0/dist/css/css-pro-layout.css'>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&amp;display=swap'>
+    <link rel="stylesheet" href="./static/css/style.css">
+    <link rel="stylesheet" href="./static/css/id.css">
+    <style>
+        /* Add your CSS styles for the rolling screen here */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #2d2d2d;
+            text-align: left;
+            padding: 8px;
+            transition: background-color 0.5s, opacity 0.5s;
+        }
+        th {
+            background-color: #4d4d4d;
+            color: #ffffff;
+        }
+        tbody tr.fade-out {
+            background-color: #ffcccb;
+            opacity: 0.5;
+        }
+        tbody tr.fade-in {
+            background-color: #cbffcb;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- partial:index.partial.html -->
+    <div class="layout has-sidebar fixed-sidebar fixed-header">
+        <aside id="sidebar" class="sidebar break-point-sm has-bg-image">
+    <a id="btn-collapse" class="sidebar-collapser"><i class="ri-arrow-left-s-line"></i></a>
+    <div class="sidebar-layout">
+      <div class="sidebar-header">
+        <div class="pro-sidebar-logo">
+          <a href="./index.html">
+            <h5>DGA域名检测系统</h5>
+          </a>
+        </div>
+      </div>
+      <div class="sidebar-content">
+        <nav class="menu open-current-submenu">
+          <ul>
+            <li class="menu-item sub-menu">
+              <a href="./home.html">
+                <span class="menu-icon">
+                  <i class="ri-vip-diamond-fill"></i>
+                </span>
+                <span class="menu-title">首页</span>
+              </a>
+            </li>
+          </ul>
+          <ul>
+            <li class="menu-item sub-menu">
+              <a href="./database.html">
+                <span class="menu-icon">
+                  <i class="ri-bar-chart-2-fill"></i>
+                </span>
+                <span class="menu-title">动态抓取</span>
+              </a>
+            </li>
+            <li class="menu-item sub-menu">
+              <a href="./type.html">
+                <span class="menu-icon">
+                  <i class="ri-global-fill"></i>
+                </span>
+                <span class="menu-title">状态查询</span>
+              </a>
+            </li>
+            <li class="menu-item sub-menu">
+              <a href="#">
+                <span class="menu-icon">
+                 <i class="ri-paint-brush-fill"></i>
+                </span>
+                <span class="menu-title">TYPE</span>
+              </a>
+              <div class="sub-menu-list">
+                <ul>
+                  <li class="menu-item">
+                    <a href="#">
+                      <span class="menu-title">Dark</span>
+                    </a>
+                  </li>
+                  <li class="menu-item">
+                    <a href="#">
+                      <span class="menu-title">Light</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="menu-header" style="padding-top: 20px"><span> EXTRA </span></li>
+            <li class="menu-item">
+              <a href="#">
+                <span class="menu-icon">
+                  <i class="ri-book-2-fill"></i>
+                </span>
+                <span class="menu-title">Documentation</span>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="#">
+                <span class="menu-icon">
+                  <i class="ri-calendar-fill"></i>
+                </span>
+                <span class="menu-title">Calendar</span>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="#">
+                <span class="menu-icon">
+                  <i class="ri-service-fill"></i>
+                </span>
+                <span class="menu-title">Examples</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </aside>
+        <div id="overlay" class="overlay"></div>
+        <div class="wrapper">
+            <header>数据库域名</header>
+        </div>
+        <!-- 导航栏右侧显示的内容 -->
+        <div class="first-frontend">
+            <table id="rolling-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Remote Address</th>
+                        <th>Remote Domain</th>
+                        <th>Domain Type</th>
+                        <th>Status</th>
+                        <th>Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+    </div>
+    <!-- partial -->
+    <script src="./static/js/script.js"></script>
+    <script>
+        const socket = new WebSocket('ws://192.168.163.1:8000/ws');
+        let currentData = null;
+
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            const rollingTableBody = document.querySelector('#rolling-table tbody');
+
+            if (JSON.stringify(data) === JSON.stringify(currentData)) {
+                return;
+            }
+
+            currentData = data;
+
+            rollingTableBody.innerHTML = '';
+
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                row.className = 'fade-in';
+
+                for (const key in item) {
+                    if (item.hasOwnProperty(key)) {
+                        const cell = document.createElement('td');
+                        cell.textContent = item[key];
+                        row.appendChild(cell);
+                    }
+                }
+
+                rollingTableBody.appendChild(row);
+
+                requestAnimationFrame(() => {
+                    row.classList.remove('fade-in');
+                });
+            });
+
+            const existingRowCount = rollingTableBody.childElementCount;
+
+            if (existingRowCount > data.length) {
+                const disappearingRowCount = existingRowCount - data.length;
+                const lastRows = rollingTableBody.querySelectorAll('tr:nth-last-child(-n+' + disappearingRowCount + ')');
+
+                lastRows.forEach(row => {
+                    row.classList.add('fade-out');
+                });
+
+                requestAnimationFrame(() => {
+                    lastRows.forEach(row => {
+                        row.remove();
+                    });
+                });
+            }
+        };
+
+        // Initial data update
+        const initialData = [{'_id': '...', 'DNS_Type': '...', 'Loc_Address': '...', 'DNS_Address': '...', 'Domain_Address': '...', 'Remote_Domain': '...', 'Domain_Type': '...', 'moveLines': '...', 'Timestamp': '...'}];
+        socket.onopen = () => {
+            socket.send(JSON.stringify(initialData));
+        };
+    </script>
+</body>
+</html>

@@ -53,12 +53,13 @@
   display: block;
 }
 .sidebar .sidebar-layout {
+  width: 200px;
   height: auto;
   min-height: 100%;
   display: flex;
   flex-direction: column;
   position: relative;
-  background-image: linear-gradient( 135deg, #5EFCE8 10%, #736EFE 100%);
+  background-image: linear-gradient( 135deg, #000908 10%, #000005 100%);
   z-index: 2;
 }
 .sidebar .sidebar-layout .sidebar-header {
@@ -125,7 +126,7 @@
   align-items: center;
   height: 50px;
   padding: 0 20px;
-  color: #0c1e35;
+  color: #f9f9fa;
 }
 .layout .sidebar .menu .menu-item a .menu-icon {
   font-size: 1.2rem;
@@ -308,7 +309,7 @@ a {
   display: flex;
   align-items: center;
 }
-.layout .sidebar .pro-sidebar-logo > h5 {
+.layout .sidebar .pro-sidebar-logo > a > h5 {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -316,7 +317,7 @@ a {
   line-height: 30px;
   transition: opacity 0.3s;
   opacity: 1;
-  color: #0c1e35;
+  color: #ffffff;
 }
 .layout .sidebar .footer-box {
   display: flex;
@@ -407,3 +408,59 @@ a {
   margin: 0 10px;
   color: #3f4750;
 }
+
+body > div > div > p{
+  color: #00829f;
+  font-size: 48px;
+  text-align: center;
+}
+
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
+body{
+  background: #f2f2f2;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.search {
+  width: 100%;
+  position: relative;
+  display: flex;
+}
+
+.searchTerm {
+  width: 100%;
+  border: 3px solid #00B4CC;
+  border-right: none;
+  padding: 5px;
+  height: 50px;
+  border-radius: 5px 0 0 5px;
+  outline: none;
+  color: #9DBFAF;
+}
+
+.searchTerm:focus{
+  color: #00B4CC;
+}
+
+.searchButton {
+  width: 40px;
+  height: 50px;
+  border: 1px solid #00B4CC;
+  background: #00B4CC;
+  text-align: center;
+  color: #fff;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+/*Resize the wrap to see the search bar change!*/
+.wrap{
+  width: 30%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+

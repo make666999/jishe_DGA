@@ -2,12 +2,13 @@
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
-  <title>DGA域名检测系统</title>
+  <title>首页</title>
   <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css'>
 <link rel='stylesheet' href='https://unpkg.com/css-pro-layout@1.1.0/dist/css/css-pro-layout.css'>
 <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&amp;display=swap'>
-  <link rel="stylesheet" href="./static/css/style.css">
-  <link rel="stylesheet" href="./static/css/wave.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/home.css">
+
 </head>
 <body>
 <!-- partial:index.partial.html -->
@@ -17,7 +18,7 @@
     <div class="sidebar-layout">
       <div class="sidebar-header">
         <div class="pro-sidebar-logo">
-          <a href="./index.html">
+          <a href="../Dist/index.html">
             <h5>DGA域名检测系统</h5>
           </a>
         </div>
@@ -26,7 +27,7 @@
         <nav class="menu open-current-submenu">
           <ul>
             <li class="menu-item sub-menu">
-              <a href="./home.html">
+              <a href="home.html">
                 <span class="menu-icon">
                   <i class="ri-vip-diamond-fill"></i>
                 </span>
@@ -36,7 +37,7 @@
           </ul>
           <ul>
             <li class="menu-item sub-menu">
-              <a href="./database.html">
+              <a href="id.html">
                 <span class="menu-icon">
                   <i class="ri-bar-chart-2-fill"></i>
                 </span>
@@ -44,7 +45,7 @@
               </a>
             </li>
             <li class="menu-item sub-menu">
-              <a href="./type.html">
+              <a href="type.html">
                 <span class="menu-icon">
                   <i class="ri-global-fill"></i>
                 </span>
@@ -56,7 +57,7 @@
                 <span class="menu-icon">
                  <i class="ri-paint-brush-fill"></i>
                 </span>
-                <span class="menu-title">MAP</span>
+                <span class="menu-title">TYPE</span>
               </a>
               <div class="sub-menu-list">
                 <ul>
@@ -103,14 +104,17 @@
       </div>
     </div>
   </aside>
-  <div class='box'>
-    <div class='wave -one'></div>
-    <div class='wave -two'></div>
-    <div class='wave -three'></div>
-    <div class='title'>欢迎来到DGA域名检测系统</div>
+  <div id="overlay" class="overlay"></div>
+  <div class="wrapper">
+    <header>首页</header>
+    <div class="contents">
+      <div class="main">恶意域名</div>
+      <div class="side">正常域名</div>
+    </div>
+    <footer>IP分析</footer>
   </div>
 </div>
 <!-- partial -->
-  <script src="../Dist/js/script.js"></script>
+  <script src="../js/script.js"></script>
 </body>
 </html>

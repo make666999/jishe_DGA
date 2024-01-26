@@ -1,0 +1,88 @@
+.wrapper {
+  width: 85%;
+  margin: 0 auto;
+}
+header {
+  background: #FFFFFF;
+  height: 40px;
+  text-align: center;
+  font-size: 30px;
+}
+.contents {
+  display: flex;
+}
+.main {
+  background: darkseagreen;
+  width: 50%;
+  height: 80px;
+  text-align: center;
+  font-size: 20px;
+}
+.side {
+  background: mediumpurple;
+  width: 50%;
+  text-align: center;
+  font-size: 20px;
+}
+footer {
+  background: #ffffff;
+  height: 75%;
+}
+
+@media (max-width: 400px) {
+  .contents {
+    flex-direction: column;
+  }
+  .main,
+  .side {
+    width: 100%;
+  }
+}
+
+body {
+    font-family: 'Microsoft YaHei', sans-serif; /* Use a font that supports Chinese characters */
+}
+.home-item {
+    margin: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.guideCard {
+    /* Add any necessary styles for the guideCard class */
+}
+
+.card-title {
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+}
+
+.card-sub {
+    font-size: 14px;
+    color: #555;
+    display: flex;
+}
+
+.guide-wrap {
+    margin-bottom: 20px;
+}
+
+.entryCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.entry-wrap {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; /* 允许按钮在一行放不下时换行 */
+}
+
+.entry-item {
+    text-align: center;
+    margin: 10px;
+}
+
+
