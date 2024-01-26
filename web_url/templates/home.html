@@ -1,47 +1,196 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en" >
 <head>
-
-    <meta charset="utf-8">
-    <title>交通大数据分析平台</title>
+  <meta charset="UTF-8">
+  <title>首页</title>
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css'>
+<link rel='stylesheet' href='https://unpkg.com/css-pro-layout@1.1.0/dist/css/css-pro-layout.css'>
+<link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&amp;display=swap'>
+  <link rel="stylesheet" href="./static/css/style.css">
+  <link rel="stylesheet" href="./static/css/home.css">
     <link rel="stylesheet" type="text/css" href="./static/ditu/css/visual.css">
-    <script src="./static/global.js"></script>
-    <script src="./static/ditu/js/echarts.min.js"></script>
-    <script src="./static/ditu/js/visual.js"></script>
-    <script src="./static/ditu/js/china.js"></script>
-
 
 </head>
-<body class="ksh">
-<div class="visual" style="margin-top: 100px">
-    <!--		路径映射-->
-    <div class="visual_con">
+<body>
+<!-- partial:index.partial.html -->
+<div class="layout has-sidebar fixed-sidebar fixed-header">
+  <aside id="sidebar" class="sidebar break-point-sm has-bg-image">
+    <div class="sidebar-layout">
+      <div class="sidebar-header">
+        <div class="pro-sidebar-logo">
+          <a href="./index.html">
+            <h5>DGA域名检测系统</h5>
+          </a>
+        </div>
+      </div>
+      <div class="sidebar-content">
+        <nav class="menu open-current-submenu">
+          <ul>
+            <li class="menu-item sub-menu">
+              <a href="./home.html">
+                <span class="menu-icon">
+                  <i class="ri-vip-diamond-fill"></i>
+                </span>
+                <span class="menu-title">首页</span>
+              </a>
+            </li>
+          </ul>
+          <ul>
+            <li class="menu-item sub-menu">
+              <a href="./database.html">
+                <span class="menu-icon">
+                  <i class="ri-bar-chart-2-fill"></i>
+                </span>
+                <span class="menu-title">动态抓取</span>
+              </a>
+            </li>
+            <li class="menu-item sub-menu">
+              <a href="./type.html">
+                <span class="menu-icon">
+                  <i class="ri-global-fill"></i>
+                </span>
+                <span class="menu-title">状态查询</span>
+              </a>
+            </li>
+            <li class="menu-item sub-menu">
+              <a href="#">
+                <span class="menu-icon">
+                 <i class="ri-paint-brush-fill"></i>
+                </span>
+                <span class="menu-title">TYPE</span>
+              </a>
+              <div class="sub-menu-list">
+                <ul>
+                  <li class="menu-item">
+                    <a href="#">
+                      <span class="menu-title">Dark</span>
+                    </a>
+                  </li>
+                  <li class="menu-item">
+                    <a href="#">
+                      <span class="menu-title">Light</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="menu-header" style="padding-top: 20px"><span> EXTRA </span></li>
+            <li class="menu-item">
+              <a href="#">
+                <span class="menu-icon">
+                  <i class="ri-book-2-fill"></i>
+                </span>
+                <span class="menu-title">Documentation</span>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="#">
+                <span class="menu-icon">
+                  <i class="ri-calendar-fill"></i>
+                </span>
+                <span class="menu-title">Calendar</span>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="#">
+                <span class="menu-icon">
+                  <i class="ri-service-fill"></i>
+                </span>
+                <span class="menu-title">Examples</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </aside>
+  <div id="overlay" class="overlay"></div>
+  <div class="wrapper">
+    <header>首页</header>
+    <div data-v-10c91e1e="" class="home-item" style="">
+      <div data-v-1fe89ae2="" data-v-10c91e1e="" class="guideCard" sites="[object Object]"
+           peanuthullinfo="[object Object]" peanuthullproperty="[object Object]" forwardservice="[object Object]"
+           bandwidthservice="[object Object]" calcflow="[object Object]" agentcustomer="[object Object]"
+           servicelift="220001,220002,220003,2303,220004,220101,220102,220103,2403,220104,223001,223002,223003,223004,223101,223102,223103,223104,210125,210126,210127,210128"
+           sslservices="[object Object]" portlist="" transferservices="" validalldomain="[object Object]" topdomains=""
+           childdomains="[object Object]" hskdomain="[object Object]" flowxaxis="[object Object]" flowdata="">
+        <div data-v-1fe89ae2="" class="flex flex-between align-center"><p data-v-1fe89ae2="" class="card-title">
+          快速上手</p> <span data-v-1fe89ae2="" class="close"><i data-v-1fe89ae2="" class="iconfont"
+                                                                 style="font-size: 22px;"></i></span></div>
+        <div data-v-1fe89ae2="" class="flex flex-between">
+          <div data-v-1fe89ae2="" class="guide-wrap">
+            <div data-v-1fe89ae2="">
+              <div data-v-1fe89ae2="" class="flex align-center"><!----> <p data-v-1fe89ae2="" class="card-title">
+                第一步：创建内网映射</p></div>
+              <p data-v-1fe89ae2="" class="card-sub">填写服务器IP端口等信息，生成外网访问地址</p>
+              <div data-v-1fe89ae2=""><a data-v-1fe89ae2="" href="/forward"
+                                         class="el-button el-button--mini border-theme hsk">立即创建</a></div>
+            </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div data-v-10c91e1e="" class="home-item">
+      <div data-v-daf72762="" data-v-10c91e1e="" class="entryCard" peanuthullinfo="[object Object]"
+           peanuthullproperty="[object Object]" peanuthullstatus="[object Object]" normalmappinglist=""
+           forwardservice="[object Object]" bandwidthservice="[object Object]" calcflow="[object Object]"
+           agentcustomer="[object Object]"
+           servicelift="220001,220002,220003,2303,220004,220101,220102,220103,2403,220104,223001,223002,223003,223004,223101,223102,223103,223104,210125,210126,210127,210128"
+           sslservices="[object Object]" portlist="" transferservices="" validalldomain="[object Object]" topdomains=""
+           childdomains="[object Object]" hskdomain="[object Object]" flowxaxis="[object Object]" flowdata=""><p
+              data-v-daf72762="" class="card-title">快捷入口</p>
+        <div data-v-daf72762="" class="entry-wrap flex flex-between">
+          <div data-v-daf72762="" class="entry-item"><img data-v-daf72762=""
+                                                          src="//res.orayimg.com/hsk/console/2.0/img/f351ea2.png"
+                                                          alt="" width="44">
+            <p data-v-daf72762="" class="entry-text">新增应用</p></div>
+          <div data-v-daf72762="" class="entry-item"><img data-v-daf72762=""
+                                                          src="//res.orayimg.com/hsk/console/2.0/img/b0de197.png"
+                                                          alt="" width="44">
+            <p data-v-daf72762="" class="entry-text">独立密码</p></div>
+          <div data-v-daf72762="" class="entry-item"><img data-v-daf72762=""
+                                                          src="//res.orayimg.com/hsk/console/2.0/img/9942af1.png"
+                                                          alt="" width="44">
+            <p data-v-daf72762="" class="entry-text">域名列表</p></div>
+          <div data-v-daf72762="" class="entry-item"><img data-v-daf72762=""
+                                                          src="//res.orayimg.com/hsk/console/2.0/img/99656fe.png"
+                                                          alt="" width="44">
+            <p data-v-daf72762="" class="entry-text">订单管理</p></div>
+          <div data-v-daf72762="" class="entry-item"><img data-v-daf72762=""
+                                                          src="//res.orayimg.com/hsk/console/2.0/img/390f09a.png"
+                                                          alt="" width="44">
+            <p data-v-daf72762="" class="entry-text">多账号管理</p></div>
+          <div data-v-daf72762="" class="entry-item"><img data-v-daf72762=""
+                                                          src="//res.orayimg.com/hsk/console/2.0/img/a18c51a.png"
+                                                          alt="" width="44">
+            <p data-v-daf72762="" class="entry-text">联系客服</p></div>
+        </div>
+      </div>
+    </div>
+    <footer>IP分析
+      <div class="visual_con">
         <div class="visual_conBot">
-            <img class="visual_conBot_l" src="./static/ditu/images/ksh42.png">
-            <img class="visual_conBot_2" src="./static/ditu/images/ksh43.png">
-            <img class="visual_conBot_3" src="./static/ditu/images/ksh44.png">
-            <img class="visual_conBot_4" src="./static/ditu/images/ksh45.png">
-            <div class="visual_chart_text">
-                <h1>流量数据攻击路径映射</h1>
-            </div>
-            <div class="visual_chart" id="main8"></div>
+          <img class="visual_conBot_l" src="./static/ditu/images/ksh42.png">
+          <img class="visual_conBot_2" src="./static/ditu/images/ksh43.png">
+          <img class="visual_conBot_3" src="./static/ditu/images/ksh44.png">
+          <img class="visual_conBot_4" src="./static/ditu/images/ksh45.png">
+          <div class="visual_chart_text">
+            <h1>流量数据攻击路径映射</h1>
+          </div>
+          <div class="visual_chart" id="main8"></div>
         </div>
-    </div>
-    <!--		趋势图-->
-    <div class="visual_left" style="margin-left: 100px">
-        <div class="visual_box">
-            <div class="visual_title">
-                <span>网络攻击分析趋势图</span>
-            </div>
-            <div class="visual_chart" id="main2">
-            </div>
-        </div>
-    </div>
+      </div>
+    </footer>
+  </div>
+
 </div>
-<!-- Scripts -->
+<!-- partial -->
+  <script src="./static/js/script.js"></script>
+<script src="./static/global.js"></script>
+    <script src="./static/ditu/js/echarts.min.js"></script>
+    <script src="./static/ditu/js/visual.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/echarts/map/js/world.js"></script>
 <script type="text/javascript">
-    var myChart2 = echarts.init(document.getElementById('main2'));
-    myChart2.setOption(option2);
 
     let currentData = null;
     const socket_city_map = new WebSocket(`ws://${ipAddress}/city_map`);
@@ -894,7 +1043,7 @@ var option8 = {
     }
   },
   geo: {
-    map: 'china',
+    map: 'world',
     label: {
       emphasis: {
         show: false

@@ -1,4 +1,4 @@
-# uvicorn app:app --reload --host 192.168.78.49 --port 8000
+# uvicorn app:app --reload --host 192.168.163.1 --port 8000
 # 192.168.78.49
 from fastapi.websockets import WebSocketState
 
@@ -20,7 +20,7 @@ app = FastAPI()
 # 连接到MongoDB数据库
 mongo_client = MongoClient("mongodb://8c630x9121.goho.co:23593")
 db = mongo_client["DGA"]
-collection = db["tabuaihua"]
+collection = db["GPU-SERVER"]
 # 模板配置
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="templates/static"), name="static")
@@ -33,12 +33,13 @@ async def get_latest_data():
     return latest_data
 
 async def get_city_data():
-    query = {"Loc_Data": {"$ne": None}}
-    projection = {"_id": 0,"Loc_Data": 1}
+    query = {"moveLines": {"$ne": None}}
+    projection = {"_id": 0,"moveLines": 1}
 
-    city_data = collection.find(query,projection)
-    city_data = [document["Loc_Data"] for document in city_data]
-
+    city_data = collection.find(query,projection).sort("Timestamp", -1).limit(50)
+    city_datas = [document["moveLines"] for document in city_data]
+    city_data= {"moveLines":city_datas}
+    # city_data = {"moveLines": document["moveLines"] for document in city_data}
     return city_data
 
 
@@ -81,11 +82,24 @@ async def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request, "latest_data": latest_data})
 
 
-
-
-
 @app.get("/data_ui")
 async def read_root(request: Request):
     city_data = await get_city_data()
     print(city_data)
     return templates.TemplateResponse("data_ui.html", {"request": request, "allDataParam": city_data})
+
+@app.get("/index")
+async def read_root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/home")
+async def read_root(request: Request):
+    return templates.TemplateResponse("home.html", {"request": request})
+
+@app.get("/id")
+async def read_root(request: Request):
+    return templates.TemplateResponse("database.html", {"request": request})
+
+@app.get("/type")
+async def read_root(request: Request):
+    return templates.TemplateResponse("type.html", {"request": request})
