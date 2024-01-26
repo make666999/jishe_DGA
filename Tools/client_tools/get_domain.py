@@ -21,12 +21,12 @@ def process_connection(domain,dst_ip,loc_ip, type, domain_ip=None):
 
     data = {
         "DNS_Type": type,
-        "Loc_Address": loc_ip,
-        "DNS_Address": dst_ip,
+        "Loc_Address": dst_ip,
+        "DNS_Address": loc_ip,
         "Domain_Address": domain_ip,
         "Remote_Domain": domain,
         "Domain_Type": domain_type,
-        "Loc_Data": loc,
+        "moveLines": loc,
         "Timestamp": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     }
     db_log.insert_one(data)

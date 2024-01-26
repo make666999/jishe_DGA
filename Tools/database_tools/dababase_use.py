@@ -1,4 +1,5 @@
-import os
+import geocoder
+import requests
 from pymongo import MongoClient
 import geoip2.database
 import socket
@@ -7,6 +8,16 @@ import socket
 # reader_path = os.path.abspath(os.path.join("Model", "Data","city_db", "GeoLite2-City.mmdb"))
 reader_path="./Model/Data/city_db/GeoLite2-City.mmdb"
 reader=geoip2.database.Reader(reader_path)
+def get_ip():
+    try:
+        response = requests.get('http://ip-api.com/json/')
+        return response.json()
+    except requests.RequestException as e:
+        print(f"Error fetching IP: {e}")
+        return None
+loc_city=get_ip()['city']
+loc_x_y=[get_ip()["lon"],get_ip()["lat"]]
+
 def mongo_link_database(database_name):
 
     client = MongoClient("mongodb://8c630x9121.goho.co:23593")
@@ -23,9 +34,9 @@ def get_ip_loc(ip):
     try:
         response = reader.city(ip)
         data= {
-            "city":response.city.names["zh-CN"],
-            "x":response.location.latitude,
-            "y":response.location.longitude
+            "fromName": loc_city,
+            "toName":response.city.names["zh-CN"],
+            "coords":[loc_x_y,[response.location.longitude,response.location.latitude]],
         }
     except:
         return None
