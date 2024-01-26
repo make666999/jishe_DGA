@@ -27,7 +27,7 @@ def process_connection(domain,dst_ip,loc_ip, type, domain_ip=None):
         "Remote_Domain": domain,
         "Domain_Type": domain_type,
         "moveLines": loc,
-        "Timestamp": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        "Timestamp": int(time.time() * 1000)
     }
     db_log.insert_one(data)
     print("\n[*] 新增连接: %s <- %s - 解析域名: %s : %s - 域名检查结果: %s - 时间: %s" % (
