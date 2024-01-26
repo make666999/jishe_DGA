@@ -12,55 +12,61 @@
     <style>
         body {
   margin: 0;
-  font-family: 'Poppins', sans-serif; /* 使用 Google Fonts 提供的 Poppins 字体 */
 }
 
 .layout {
   display: flex;
-  height: 100vh; /* 使用视口高度作为布局的高度 */
+  height: 100vh; /* 确保布局占满整个视口高度 */
+  overflow: hidden; /* 防止整个页面滚动 */
 }
 
-#sidebar {
-  flex: 0 0 250px; /* 固定宽度的侧边栏 */
-  overflow-y: auto; /* 如果内容溢出，启用纵向滚动条 */
+.sidebar {
+  width: 250px; /* 侧边栏宽度 */
+  /* 其他样式保持不变 */
 }
 
-.wrapper {
-  flex: 1; /* 自适应宽度的主要内容区域 */
-  overflow-y: auto; /* 如果内容溢出，启用纵向滚动条 */
-  padding: 20px; /* 添加内边距，以与表格保持距离 */
+.first-frontend {
+  flex-grow: 1; /* 让内容区域占据剩余空间 */
+
+  padding: 20px;
 }
 
-#rolling-table {
-  width: 100%; /* 表格宽度占满父容器 */
-  margin-top: 20px; /* 顶部外边距 */
+/* 表格样式优化 */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 20px; /* 添加底部外边距 */
 }
 
-/* 其他样式不变 */
+th, td {
+  padding: 8px;
+  text-align: left;
+}
 
-        /* Add your CSS styles for the rolling screen here */
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid #2d2d2d;
-            text-align: left;
-            padding: 8px;
-            transition: background-color 0.5s, opacity 0.5s;
-        }
-        th {
-            background-color: #4d4d4d;
-            color: #ffffff;
-        }
-        tbody tr.fade-out {
-            background-color: #ffcccb;
-            opacity: 0.5;
-        }
-        tbody tr.fade-in {
-            background-color: #cbffcb;
-            opacity: 1;
-        }
+th {
+  background-color: #4d4d4d;
+  color: white;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #f9f9f9; /* 条纹效果 */
+}
+
+/* 删除边框 */
+th, td {
+  border: none;
+}
+
+/* 滑动效果 */
+tbody tr.fade-out {
+  background-color: #ffcccb;
+  opacity: 0.5;
+}
+
+tbody tr.fade-in {
+  background-color: #cbffcb;
+  opacity: 1;
+}
         .first-frontend {
   flex: 1; /* 占据剩余空间，自适应宽度 */
   display: flex;
@@ -117,11 +123,11 @@
               </a>
             </li>
             <li class="menu-item sub-menu">
-              <a href="#">
+              <a href="./Charts">
                 <span class="menu-icon">
                  <i class="ri-paint-brush-fill"></i>
                 </span>
-                <span class="menu-title">TYPE</span>
+                <span class="menu-title">Charts</span>
               </a>
               <div class="sub-menu-list">
                 <ul>

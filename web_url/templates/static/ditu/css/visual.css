@@ -52,15 +52,15 @@ html, body, form{overflow-y:auto;height:100%;}
 .head_top p{width:100%;text-align:center;color:#55bfff;position:absolute;bottom: -18px;left: -10px;}
 .head_top p span{font-family:'yjsz';font-size:20px;}
 
-.visual{height:calc(100% - 33px);padding-top:10px;}
+.visual{height:calc(100% - 33px);width: 100%; padding-top:10px;}
 
 .visual_box{height:33.3%;}
 .visual_box .visual_title{position:relative;height:35px;margin:5px 0;}
-.visual_box .visual_title span{color:#fff;font-size:18px;line-height:35px;}
+.visual_box .visual_title span{color: #171616;font-size:18px;line-height:35px;}
 .visual_box .visual_title img{width:100%;position:absolute;left:0;bottom:0;}
 .visual_box .visual_chart{height:calc(100% - 35px);}
 
-.visual_left{width:35%;height:90%;float:left;}
+.visual_left{width:50%;height:90%;float:left;}
 .visual_left .sfzcll{position:relative;}
 .visual_left .sfzcll a{width:32%;text-align:center;line-height:25px;color:#fff;display:inline-block;}
 .visual_left .sfzcll .sfzcll_pos_box{width:100%;height:calc(100% - 30px);}
@@ -96,7 +96,7 @@ html, body, form{overflow-y:auto;height:100%;}
 .visual_left1 .sfzcll .sfzcll_box .sfzcll_smallBk .ygl{color:#00ffc6;}
 .visual_left1 .sfzcll .sfzcll_box .sfzcll_smallBk .ygh{color:#ffe400;}
 
-.visual_con{width:50%;height:100%;float:left;padding:25px 20px 0 20px;}
+.visual_con{width:100%;height:100%;float:left;padding:25px 20px 0 20px;}
 .visual_con .visual_conTop{height:130px;margin-bottom:10px;}
 .visual_con .visual_conTop .visual_conTop_box{height:100%;padding:0 3px;}
 .visual_con .visual_conTop .visual_conTop1{width:20%;height:100%;float:left;}
@@ -114,7 +114,7 @@ html, body, form{overflow-y:auto;height:100%;}
 .visual_con .visual_conTop .visual_conTop_box>div .conTop_smil a.xd{color:#12fe81;}
 .visual_con .visual_conTop .visual_conTop_box>div .conTop_smil a.null{visibility:hidden;}
 
-.visual_con .visual_conBot{height:calc(100% - 136px);background:url(../images/ksh41.png) no-repeat;background-size:100% 100%;position:relative;}
+.visual_con .visual_conBot{height:calc(100% - 25px);background:url(../images/ksh41.png) no-repeat;background-size:100% 100%;position:relative;}
 .visual_con .visual_conBot>img{position:absolute;width:25px;height:25px;}
 .visual_con .visual_conBot .visual_conBot_l{position:absolute;left:0;top:0;}
 .visual_con .visual_conBot .visual_conBot_2{position:absolute;right:0;top:0;}

@@ -12,7 +12,7 @@ from fastapi import FastAPI, WebSocket
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-
+from pydantic import BaseModel
 from bson.json_util import dumps
 import asyncio
 
@@ -23,10 +23,30 @@ app = FastAPI()
 # 连接到MongoDB数据库
 mongo_client = MongoClient("mongodb://8c630x9121.goho.co:23593")
 db = mongo_client["DGA"]
-collection = db["GPU-SERVER"]
+Local_db="GPU-SERVER"
+collection = db[Local_db]
 # 模板配置
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="templates/static"), name="static")
+
+# 获取数据库集合
+@app.websocket("/collection_names")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            global db
+            collection_names =  db.list_collection_names()
+            print("collection_names:", collection_names)
+            await websocket.send_text(dumps(collection_names))
+            await asyncio.sleep(3)
+    except Exception as e:
+            print(f"Error: {e}")
+    finally:
+        # 关闭连接时的清理工作
+        await websocket.close()
+
+
 
 
 
@@ -222,3 +242,24 @@ async def read_root(request: Request):
 @app.get("/type")
 async def read_root(request: Request):
     return templates.TemplateResponse("type.html", {"request": request})
+
+@app.get("/Charts")
+async def read_root(request: Request):
+    return templates.TemplateResponse("Charts.html", {"request": request})
+
+
+class DataToReceive(BaseModel):
+    Local: str
+    Time: str
+
+
+
+@app.post("/api/send_data")
+async def receive_data(data: DataToReceive):
+    # 在这里处理从前端发送过来的数据
+    global db
+    global collection
+    collection= db[data.Local]
+    print(data.Local)
+    # received_data = data.dict()
+    # return received_data
