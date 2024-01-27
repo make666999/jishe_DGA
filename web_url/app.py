@@ -219,39 +219,40 @@ def get_local_ip():
         print("Error occurred:", e)
         return None
 ipAddress=str(get_local_ip())+":8000"
+print(ipAddress)
 @app.get("/")
 async def read_root(request: Request):
     latest_data = await get_latest_data()
     return templates.TemplateResponse("index.html", {"request": request, "latest_data": latest_data,"ipAddress":ipAddress})
 
 
-@app.get("/data_ui")
+@app.get("/data_ui.html")
 async def read_root(request: Request):
     city_data = await get_city_data()
     print(city_data)
     return templates.TemplateResponse("data_ui.html", {"request": request, "allDataParam": city_data,"ipAddress":ipAddress})
 
-@app.get("/index")
+@app.get("/index.html")
 async def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request,"ipAddress":ipAddress})
 
-@app.get("/home")
+@app.get("/home.html")
 async def read_root(request: Request):
     return templates.TemplateResponse("home.html", {"request": request,"ipAddress":ipAddress})
 
-@app.get("/id")
+@app.get("/id.html")
 async def read_root(request: Request):
     return templates.TemplateResponse("database.html", {"request": request,"ipAddress":ipAddress})
 
-@app.get("/database")
+@app.get("/database.html")
 async def read_root(request: Request):
     return templates.TemplateResponse("database.html", {"request": request,"ipAddress":ipAddress})
 
-@app.get("/type")
+@app.get("/type.html")
 async def read_root(request: Request):
     return templates.TemplateResponse("type.html", {"request": request,"ipAddress":ipAddress})
 
-@app.get("/Charts")
+@app.get("/Charts.html")
 async def read_root(request: Request):
     return templates.TemplateResponse("Charts.html", {"request": request,"ipAddress":ipAddress})
 
