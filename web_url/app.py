@@ -1,8 +1,9 @@
 # uvicorn app:app --reload --host  192.168.78.49 --port 8000
 import datetime
 import json
+import socket
 import time
-
+from uvicorn import run
 from fastapi.websockets import WebSocketState
 
 from fastapi import FastAPI, WebSocket, Request
@@ -45,9 +46,6 @@ async def websocket_endpoint(websocket: WebSocket):
     finally:
         # 关闭连接时的清理工作
         await websocket.close()
-
-
-
 
 
 # 获取列表分类
@@ -157,10 +155,6 @@ async def websocket_endpoint(websocket: WebSocket):
     finally:
         await websocket.close()
 
-
-
-
-
 # 获取十条最新数据和地图数据
 async def get_latest_data():
     # 获取最新的十条数据
@@ -210,42 +204,57 @@ async def websocket_endpoint(websocket: WebSocket):
         # 关闭连接时的清理工作
         await websocket.close()
 
-
+def get_local_ip():
+    try:
+        # 创建一个socket连接
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        # 连接到一个不存在的IP地址，以获取本地IP地址
+        s.connect(("10.255.255.255", 1))
+        # 获取本地IP地址
+        local_ip = s.getsockname()[0]
+        # 关闭连接
+        s.close()
+        return local_ip
+    except Exception as e:
+        print("Error occurred:", e)
+        return None
+ipAddress=str(get_local_ip())+":8000"
+print(ipAddress)
 @app.get("/")
 async def read_root(request: Request):
     latest_data = await get_latest_data()
-    return templates.TemplateResponse("index.html", {"request": request, "latest_data": latest_data})
+    return templates.TemplateResponse("index.html", {"request": request, "latest_data": latest_data,"ipAddress":ipAddress})
 
 
-@app.get("/data_ui")
+@app.get("/data_ui.html")
 async def read_root(request: Request):
     city_data = await get_city_data()
     print(city_data)
-    return templates.TemplateResponse("data_ui.html", {"request": request, "allDataParam": city_data})
+    return templates.TemplateResponse("data_ui.html", {"request": request, "allDataParam": city_data,"ipAddress":ipAddress})
 
-@app.get("/index")
+@app.get("/index.html")
 async def read_root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse("index.html", {"request": request,"ipAddress":ipAddress})
 
-@app.get("/home")
+@app.get("/home.html")
 async def read_root(request: Request):
-    return templates.TemplateResponse("home.html", {"request": request})
+    return templates.TemplateResponse("home.html", {"request": request,"ipAddress":ipAddress})
 
-@app.get("/id")
+@app.get("/id.html")
 async def read_root(request: Request):
-    return templates.TemplateResponse("database.html", {"request": request})
+    return templates.TemplateResponse("database.html", {"request": request,"ipAddress":ipAddress})
 
-@app.get("/database")
+@app.get("/database.html")
 async def read_root(request: Request):
-    return templates.TemplateResponse("database.html", {"request": request})
+    return templates.TemplateResponse("database.html", {"request": request,"ipAddress":ipAddress})
 
-@app.get("/type")
+@app.get("/type.html")
 async def read_root(request: Request):
-    return templates.TemplateResponse("type.html", {"request": request})
+    return templates.TemplateResponse("type.html", {"request": request,"ipAddress":ipAddress})
 
-@app.get("/Charts")
+@app.get("/Charts.html")
 async def read_root(request: Request):
-    return templates.TemplateResponse("Charts.html", {"request": request})
+    return templates.TemplateResponse("Charts.html", {"request": request,"ipAddress":ipAddress})
 
 
 class DataToReceive(BaseModel):
@@ -263,3 +272,11 @@ async def receive_data(data: DataToReceive):
     print(data.Local)
     # received_data = data.dict()
     # return received_data
+
+
+
+
+if __name__ == '__main__':
+    local_ip = get_local_ip()
+    run("app:app", host=f"{local_ip}", port=8000, reload=True)
+

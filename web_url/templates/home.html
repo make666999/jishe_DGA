@@ -28,7 +28,7 @@
                 <nav class="menu open-current-submenu">
                     <ul>
                         <li class="menu-item sub-menu">
-                            <a href="./home.html">
+                            <a href="./home">
                 <span class="menu-icon">
                   <i class="ri-vip-diamond-fill"></i>
                 </span>
@@ -151,14 +151,15 @@
 
 </div>
 <!-- partial -->
-<script src="./static/js/script.js"></script>
-<script src="./static/global.js"></script>
-<script src="./static/ditu/js/echarts.min.js"></script>
-<script src="./static/ditu/js/visual.js"></script>
+  <script src="./static/js/script.js"></script>
+<!--<script src="./static/global.js"></script>-->
+    <script src="./static/ditu/js/echarts.min.js"></script>
+    <script src="./static/ditu/js/visual.js"></script>
 <!--?<script src="./static/ditu/js/world.js"></script>-->
 <script src="https://cdn.jsdelivr.net/npm/echarts/map/js/world.js"></script>
 <script type="text/javascript">
-
+    const ipAddress ="{{ipAddress}}";
+    console.log(ipAddress);
     let count_data2 = null;
     const count_data = new WebSocket(`ws://${ipAddress}/data_list`);
     count_data.onmessage = (event) => {
