@@ -1,3 +1,4 @@
+/* test.js */
 var data = [
 { y: '2014', a: 50, b: 90 },
 { y: '2015', a: 65, b: 75 },
@@ -11,6 +12,30 @@ var data = [
 { y: '2023', a: 145, b: 85 },
 { y: '2024', a: 160, b: 95 }
 ];
+
+var areaConfig = {
+element: 'area-chart',
+data: data,
+xkey: 'y',
+ykeys: ['a', 'b'],
+labels: ['Total Income', 'Total Outcome'],
+fillOpacity: 0.6,
+hideHover: 'auto',
+behaveLikeLine: true,
+resize: true,
+pointFillColors: ['#ffffff'],
+pointStrokeColors: ['black'],
+lineColors: ['gray', 'red']
+};
+
+var lineConfig = {
+element: 'line-chart',
+data: data,
+xkey: 'y',
+ykeys: ['a', 'b'],
+labels: ['Total Income', 'Total Outcome'],
+lineColors: ['blue', 'green']
+};
 
 var barConfig = {
 element: 'bar-chart',
@@ -41,6 +66,9 @@ data: [
 colors: ['#428bca', '#5bc0de', '#d9534f', '#5cb85c']
 };
 
+
+Morris.Area(areaConfig);
+Morris.Line(lineConfig);
 Morris.Bar(barConfig);
 Morris.Bar(stackedConfig);
 Morris.Donut(pieConfig);

@@ -1,4 +1,4 @@
-# uvicorn app:app --reload --host 192.168.78.71 --port 8000
+# uvicorn app:app --reload --host  192.168.78.49 --port 8000
 import datetime
 import json
 import time

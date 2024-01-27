@@ -1,0 +1,11 @@
+/* test.css */
+.row {
+margin-top: 30px;
+}
+.label-success {
+font-size: 16px;
+}
+#main2,#bar-chart, #stacked, #pie-chart {
+height: 600px;
+width: 1000px;
+}
