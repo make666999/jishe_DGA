@@ -6,15 +6,7 @@ html {
 }
 
 body {
-	width: 100%;
-	height: 100%;
-	background-color: #000000;
-	font-family: 'Open Sans', sans-serif;
-	font-weight: 400;
-	font-size: 0;
 	text-align: center;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
 }
 
 body .container {
