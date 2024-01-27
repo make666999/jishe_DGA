@@ -9,16 +9,15 @@
   <link rel="stylesheet" href="./static/css/style.css">
   <link rel="stylesheet" href="./static/css/home.css">
     <link rel="stylesheet" type="text/css" href="./static/ditu/css/visual.css">
-
 </head>
 <body>
-<!-- partial:index.partial.html -->
-<div class="layout has-sidebar fixed-sidebar fixed-header">
+<!-- partial:index.partial -->
+<div class="layout has-sidebar">
   <aside id="sidebar" class="sidebar break-point-sm has-bg-image">
     <div class="sidebar-layout">
       <div class="sidebar-header">
         <div class="pro-sidebar-logo">
-          <a href="./index.html">
+          <a href="./index">
             <h5>DGA域名检测系统</h5>
           </a>
         </div>
@@ -27,7 +26,7 @@
         <nav class="menu open-current-submenu">
           <ul>
             <li class="menu-item sub-menu">
-              <a href="./home.html">
+              <a href="./home">
                 <span class="menu-icon">
                   <i class="ri-vip-diamond-fill"></i>
                 </span>
@@ -37,7 +36,7 @@
           </ul>
           <ul>
             <li class="menu-item sub-menu">
-              <a href="./database.html">
+              <a href="./database">
                 <span class="menu-icon">
                   <i class="ri-bar-chart-2-fill"></i>
                 </span>
@@ -45,7 +44,7 @@
               </a>
             </li>
             <li class="menu-item sub-menu">
-              <a href="./type.html">
+              <a href="./type">
                 <span class="menu-icon">
                   <i class="ri-global-fill"></i>
                 </span>
@@ -53,11 +52,11 @@
               </a>
             </li>
             <li class="menu-item sub-menu">
-              <a href="#">
+              <a href="./Charts">
                 <span class="menu-icon">
                  <i class="ri-paint-brush-fill"></i>
                 </span>
-                <span class="menu-title">TYPE</span>
+                <span class="menu-title">Charts</span>
               </a>
               <div class="sub-menu-list">
                 <ul>
@@ -107,67 +106,11 @@
   <div id="overlay" class="overlay"></div>
   <div class="wrapper">
     <header>首页</header>
-    <div data-v-10c91e1e="" class="home-item" style="">
-      <div data-v-1fe89ae2="" data-v-10c91e1e="" class="guideCard" sites="[object Object]"
-           peanuthullinfo="[object Object]" peanuthullproperty="[object Object]" forwardservice="[object Object]"
-           bandwidthservice="[object Object]" calcflow="[object Object]" agentcustomer="[object Object]"
-           servicelift="220001,220002,220003,2303,220004,220101,220102,220103,2403,220104,223001,223002,223003,223004,223101,223102,223103,223104,210125,210126,210127,210128"
-           sslservices="[object Object]" portlist="" transferservices="" validalldomain="[object Object]" topdomains=""
-           childdomains="[object Object]" hskdomain="[object Object]" flowxaxis="[object Object]" flowdata="">
-        <div data-v-1fe89ae2="" class="flex flex-between align-center"><p data-v-1fe89ae2="" class="card-title">
-          快速上手</p> <span data-v-1fe89ae2="" class="close"><i data-v-1fe89ae2="" class="iconfont"
-                                                                 style="font-size: 22px;"></i></span></div>
-        <div data-v-1fe89ae2="" class="flex flex-between">
-          <div data-v-1fe89ae2="" class="guide-wrap">
-            <div data-v-1fe89ae2="">
-              <div data-v-1fe89ae2="" class="flex align-center"><!----> <p data-v-1fe89ae2="" class="card-title">
-                第一步：创建内网映射</p></div>
-              <p data-v-1fe89ae2="" class="card-sub">填写服务器IP端口等信息，生成外网访问地址</p>
-              <div data-v-1fe89ae2=""><a data-v-1fe89ae2="" href="/forward"
-                                         class="el-button el-button--mini border-theme hsk">立即创建</a></div>
-            </div>
-            </div>
-        </div>
+      <div class="home-item" style="height: 10%">
+          <h1 style="float: left">今日正常域名访问数量:<span id="Good"></span></h1>
+<h1 style="float: right">今日异常域名访问数量:<span id="Bad"></span></h1>
       </div>
-    </div>
-    <div data-v-10c91e1e="" class="home-item">
-      <div data-v-daf72762="" data-v-10c91e1e="" class="entryCard" peanuthullinfo="[object Object]"
-           peanuthullproperty="[object Object]" peanuthullstatus="[object Object]" normalmappinglist=""
-           forwardservice="[object Object]" bandwidthservice="[object Object]" calcflow="[object Object]"
-           agentcustomer="[object Object]"
-           servicelift="220001,220002,220003,2303,220004,220101,220102,220103,2403,220104,223001,223002,223003,223004,223101,223102,223103,223104,210125,210126,210127,210128"
-           sslservices="[object Object]" portlist="" transferservices="" validalldomain="[object Object]" topdomains=""
-           childdomains="[object Object]" hskdomain="[object Object]" flowxaxis="[object Object]" flowdata=""><p
-              data-v-daf72762="" class="card-title">快捷入口</p>
-        <div data-v-daf72762="" class="entry-wrap flex flex-between">
-          <div data-v-daf72762="" class="entry-item"><img data-v-daf72762=""
-                                                          src="//res.orayimg.com/hsk/console/2.0/img/f351ea2.png"
-                                                          alt="" width="44">
-            <p data-v-daf72762="" class="entry-text">新增应用</p></div>
-          <div data-v-daf72762="" class="entry-item"><img data-v-daf72762=""
-                                                          src="//res.orayimg.com/hsk/console/2.0/img/b0de197.png"
-                                                          alt="" width="44">
-            <p data-v-daf72762="" class="entry-text">独立密码</p></div>
-          <div data-v-daf72762="" class="entry-item"><img data-v-daf72762=""
-                                                          src="//res.orayimg.com/hsk/console/2.0/img/9942af1.png"
-                                                          alt="" width="44">
-            <p data-v-daf72762="" class="entry-text">域名列表</p></div>
-          <div data-v-daf72762="" class="entry-item"><img data-v-daf72762=""
-                                                          src="//res.orayimg.com/hsk/console/2.0/img/99656fe.png"
-                                                          alt="" width="44">
-            <p data-v-daf72762="" class="entry-text">订单管理</p></div>
-          <div data-v-daf72762="" class="entry-item"><img data-v-daf72762=""
-                                                          src="//res.orayimg.com/hsk/console/2.0/img/390f09a.png"
-                                                          alt="" width="44">
-            <p data-v-daf72762="" class="entry-text">多账号管理</p></div>
-          <div data-v-daf72762="" class="entry-item"><img data-v-daf72762=""
-                                                          src="//res.orayimg.com/hsk/console/2.0/img/a18c51a.png"
-                                                          alt="" width="44">
-            <p data-v-daf72762="" class="entry-text">联系客服</p></div>
-        </div>
-      </div>
-    </div>
-    <footer>IP分析
+    <footer>
       <div class="visual_con">
         <div class="visual_conBot">
           <img class="visual_conBot_l" src="./static/ditu/images/ksh42.png">
@@ -175,7 +118,7 @@
           <img class="visual_conBot_3" src="./static/ditu/images/ksh44.png">
           <img class="visual_conBot_4" src="./static/ditu/images/ksh45.png">
           <div class="visual_chart_text">
-            <h1>流量数据攻击路径映射</h1>
+<!--?            <h1 style="color: #0d45ef">流量数据攻击路径映射</h1>-->
           </div>
           <div class="visual_chart" id="main8"></div>
         </div>
@@ -189,8 +132,22 @@
 <script src="./static/global.js"></script>
     <script src="./static/ditu/js/echarts.min.js"></script>
     <script src="./static/ditu/js/visual.js"></script>
+<!--?<script src="./static/ditu/js/world.js"></script>-->
  <script src="https://cdn.jsdelivr.net/npm/echarts/map/js/world.js"></script>
 <script type="text/javascript">
+
+    let count_data2 = null;
+    const count_data = new WebSocket(`ws://${ipAddress}/data_list`);
+    count_data.onmessage = (event) => {
+        const count_data2 = JSON.parse(event.data);
+
+    var count_data_good = document.getElementById("Good");
+    var count_data_bad = document.getElementById("Bad");
+
+    // 将变量的值插入到HTML元素的内容中
+    count_data_good.innerHTML = count_data2.Good;
+count_data_bad.innerHTML = count_data2.Bad;
+}
 
     let currentData = null;
     const socket_city_map = new WebSocket(`ws://${ipAddress}/city_map`);
@@ -1056,7 +1013,7 @@ var option8 = {
         borderColor: '#0177ff'
       },
       emphasis: {
-        areaColor: '#071537'//鼠标指上市时的颜色
+        areaColor: '#bec2cc'//鼠标指上市时的颜色
       }
     }
   },

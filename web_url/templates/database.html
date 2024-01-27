@@ -10,40 +10,85 @@
     <link rel="stylesheet" href="./static/css/style.css">
     <link rel="stylesheet" href="./static/css/id.css">
     <style>
-        /* Add your CSS styles for the rolling screen here */
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid #2d2d2d;
-            text-align: left;
-            padding: 8px;
-            transition: background-color 0.5s, opacity 0.5s;
-        }
-        th {
-            background-color: #4d4d4d;
-            color: #ffffff;
-        }
-        tbody tr.fade-out {
-            background-color: #ffcccb;
-            opacity: 0.5;
-        }
-        tbody tr.fade-in {
-            background-color: #cbffcb;
-            opacity: 1;
-        }
+        body {
+  margin: 0;
+}
+
+.layout {
+  display: flex;
+  height: 100vh; /* 确保布局占满整个视口高度 */
+  overflow: hidden; /* 防止整个页面滚动 */
+}
+
+.sidebar {
+  width: 250px; /* 侧边栏宽度 */
+  /* 其他样式保持不变 */
+}
+
+.first-frontend {
+  flex-grow: 1; /* 让内容区域占据剩余空间 */
+
+  padding: 20px;
+}
+
+/* 表格样式优化 */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 20px; /* 添加底部外边距 */
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #4d4d4d;
+  color: white;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #f9f9f9; /* 条纹效果 */
+}
+
+/* 删除边框 */
+th, td {
+  border: none;
+}
+
+/* 滑动效果 */
+tbody tr.fade-out {
+  background-color: #ffcccb;
+  opacity: 0.5;
+}
+
+tbody tr.fade-in {
+  background-color: #cbffcb;
+  opacity: 1;
+}
+        .first-frontend {
+  flex: 1; /* 占据剩余空间，自适应宽度 */
+  display: flex;
+  flex-direction: column;
+}
+
+#rolling-table {
+  flex: 1; /* 让表格占据.flex容器的所有可用空间 */
+  width: 100%;
+  margin-top: 20px;
+  overflow-y: auto; /* 如果表格内容过多，启用纵向滚动条 */
+}
     </style>
 </head>
 <body>
-    <!-- partial:index.partial.html -->
+    <!-- partial:index.partial -->
     <div class="layout has-sidebar fixed-sidebar fixed-header">
         <aside id="sidebar" class="sidebar break-point-sm has-bg-image">
-    <a id="btn-collapse" class="sidebar-collapser"><i class="ri-arrow-left-s-line"></i></a>
     <div class="sidebar-layout">
       <div class="sidebar-header">
         <div class="pro-sidebar-logo">
-          <a href="./index.html">
+          <a href="./index">
             <h5>DGA域名检测系统</h5>
           </a>
         </div>
@@ -52,7 +97,7 @@
         <nav class="menu open-current-submenu">
           <ul>
             <li class="menu-item sub-menu">
-              <a href="./home.html">
+              <a href="./home">
                 <span class="menu-icon">
                   <i class="ri-vip-diamond-fill"></i>
                 </span>
@@ -62,7 +107,7 @@
           </ul>
           <ul>
             <li class="menu-item sub-menu">
-              <a href="./database.html">
+              <a href="./database">
                 <span class="menu-icon">
                   <i class="ri-bar-chart-2-fill"></i>
                 </span>
@@ -70,7 +115,7 @@
               </a>
             </li>
             <li class="menu-item sub-menu">
-              <a href="./type.html">
+              <a href="./type">
                 <span class="menu-icon">
                   <i class="ri-global-fill"></i>
                 </span>
@@ -78,11 +123,11 @@
               </a>
             </li>
             <li class="menu-item sub-menu">
-              <a href="#">
+              <a href="./Charts">
                 <span class="menu-icon">
                  <i class="ri-paint-brush-fill"></i>
                 </span>
-                <span class="menu-title">TYPE</span>
+                <span class="menu-title">Charts</span>
               </a>
               <div class="sub-menu-list">
                 <ul>
@@ -130,9 +175,9 @@
     </div>
   </aside>
         <div id="overlay" class="overlay"></div>
-        <div class="wrapper">
-            <header>数据库域名</header>
-        </div>
+<!--        <div class="wrapper">-->
+<!--            <header>数据库域名</header>-->
+<!--        </div>-->
         <!-- 导航栏右侧显示的内容 -->
         <div class="first-frontend">
             <table id="rolling-table">
@@ -141,6 +186,9 @@
                         <th>ID</th>
                         <th>Remote Address</th>
                         <th>Remote Domain</th>
+                        <th>Domain Type</th>
+                        <th>Status</th>
+                        <th>Timestamp</th>
                         <th>Domain Type</th>
                         <th>Status</th>
                         <th>Timestamp</th>
@@ -154,7 +202,7 @@
     <!-- partial -->
     <script src="./static/js/script.js"></script>
     <script>
-        const socket = new WebSocket('ws://192.168.163.1:8000/ws');
+        const socket = new WebSocket('ws://192.168.78.71:8000/ws');
         let currentData = null;
 
         socket.onmessage = (event) => {
