@@ -8,7 +8,7 @@
     <link rel='stylesheet' href='https://unpkg.com/css-pro-layout@1.1.0/dist/css/css-pro-layout.css'>
     <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&amp;display=swap'>
     <link rel="stylesheet" href="./static/css/style.css">
-    <link rel="stylesheet" href="./static/css/id.css">
+    <link rel="stylesheet" href="static/css/database.css">
     <style>
         body {
   margin: 0;
@@ -202,7 +202,9 @@ tbody tr.fade-in {
     <!-- partial -->
     <script src="./static/js/script.js"></script>
     <script>
-        const socket = new WebSocket('ws://192.168.78.71:8000/ws');
+        const ipAddress ="{{ipAddress}}";
+
+        const socket = new WebSocket('ws://${ipAddress}/ws');
         let currentData = null;
 
         socket.onmessage = (event) => {

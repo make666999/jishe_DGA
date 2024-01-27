@@ -12,10 +12,10 @@
     <link rel='stylesheet' href='https://unpkg.com/css-pro-layout@1.1.0/dist/css/css-pro-layout.css'>
     <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&amp;display=swap'>
     <link rel="stylesheet" href="./static/css/style.css">
-    <link rel="stylesheet" href="./static/css/id.css">
+    <link rel="stylesheet" href="./static/css/charts.css">
 </head>
 
-<body style="background-color: aqua">
+<body style="background-color: #ffffff">
 
 <!-- partial:index.partial -->
 <div class="layout has-sidebar fixed-sidebar fixed-header">
@@ -64,45 +64,6 @@
                 </span>
                                 <span class="menu-title">Charts</span>
                             </a>
-                            <div class="sub-menu-list">
-                                <ul>
-                                    <li class="menu-item">
-                                        <a href="#">
-                                            <span class="menu-title">Dark</span>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="#">
-                                            <span class="menu-title">Light</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="menu-header" style="padding-top: 20px"><span> EXTRA </span></li>
-                        <li class="menu-item">
-                            <a href="#">
-                <span class="menu-icon">
-                  <i class="ri-book-2-fill"></i>
-                </span>
-                                <span class="menu-title">Documentation</span>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="#">
-                <span class="menu-icon">
-                  <i class="ri-calendar-fill"></i>
-                </span>
-                                <span class="menu-title">Calendar</span>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="#">
-                <span class="menu-icon">
-                  <i class="ri-service-fill"></i>
-                </span>
-                                <span class="menu-title">Examples</span>
-                            </a>
                         </li>
                     </ul>
                 </nav>
@@ -118,10 +79,46 @@
         </select>
     </div>
 
-    <div class="visual" style="margin-top: 50px">
-        <!--		趋势图-->
-        <div class="visual_left" style="margin-left: 100px">
-<h1><span id="User">暂无</span>用户的数据分析</h1>
+<style>
+    body {
+        display: grid;
+        grid-template-rows: 1fr 1fr; /* 上下均分 */
+        grid-template-columns: 1fr 1fr; /* 左右均分 */
+        height: 100vh; /* 让整个页面占据视口的高度 */
+        margin: 0; /* 去除默认的外边距 */
+    }
+
+    .area {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+
+    .area:nth-child(1) {
+        background-color: lightblue; /* Top区域颜色 */
+    }
+
+    .area:nth-child(2) {
+        background-color: lightgreen; /* Right区域颜色 */
+    }
+
+    .area:nth-child(3) {
+        background-color: lightcoral; /* Bottom区域颜色 */
+    }
+
+    .area:nth-child(4) {
+        background-color: lightgoldenrodyellow; /* Left区域颜色 */
+    }
+</style>
+
+<!-- charts -->
+<!-- line -->
+    <div class="visual">
+        <!-- 趋势图 -->
+        <div class="visual_up_left">
+            <h1><span id="User"></span>用户的数据分析</h1>
             <div class="visual_box">
                 <div class="visual_title">
                     <span>网络攻击分析趋势图</span>
@@ -131,8 +128,10 @@
             </div>
         </div>
     </div>
+
 </div>
-    <!-- Scripts -->
+
+<!-- Scripts -->
 
 
     <script>

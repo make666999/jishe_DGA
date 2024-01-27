@@ -1,4 +1,4 @@
-import geocoder
+
 import requests
 from pymongo import MongoClient
 import geoip2.database

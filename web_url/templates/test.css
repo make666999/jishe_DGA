@@ -1,16 +1,6 @@
-.entryCard {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
 
-.entry-wrap {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap; /* 允许按钮在一行放不下时换行 */
-}
-
-.entry-item {
-    text-align: center;
-    margin: 10px;
+element.style {
+    position: absolute;
+    left: 0%;
+    top: 0px;
 }
