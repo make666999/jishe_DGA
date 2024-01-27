@@ -1,4 +1,5 @@
 /*jshint esversion: 6 */
+/* jshint esversion: 6, node: true */
 
 console.clear();
 
