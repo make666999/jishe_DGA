@@ -1,38 +1,77 @@
-<style>
-    body {
-        display: grid;
-        grid-template-rows: 1fr 1fr; /* 上下均分 */
-        grid-template-columns: 1fr 1fr; /* 左右均分 */
-        height: 100vh; /* 让整个页面占据视口的高度 */
-        margin: 0; /* 去除默认的外边距 */
-    }
+<meta charset="UTF-8">
+<link rel="stylesheet" href="test.css">
 
-    .area {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5em;
-        font-weight: bold;
-    }
+<div class="peer bdL p-20 w-30p@lg+ w-100p@lg-">
+    <div class="layers">
+        <div class="layer w-100">
 
-    .area:nth-child(1) {
-        background-color: lightblue; /* Top区域颜色 */
-    }
+            <div class="layers">
+                <div class="layer w-100">
+                    <h5 class="mB-5">100k</h5>
+                    <small class="fw-600 c-grey-700">Visitors From USA</small>
+                    <span class="pull-right c-grey-600 fsz-sm">50%</span>
+                    <div class="progress mT-10">
+                        <div class="progress-bar bgc-deep-purple-500" role="progressbar" aria-valuenow="50"
+                             aria-valuemin="0" aria-valuemax="100" style="width:50%;"><span class="visually-hidden">50% Complete</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="layer w-100 mT-15">
+                    <h5 class="mB-5">1M</h5>
+                    <small class="fw-600 c-grey-700">Visitors From Europe</small>
+                    <span class="pull-right c-grey-600 fsz-sm">80%</span>
+                    <div class="progress mT-10">
+                        <div class="progress-bar bgc-green-500" role="progressbar" aria-valuenow="50" aria-valuemin="0"
+                             aria-valuemax="100" style="width:80%;"><span class="visually-hidden">80% Complete</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="layer w-100 mT-15">
+                    <h5 class="mB-5">450k</h5>
+                    <small class="fw-600 c-grey-700">Visitors From Australia</small>
+                    <span class="pull-right c-grey-600 fsz-sm">40%</span>
+                    <div class="progress mT-10">
+                        <div class="progress-bar bgc-light-blue-500" role="progressbar" aria-valuenow="50"
+                             aria-valuemin="0" aria-valuemax="100" style="width:40%;"><span class="visually-hidden">40% Complete</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="layer w-100 mT-15">
+                    <h5 class="mB-5">1B</h5>
+                    <small class="fw-600 c-grey-700">Visitors From India</small>
+                    <span class="pull-right c-grey-600 fsz-sm">90%</span>
+                    <div class="progress mT-10">
+                        <div class="progress-bar bgc-blue-grey-500" role="progressbar" aria-valuenow="50"
+                             aria-valuemin="0" aria-valuemax="100" style="width:90%;"><span class="visually-hidden">90% Complete</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    .area:nth-child(2) {
-        background-color: lightgreen; /* Right区域颜色 */
-    }
 
-    .area:nth-child(3) {
-        background-color: lightcoral; /* Bottom区域颜色 */
-    }
-
-    .area:nth-child(4) {
-        background-color: lightgoldenrodyellow; /* Left区域颜色 */
-    }
-</style>
-
-<div class="area">Top</div>
-<div class="area">Right</div>
-<div class="area">Bottom</div>
-<div class="area">Left</div>
+            <div class="peers pT-20 mT-20 bdT fxw-nw@lg+ jc-sb ta-c gap-10">
+                <div class="peer">
+                    <div class="easy-pie-chart" data-size="80" data-percent="75" data-bar-color="#f44336">
+                        <span>75 %</span>
+                        <canvas height="80" width="80"></canvas>
+                    </div>
+                    <h6 class="fsz-sm">New Users</h6>
+                </div>
+                <div class="peer">
+                    <div class="easy-pie-chart" data-size="80" data-percent="50" data-bar-color="#2196f3">
+                        <span>50 %</span>
+                        <canvas height="80" width="80"></canvas>
+                    </div>
+                    <h6 class="fsz-sm">New Purchases</h6>
+                </div>
+                <div class="peer">
+                    <div class="easy-pie-chart" data-size="80" data-percent="90" data-bar-color="#ff9800">
+                        <span>90 %</span>
+                        <canvas height="80" width="80"></canvas>
+                    </div>
+                    <h6 class="fsz-sm">Bounce Rate</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,6 +1,72 @@
-
-element.style {
-    position: absolute;
-    left: 0%;
-    top: 0px;
+#layers {
+    --bs-blue: #2196f3;
+    --bs-indigo: #3f51b5;
+    --bs-purple: #9c27b0;
+    --bs-pink: #e91e63;
+    --bs-red: #f44336;
+    --bs-orange: #ff9800;
+    --bs-yellow: #ffeb3b;
+    --bs-green: #4caf50;
+    --bs-teal: #009688;
+    --bs-cyan: #00bcd4;
+    --bs-black: #000;
+    --bs-white: #fff;
+    --bs-gray: #6c757d;
+    --bs-gray-dark: #343a40;
+    --bs-gray-100: #f8f9fa;
+    --bs-gray-200: #e9ecef;
+    --bs-gray-300: #dee2e6;
+    --bs-gray-400: #ced4da;
+    --bs-gray-500: #adb5bd;
+    --bs-gray-600: #6c757d;
+    --bs-gray-700: #495057;
+    --bs-gray-800: #343a40;
+    --bs-gray-900: #212529;
+    --bs-primary: #2196f3;
+    --bs-secondary: #6c757d;
+    --bs-success: #4caf50;
+    --bs-info: #00bcd4;
+    --bs-warning: #ffeb3b;
+    --bs-danger: #f44336;
+    --bs-light: #f8f9fa;
+    --bs-dark: #212529;
+    --bs-primary-rgb: 33, 150, 243;
+    --bs-secondary-rgb: 108, 117, 125;
+    --bs-success-rgb: 76, 175, 80;
+    --bs-info-rgb: 0, 188, 212;
+    --bs-warning-rgb: 255, 235, 59;
+    --bs-danger-rgb: 244, 67, 54;
+    --bs-light-rgb: 248, 249, 250;
+    --bs-dark-rgb: 33, 37, 41;
+    --bs-primary-text-emphasis: #0d3c61;
+    --bs-secondary-text-emphasis: #2b2f32;
+    --bs-success-text-emphasis: #1e4620;
+    --bs-info-text-emphasis: #004b55;
+    --bs-warning-text-emphasis: #665e18;
+    --bs-danger-text-emphasis: #621b16;
+    --bs-light-text-emphasis: #495057;
+    --bs-dark-text-emphasis: #495057;
+    --bs-primary-bg-subtle: #d3eafd;
+    --bs-secondary-bg-subtle: #e2e3e5;
+    --bs-success-bg-subtle: #dbefdc;
+    --bs-info-bg-subtle: #ccf2f6;
+    --bs-warning-bg-subtle: #fffbd8;
+    --bs-danger-bg-subtle: #fdd9d7;
+    --bs-light-bg-subtle: #fcfcfd;
+    --bs-dark-bg-subtle: #ced4da;
+    --bs-primary-border-subtle: #a6d5fa;
+    --bs-secondary-border-subtle: #c4c8cb;
+    --bs-success-border-subtle: #b7dfb9;
+    --bs-info-border-subtle: #99e4ee;
+    --bs-warning-border-subtle: #fff7b1;
+    --bs-danger-border-subtle: #fbb4af;
+    --bs-light-border-subtle: #e9ecef;
+    --bs-dark-border-subtle: #adb5bd;
+    --bs-white-rgb: 255, 255, 255;
+    --bs-black-rgb: 0, 0, 0;
+    --bs-font-sans-serif: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
 }
+
+/* Add your custom CSS rules here */

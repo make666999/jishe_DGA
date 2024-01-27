@@ -1,6 +1,7 @@
 .wrapper {
-  width: 85%;
-  margin: 0 auto;
+    padding: 0;
+    width: 65%;
+    margin-right: 16px
 }
 header {
   background: #FFFFFF;
@@ -43,13 +44,11 @@ body {
     font-family: 'Microsoft YaHei', sans-serif; /* Use a font that supports Chinese characters */
 }
 .home-item {
-    margin: 20px;
-    padding: 10px;
     border: 1px solid #ccc;
-}
-
-.guideCard {
-    /* Add any necessary styles for the guideCard class */
+    margin-left: 16px;
+    margin-right: 16px;
+    margin-top: 16px;
+    margin-bottom: 16px;
 }
 
 .card-title {
@@ -69,9 +68,10 @@ body {
 }
 
 .entryCard {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    position: sticky;
+    top: 10px;
+    background-color: rgba(255, 255, 255, 0.9);
+    text-align: center;
 }
 
 .entry-wrap {
@@ -84,5 +84,49 @@ body {
     text-align: center;
     margin: 10px;
 }
+#user-info {
+    font: 12px/1.5 Microsoft Yahei,Hiragino Sans GB,sans-serif;
+    color: rgba(0,0,0,.6);
+    width: 45%;
+    max-width: 650px;
+    min-width: 300px;
+    padding: 16px;
+    margin-right: 16px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
 
+.user {
+    width: 35%;
+}
+.user-info{
+    width: 100%;
+    height: 30vh; /* 100% of viewport height */
+    margin-right: 16px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    border: 1px solid #8f8e8e; /* 添加黑线框 */
+}
+
+*{
+  box-sizing: border-box;
+}
+html {
+    width: 100%;
+    height: 100%;
+}
+
+/*首页图表*/
+.chart__container {
+    border-radius: 8px;
+    background-color: #ccc5c5;
+    width: 100%;
+    height: 50%;
+    display: inline-block;
+    box-shadow: 0px 5px 12px rgba(192, 192, 192, 0.86);
+}
+.row {
+    display: table-cell;
+    vertical-align: middle;
+}
 
