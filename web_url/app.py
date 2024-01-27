@@ -1,4 +1,4 @@
-# uvicorn app:app --reload --host 192.168.163.1 --port 8000
+# uvicorn app:app --reload --host 192.168.78.49 --port 8000
 # 192.168.78.49
 from fastapi.websockets import WebSocketState
 

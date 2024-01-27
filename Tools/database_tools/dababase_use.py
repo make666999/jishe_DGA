@@ -11,6 +11,7 @@ reader=geoip2.database.Reader(reader_path)
 def get_ip():
     try:
         response = requests.get('http://ip-api.com/json/')
+
         return response.json()
 
     except requests.RequestException as e:
