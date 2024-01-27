@@ -219,7 +219,7 @@ def get_local_ip():
         print("Error occurred:", e)
         return None
 ipAddress=str(get_local_ip())+":8000"
-print(ipAddress)
+
 @app.get("/")
 async def read_root(request: Request):
     latest_data = await get_latest_data()
