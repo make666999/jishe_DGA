@@ -6,7 +6,7 @@ import socket
 # 创建 MongoClient 对象，指定 MongoDB 的数据库、集合
 
 # reader_path = os.path.abspath(os.path.join("Model", "Data","city_db", "GeoLite2-City.mmdb"))
-reader_path="../Model/Data/city_db/GeoLite2-City.mmdb"
+reader_path="./Model/Data/city_db/GeoLite2-City.mmdb"
 reader=geoip2.database.Reader(reader_path)
 def get_ip():
     try:

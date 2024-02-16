@@ -41,6 +41,7 @@ footer {
 }
 
 body {
+    background-color: #ffffff;
     font-family: 'Microsoft YaHei', sans-serif; /* Use a font that supports Chinese characters */
 }
 .home-item {
