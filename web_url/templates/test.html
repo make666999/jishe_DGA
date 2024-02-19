@@ -1,77 +1,81 @@
-<meta charset="UTF-8">
 <link rel="stylesheet" href="test.css">
 
-<div class="peer bdL p-20 w-30p@lg+ w-100p@lg-">
-    <div class="layers">
-        <div class="layer w-100">
-
-            <div class="layers">
-                <div class="layer w-100">
-                    <h5 class="mB-5">100k</h5>
-                    <small class="fw-600 c-grey-700">Visitors From USA</small>
-                    <span class="pull-right c-grey-600 fsz-sm">50%</span>
-                    <div class="progress mT-10">
-                        <div class="progress-bar bgc-deep-purple-500" role="progressbar" aria-valuenow="50"
-                             aria-valuemin="0" aria-valuemax="100" style="width:50%;"><span class="visually-hidden">50% Complete</span>
-                        </div>
-                    </div>
+<section class="result-section mt-1">
+    <div class="result-content">
+        <div class="tool-content-wrap bg-white pa-0" id="result">
+            <header class="tool-content-header"><h3><i class="iconfont icon-coordinate"></i> 域名<span
+                    id="checked-domain"></span>检测结果</h3></header>
+            <div class="tool-content-body"><p><i class="iconfont icon-earth"></i> <strong>域名基本信息</strong></p>
+                <div class="table-responsive">
+                    <table class="list-table">
+                        <tbody>
+                        <tr>
+                            <th>域名注册商</th>
+                            <td class="r-cell" id="DOMAIN_REGISTRAR">等待检测</td>
+                        </tr>
+                        <tr>
+                            <th>域名有效期</th>
+                            <td class="r-cell" id="DOMAIN_EXPIRED_STATUS">等待检测</td>
+                        </tr>
+                        <tr>
+                            <th>域名状态</th>
+                            <td class="r-cell" id="DOMAIN_STATUS">等待检测</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="layer w-100 mT-15">
-                    <h5 class="mB-5">1M</h5>
-                    <small class="fw-600 c-grey-700">Visitors From Europe</small>
-                    <span class="pull-right c-grey-600 fsz-sm">80%</span>
-                    <div class="progress mT-10">
-                        <div class="progress-bar bgc-green-500" role="progressbar" aria-valuenow="50" aria-valuemin="0"
-                             aria-valuemax="100" style="width:80%;"><span class="visually-hidden">80% Complete</span>
-                        </div>
-                    </div>
+                <p class="mt-1"><i class="iconfont icon-list"></i> <strong>域名 DNS 检测结果</strong></p>
+                <div class="table-responsive">
+                    <table class="list-table">
+                        <tbody>
+                        <tr>
+                            <th>域名 DNS</th>
+                            <td class="r-cell" id="AUTHORITATIVE_DNS">等待检测</td>
+                        </tr>
+                        <tr>
+                            <th>DNS 解析结果</th>
+                            <td class="r-cell" id="AUTHORITATIVE_DNS_RESOLVE_RESULT">等待检测</td>
+                        </tr>
+                        <tr>
+                            <th>114.114.114.114 解析结果</th>
+                            <td class="r-cell" id="RECURSIVE_DNS_RESOLVE_RESULT">等待检测</td>
+                        </tr>
+                        <tr>
+                            <th>递归解析追踪</th>
+                            <td class="r-cell" id="RECURSIVE_STATUS">等待检测</td>
+                        </tr>
+                        <tr>
+                            <th>TTL 生效时间</th>
+                            <td class="r-cell" id="TTL">等待检测</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="layer w-100 mT-15">
-                    <h5 class="mB-5">450k</h5>
-                    <small class="fw-600 c-grey-700">Visitors From Australia</small>
-                    <span class="pull-right c-grey-600 fsz-sm">40%</span>
-                    <div class="progress mT-10">
-                        <div class="progress-bar bgc-light-blue-500" role="progressbar" aria-valuenow="50"
-                             aria-valuemin="0" aria-valuemax="100" style="width:40%;"><span class="visually-hidden">40% Complete</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="layer w-100 mT-15">
-                    <h5 class="mB-5">1B</h5>
-                    <small class="fw-600 c-grey-700">Visitors From India</small>
-                    <span class="pull-right c-grey-600 fsz-sm">90%</span>
-                    <div class="progress mT-10">
-                        <div class="progress-bar bgc-blue-grey-500" role="progressbar" aria-valuenow="50"
-                             aria-valuemin="0" aria-valuemax="100" style="width:90%;"><span class="visually-hidden">90% Complete</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="peers pT-20 mT-20 bdT fxw-nw@lg+ jc-sb ta-c gap-10">
-                <div class="peer">
-                    <div class="easy-pie-chart" data-size="80" data-percent="75" data-bar-color="#f44336">
-                        <span>75 %</span>
-                        <canvas height="80" width="80"></canvas>
-                    </div>
-                    <h6 class="fsz-sm">New Users</h6>
-                </div>
-                <div class="peer">
-                    <div class="easy-pie-chart" data-size="80" data-percent="50" data-bar-color="#2196f3">
-                        <span>50 %</span>
-                        <canvas height="80" width="80"></canvas>
-                    </div>
-                    <h6 class="fsz-sm">New Purchases</h6>
-                </div>
-                <div class="peer">
-                    <div class="easy-pie-chart" data-size="80" data-percent="90" data-bar-color="#ff9800">
-                        <span>90 %</span>
-                        <canvas height="80" width="80"></canvas>
-                    </div>
-                    <h6 class="fsz-sm">Bounce Rate</h6>
+                <p class="mt-1"><i class="iconfont icon-c-webmaster"></i> <strong>网站检测结果</strong></p>
+                <div class="table-responsive">
+                    <table class="list-table">
+                        <tbody>
+                        <tr>
+                            <th>备案情况</th>
+                            <td class="r-cell" id="BEIAN_STATUS">等待检测</td>
+                        </tr>
+                        <tr>
+                            <th>Ping 检查</th>
+                            <td class="r-cell" id="PING_STATUS">等待检测</td>
+                        </tr>
+                        <tr>
+                            <th>网站状态检查</th>
+                            <td class="r-cell" id="WEBSITE_STATUS">等待检测</td>
+                        </tr>
+                        <tr>
+                            <th>工信部黑名单网站</th>
+                            <td class="r-cell" id="MIIT_BLACK_LIST">等待检测</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+<script src="test.js"></script>
