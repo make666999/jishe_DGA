@@ -9,7 +9,6 @@
           href='https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&amp;display=swap'>
     <link rel="stylesheet" href="./static/css/style.css">
     <link rel="stylesheet" href="./static/css/home.css">
-    <link rel="stylesheet" href="./static/css/home_panel.css">
     <link rel="stylesheet" type="text/css" href="./static/ditu/css/visual.css">
 </head>
 <body>
@@ -28,7 +27,7 @@
                 <nav class="menu open-current-submenu">
                     <ul>
                         <li class="menu-item sub-menu">
-                            <a href="./home">
+                            <a href="./home.html">
                 <span class="menu-icon">
                   <i class="ri-vip-diamond-fill"></i>
                 </span>
@@ -69,7 +68,7 @@
 
     <div class="wrapper">
         <div data-v-10c91e1e="" class="home-item" style="height: 10%">
-            <div ><p data-v-daf72762="" class="card-title" style="text-align: center">快捷入口</p>
+            <div><p data-v-daf72762="" class="card-title" style="text-align: center">快捷入口</p>
                 <div data-v-daf72762="" class="entry-wrap flex flex-between">
                     <div data-v-daf72762="" class="entry-item"><img data-v-daf72762=""
                                                                     src="//res.orayimg.com/hsk/console/2.0/img/f351ea2.png"
@@ -99,9 +98,9 @@
             </div>
         </div>
         <div class="home-item" style="height: 10%">
-            <h1 style="text-align: center;">今日域名访问总数量:<span id="All"></span></h1>
-            <h1 style="float: left">正常域名访问数量:<span id="Good"></span></h1>
-            <h1 style="float: right">异常域名访问数量:<span id="Bad"></span></h1>
+            <p style="text-align: center;">今日域名访问总数量:<span id="All"></span></p>
+            <p style="float: left">正常域名访问数量:<span id="Good"></span></p>
+            <p style="float: right">异常域名访问数量:<span id="Bad"></span></p>
         </div>
         <footer>
             <div class="visual_con">
@@ -120,45 +119,55 @@
     </div>
 
     <div class="user">
+        <div class="flex">
+            <div class="card">
+                <div class="additional">
+                    <div class="user-card">
+                        <div class="level center">
+                            账号：123456789
+                        </div>
+                        <div class="points center">
+                            登陆地点：滁州
+                        </div>
+                        <div id="user-picture">
+                            <img src="./static/images/user.jpg" style="max-width: 100%; max-height: 100%;">
+                        </div>
+                        <p style="text-align: center; margin-top: 10px;">切换账号</p>
+                    </div>
+                    <div class="more-info">
+                        <div class="coords">
+                            <p>欢迎，您已登录！</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="general">
+                    <h1>Username</h1>
+                    <p>服务代码：111111</p>
+                    <p>授权代码：222222</p>
+                    <p>实名认证：未实名</p>
+                </div>
+            </div>
+        </div>
         <div class="user-info">
-            <div class="flex">
-                <div class="card-avatar">
-                    <img src="https://res.orayimg.com/oray/avatar/default-001.png" width="40">
-                </div>
-                <div><p class="card-title over-text">13866527545</p>
-                    <p class="card-sub">服务代码：86309121</p>
+            <div class="row">
+                <div class="chart__container">
+                    <canvas id="chart" width="610" height="400"></canvas>
+                    <p style="text-align: center">今日各时间段检测趋势</p>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="chart__container">
-                <canvas id="chart" width="600" height="300"></canvas>
-            </div>
-        </div>
-        <div class="container">
-            <div class="panel">
-                <div class="exchange-rate">
-                    <div class="label">Exchange</div>
-                    <div class="conversion-selector">USD - AUD</div>
-                    <span class="rate" data-currency="$"></span>
-                </div>
-                <div id="panel">
-                </div>
-            </div>
-            <button id="generate">Generate New Data</button>
         </div>
     </div>
 
 </div>
 <!-- partial -->
-  <script src="./static/js/script.js"></script>
+<script src="./static/js/script.js"></script>
 <!--<script src="./static/global.js"></script>-->
-    <script src="./static/ditu/js/echarts.min.js"></script>
-    <script src="./static/ditu/js/visual.js"></script>
+<script src="./static/ditu/js/echarts.min.js"></script>
+<script src="./static/ditu/js/visual.js"></script>
 <!--?<script src="./static/ditu/js/world.js"></script>-->
 <script src="https://cdn.jsdelivr.net/npm/echarts/map/js/world.js"></script>
 <script type="text/javascript">
-    const ipAddress ="{{ipAddress}}";
+    const ipAddress = "{{ipAddress}}";
     console.log(ipAddress);
     let count_data2 = null;
     const count_data = new WebSocket(`ws://${ipAddress}/data_list`);
@@ -1100,10 +1109,7 @@
     }
 </script>
 
-// 包含Chart.js库
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
 <script src="static/js/home_line.js"></script>
-<script src="https://d3js.org/d3.v7.min.js"></script>
-<script src="static/js/home_panel.js"></script>
 </body>
 </html>

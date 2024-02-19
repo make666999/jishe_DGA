@@ -1,7 +1,8 @@
 .wrapper {
     padding: 0;
     width: 65%;
-    margin-right: 16px
+    margin-right: 16px;
+    height: 10%;
 }
 header {
   background: #FFFFFF;
@@ -47,15 +48,9 @@ body {
 .home-item {
     border: 1px solid #ccc;
     margin-left: 16px;
-    margin-right: 16px;
+    margin-right: 10px;
     margin-top: 16px;
     margin-bottom: 16px;
-}
-
-.card-title {
-    font-size: 16px;
-    font-weight: bold;
-    display: flex;
 }
 
 .card-sub {
@@ -85,28 +80,17 @@ body {
     text-align: center;
     margin: 10px;
 }
-#user-info {
-    font: 12px/1.5 Microsoft Yahei,Hiragino Sans GB,sans-serif;
-    color: rgba(0,0,0,.6);
-    width: 45%;
-    max-width: 650px;
-    min-width: 300px;
-    padding: 16px;
-    margin-right: 16px;
-    margin-top: 16px;
-    margin-bottom: 16px;
-}
 
 .user {
     width: 35%;
 }
 .user-info{
-    width: 100%;
-    height: 30vh; /* 100% of viewport height */
+    width: 430px;
+    height: 50vh; /* 100% of viewport height */
     margin-right: 16px;
     margin-top: 16px;
     margin-bottom: 16px;
-    border: 1px solid #8f8e8e; /* 添加黑线框 */
+    border: 1px solid rgba(128, 128, 128, 0.29); /* 添加黑线框 */
 }
 
 *{
@@ -120,14 +104,186 @@ html {
 /*首页图表*/
 .chart__container {
     border-radius: 8px;
-    background-color: #ccc5c5;
-    width: 100%;
-    height: 50%;
+    width: 425px;
+    height: 60%;
     display: inline-block;
-    box-shadow: 0px 5px 12px rgba(192, 192, 192, 0.86);
 }
 .row {
     display: table-cell;
     vertical-align: middle;
 }
+
+@import url('https://fonts.googleapis.com/css?family=Abel');
+
+.card {
+  width: 425px;
+  height: 250px;
+  background-color: #fff;
+  background: linear-gradient(#f8f8f8, #fff);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  margin-right: 16px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.card h1 {
+  text-align: center;
+}
+
+.card .additional {
+  position: absolute;
+  width: 150px;
+  height: 100%;
+  background: linear-gradient(rgba(128, 128, 128, 0.29), rgba(142, 226, 245, 0.07));
+  transition: width 0.4s;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.card.green .additional {
+  background: linear-gradient(#92bCa6, #A2CCB6);
+}
+
+.card:hover .additional {
+  width: 100%;
+  border-radius: 0 5px 5px 0;
+}
+
+.card .additional .user-card {
+  width: 150px;
+  height: 100%;
+  position: relative;
+  float: left;
+}
+
+.card .additional .user-card::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 10%;
+  right: -2px;
+  height: 80%;
+  border-left: 2px solid rgba(0,0,0,0.025);
+}
+
+.card .additional .user-card .level,
+.card .additional .user-card .points {
+  top: 15%;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 0.75em;
+  font-weight: bold;
+  background: rgba(0,0,0,0.15);
+  padding: 0.125rem 0.75rem;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+
+.card .additional .user-card .points {
+  top: 85%;
+}
+
+.card .additional .user-card svg {
+  top: 50%;
+}
+
+.card .additional .more-info {
+  width: 300px;
+  float: left;
+  position: absolute;
+  left: 150px;
+  height: 100%;
+}
+
+.card .additional .more-info h1 {
+  color: #fff;
+  margin-bottom: 0;
+}
+
+.card.green .additional .more-info h1 {
+  color: #224C36;
+}
+
+.card .additional .coords {
+  margin: 0 1rem;
+  color: #000a09;
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 50%;
+}
+
+.card.green .additional .coords {
+  color: #325C46;
+}
+
+.card .additional .coords span + span {
+  float: right;
+}
+
+.card .additional .stats {
+  font-size: 2rem;
+  display: flex;
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  right: 1rem;
+  top: auto;
+  color: #fff;
+}
+
+.card.green .additional .stats {
+  color: #325C46;
+}
+
+.card .additional .stats > div {
+  flex: 1;
+  text-align: center;
+}
+
+.card .additional .stats i {
+  display: block;
+}
+
+.card .additional .stats div.title {
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.card .additional .stats div.value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 1.5rem;
+}
+
+.card .additional .stats div.value.infinity {
+  font-size: 2.5rem;
+}
+
+.card .general {
+  width: 300px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  box-sizing: border-box;
+  padding: 1rem;
+  padding-top: 0;
+}
+body > div > div.user > div.flex > div > div.general > p{
+    margin-left: 20px;
+    margin-top: 10px;
+}
+#user-picture{
+    width: 150px;
+    height: 150px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 

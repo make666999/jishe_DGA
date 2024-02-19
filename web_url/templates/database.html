@@ -165,7 +165,7 @@ tbody tr.fade-in {
     <script>
         const ipAddress ="{{ipAddress}}";
 
-        const socket = new WebSocket('ws://${ipAddress}/ws');
+        const socket = new WebSocket(`ws://${ipAddress}/ws`);
         let currentData = null;
 
         socket.onmessage = (event) => {
