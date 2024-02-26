@@ -3,7 +3,7 @@ from uvicorn import run
 # from web_url import app
 
 if __name__ == '__main__':
-    run("main:app", host="192.168.78.120", port=8000, reload=True)
+    # run("main:app", host="192.168.78.120", port=8000, reload=True)
     get_domain.Get_Domain_Save_Main()
 
 

@@ -847,14 +847,14 @@ def test(model):
         iter = 0
         loss_sum = 0
         metric_collection = torchmetrics.MetricCollection({
-            'acc': torchmetrics.Accuracy(task="multiclass", num_classes=34, average=average),
-            'prec': torchmetrics.Precision(task="multiclass", num_classes=34, average=average),
-            'rec': torchmetrics.Recall(task="multiclass", num_classes=34, average=average),
-            "F1": torchmetrics.F1Score(task="multiclass", num_classes=34, average=average)
+            'acc': torchmetrics.Accuracy(task="multiclass", num_classes=34, average="weighted"),
+            'prec': torchmetrics.Precision(task="multiclass", num_classes=34, average="weighted"),
+            'rec': torchmetrics.Recall(task="multiclass", num_classes=34, average="weighted"),
+            "F1": torchmetrics.F1Score(task="multiclass", num_classes=34, average="weighted")
         }).to(device)
 
         for i, (inputs, labels) in enumerate(test_loader):
-            print(inputs)
+
             y_label = labels.to(device).view(-1)
 
             X = inputs.to(device)
