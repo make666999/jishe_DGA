@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>图表分析</title>
-    <script src="./static/global.js"></script>
+
     <link rel="stylesheet" type="text/css" href="./static/ditu/css/visual.css">
     <script src="./static/ditu/js/echarts.min.js"></script>
     <meta charset="UTF-8">
@@ -135,6 +135,7 @@
 
     const selectElement = document.getElementById("collectionSelect");
     // 创建WebSocket连接
+    const ipAddress = "{{ipAddress}}";
     const socket = new WebSocket(`ws://${ipAddress}/collection_names`);
 
     socket.addEventListener("message", function (event) {

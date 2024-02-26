@@ -145,13 +145,13 @@ tbody tr.fade-in {
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Remote Address</th>
+                        <th>DNS Type</th>
+                        <th>Loc Address</th>
+                        <th>DNS Address</th>
+                        <th>Domain Address</th>
                         <th>Remote Domain</th>
                         <th>Domain Type</th>
-                        <th>Status</th>
-                        <th>Timestamp</th>
-                        <th>Domain Type</th>
-                        <th>Status</th>
+                        <th>Wrold Address</th>
                         <th>Timestamp</th>
                     </tr>
                 </thead>
@@ -163,13 +163,14 @@ tbody tr.fade-in {
     <!-- partial -->
     <script src="./static/js/script.js"></script>
     <script>
-        const ipAddress ="{{ipAddress}}";
+        const ipAddress = "{{ipAddress}}";
 
         const socket = new WebSocket(`ws://${ipAddress}/ws`);
         let currentData = null;
 
         socket.onmessage = (event) => {
             const data = JSON.parse(event.data);
+            console.log(data);
             const rollingTableBody = document.querySelector('#rolling-table tbody');
 
             if (JSON.stringify(data) === JSON.stringify(currentData)) {
@@ -187,7 +188,13 @@ tbody tr.fade-in {
                 for (const key in item) {
                     if (item.hasOwnProperty(key)) {
                         const cell = document.createElement('td');
-                        cell.textContent = item[key];
+                        if (key === '_id') {
+                            cell.textContent = item[key].$oid;
+                        } else if (key === 'moveLines' && item.moveLines) {
+                            cell.textContent = item.moveLines.toName;
+                        } else {
+                            cell.textContent = item[key];
+                        }
                         row.appendChild(cell);
                     }
                 }
@@ -218,10 +225,21 @@ tbody tr.fade-in {
         };
 
         // Initial data update
-        const initialData = [{'_id': '...', 'DNS_Type': '...', 'Loc_Address': '...', 'DNS_Address': '...', 'Domain_Address': '...', 'Remote_Domain': '...', 'Domain_Type': '...', 'moveLines': '...', 'Timestamp': '...'}];
+        const initialData = [{
+            '_id': {'$oid': '...'},
+            'DNS_Type': '...',
+            'Loc_Address': '...',
+            'DNS_Address': '...',
+            'Domain_Address': '...',
+            'Remote_Domain': '...',
+            'Domain_Type': '...',
+            'moveLines': {'toName': '...'},
+            'Timestamp': '...'
+        }];
         socket.onopen = () => {
             socket.send(JSON.stringify(initialData));
         };
     </script>
+
 </body>
 </html>
