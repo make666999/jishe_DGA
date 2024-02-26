@@ -3,99 +3,73 @@
 <head>
     <meta charset="utf-8"/>
     <title>ECharts</title>
-    <!-- 引入刚刚下载的 ECharts 文件 -->
+    <!-- 引入 ECharts 文件 -->
     <script src="./static/echarts.min.js"></script>
 </head>
 <body>
 <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
 <div id="main" style="height:400px;border: 1px solid red"></div>
 <script type="text/javascript">
-    // 基于准备好的dom，初始化echarts实例
+    // 初始化echarts实例
     var myChart = echarts.init(document.getElementById('main'));
 
-    function randomData() {
-        now = new Date(+now + oneDay);
-        value = value + Math.random() * 21 - 10;
-        return {
-            name: now.toString(),
-            value: [
-                [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'),
-                Math.round(value)
-            ]
-        };
-    }
+    // 定义数据数组
+    var dates = [];
+    var counts = [];
 
-    let data = [];
-    let now = new Date(1997, 9, 3);
-    let oneDay = 24 * 3600 * 1000;
-    let value = Math.random() * 1000;
-
-    for (var i = 0; i < 1000; i++) {
-        data.push(randomData());
-    }
-    option = {
-        title: {
-            text: 'Dynamic Data & Time Axis'
-        },
-        tooltip: {
-            trigger: 'axis',
-            formatter: function (params) {
-                params = params[0];
-                var date = new Date(params.name);
-                return (
-                    date.getDate() +
-                    '/' +
-                    (date.getMonth() + 1) +
-                    '/' +
-                    date.getFullYear() +
-                    ' : ' +
-                    params.value[1]
-                );
-            },
-            axisPointer: {
-                animation: false
-            }
-        },
+    // 图表的配置项
+    var option = {
         xAxis: {
-            type: 'time',
-            splitLine: {
-                show: false
-            }
+            type: 'category',
+            boundaryGap: false,
+            data: dates
         },
         yAxis: {
             type: 'value',
-            boundaryGap: [0, '100%'],
-            splitLine: {
-                show: false
-            }
+            boundaryGap: [0, '50%']
         },
-        series: [
-            {
-                name: 'Fake Data',
-                type: 'line',
-                showSymbol: false,
-                data: data
-            }
-        ]
+        series: [{
+            name: '成交',
+            type: 'line',
+            data: counts,
+            smooth: true,
+            areaStyle: {}
+        }]
     };
-    setInterval(function () {
-        for (var i = 0; i < 5; i++) {
-            data.shift();
-            data.push(randomData());
+
+    // 使用配置项和数据显示图表
+
+
+    // 建立WebSocket连接
+    const ws = new WebSocket('ws://192.168.212.79:8000/count_last_second');
+    ws.onmessage = function(event) {
+        const response = JSON.parse(event.data);
+        // 更新图表数据
+        dates.push(response.time);
+        counts.push(response.count);
+
+        // 保持数据数组不超过一定长度
+        if (dates.length > 20) {
+            dates.shift();
+            counts.shift();
         }
+
+        // 更新图表
         myChart.setOption({
-            series: [
-                {
-                    data: data
-                }
-            ]
+            xAxis: {
+                data: dates
+            },
+            series: [{
+                data: counts
+            }]
         });
-    }, 100);
+    };
+     myChart.setOption(option);
 
-    // 使用刚指定的配置项和数据显示图表。
-    myChart.setOption(option);
-    window.onresize = myChart.resize
-
+    // 处理窗口尺寸变化
+    window.onresize = function() {
+        myChart.resize();
+    };
 </script>
 </body>
 </html>
