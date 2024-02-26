@@ -3,6 +3,7 @@ import datetime
 import json
 import socket
 import time
+from datetime import datetime, timedelta
 from uvicorn import run
 from fastapi.websockets import WebSocketState
 
@@ -49,8 +50,8 @@ async def websocket_endpoint(websocket: WebSocket):
 
 
 # 获取列表分类
-
-today = datetime.date.today().strftime("%Y-%m-%d")
+today = datetime.today().strftime("%Y-%m-%d")
+# today = datetime.date.today().strftime("%Y-%m-%d")
 
 async def get_data_list():
     # 获取当天的起始时间戳和结束时间戳
@@ -111,6 +112,51 @@ async def websocket_endpoint(websocket: WebSocket):
             print(f"Error: {e}")
     finally:
         # 关闭连接时的清理工作
+        await websocket.close()
+
+# 统计当前一天不同时间段的数据量
+async def get_count_per_day_for_last_eight_days():
+    current_date = datetime.now()  # 获取当前日期
+    eight_days_ago = current_date - timedelta(days=8)  # 计算八天前的日期
+
+    # 初始化每天的数据计数为0
+    data_per_day = {i: 0 for i in range(8)}
+
+    data_points = collection.find({
+        "Timestamp": {
+            "$gte": int(eight_days_ago.timestamp() * 1000),
+            "$lte": int(current_date.timestamp() * 1000)
+        }
+    })
+
+    for data_point in data_points:
+        timestamp = data_point["Timestamp"]
+        date = datetime.fromtimestamp(timestamp / 1000).date()  # 将时间戳转换为日期
+        day_difference = (date - eight_days_ago.date()).days  # 计算日期差
+        if 0 <= day_difference < 8:
+            data_per_day[day_difference] += 1
+
+    # 准备返回的数据
+    dates = []
+    counts = []
+    for i in range(8):
+        date_str = (eight_days_ago + timedelta(days=i)).strftime("%Y-%m-%d")
+        dates.append(date_str)
+        counts.append(data_per_day[i])
+
+    return {"dates": dates, "count": counts}
+
+@app.websocket("/count_per_day_for_last_eight_days")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            result = await get_count_per_day_for_last_eight_days()
+            await websocket.send_text(json.dumps(result))  # 使用json.dumps将字典转换为JSON字符串
+            await asyncio.sleep(86400)  # 每24小时更新一次
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
         await websocket.close()
 
 

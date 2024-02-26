@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>图表分析</title>
-    <script src="./static/global.js"></script>
+
     <link rel="stylesheet" type="text/css" href="./static/ditu/css/visual.css">
     <script src="./static/ditu/js/echarts.min.js"></script>
     <meta charset="UTF-8">
@@ -73,36 +73,57 @@
       </div>
     </div>
   </aside>
+<section id="content">
+    <div class="content">
+        <div class="content-header">
+            <div>
+                <h5>请下拉选择框，选择查看的用户数据</h5>
+                <select style="float: left; color: #000000" id="collectionSelect">
+                    <!-- 默认选项 -->
+                    <option value="" disabled selected id="sendButton">Select a collection</option>
+                </select>
+                <h1 style="position: absolute; right: 30px; top: 3%;"><span id="User">当前暂无</span>用户的数据分析</h1>
+            </div>
+        </div>
+        <div class="widget-box sample-widget">
+            <div class="widget-header">
+                <h2>网络攻击分析趋势图</h2>
+            </div>
+            <div class="widget-content">
+                <div class="visual_chart" id="main2">
+                </div>
+            </div>
+        </div>
+        <div class="widget-box sample-widget">
+            <div class="widget-header">
+                <h2>Bar</h2>
+            </div>
+            <div class="widget-content">
+                <div class="chart-container" id="bar-chart">
+                </div>
+            </div>
+        </div>
+        <div class="widget-box sample-widget">
+            <div class="widget-header">
+                <h2>Widget Header</h2>
+            </div>
+            <div class="widget-content">
+                <div class="chart-container" id="stacked">
+                </div>
+            </div>
+        </div>
+        <div class="widget-box sample-widget">
+            <div class="widget-header">
+                <h2>Pie统计今日域名检测数量分类</h2>
+            </div>
+            <div class="widget-content">
+                <div class="chart-container" id="pie-chart">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-    <div style="height: 5%; width: 5%; padding-top: 5%">
-        <h5>请下拉选择框，选择查看的用户数据</h5>
-        <h1><span id="User">暂无</span>用户的数据分析</h1>
-        <select style="float: left; color: #12fe81" id="collectionSelect">
-            <!-- 默认选项 -->
-            <option value="" disabled selected id="sendButton">Select a collection</option>
-        </select>
-    </div>
-    <div class="left">
-        <div class="visual_box">
-            <div class="visual_title">
-                <span>网络攻击分析趋势图</span>
-            </div>
-            <div class="visual_chart" id="main2">
-                <!-- 在这里插入折线图的内容 -->
-            </div>
-        </div>
-        <div class="chart-container" id="bar-chart">
-            <label class="label label-success">Bar Chart</label>
-        </div>
-    </div>
-    <div class="right">
-        <div class="chart-container" id="stacked">
-            <label class="label label-success">Bar stacked</label>
-        </div>
-        <div class="chart-container" id="pie-chart">
-            <label class="label label-success">Pie Chart</label>
-        </div>
-    </div>
 
 </div>
 
@@ -114,8 +135,8 @@
 
     const selectElement = document.getElementById("collectionSelect");
     // 创建WebSocket连接
-
-    const socket = new WebSocket('ws://192.168.78.71:8000/collection_names');
+    const ipAddress = "{{ipAddress}}";
+    const socket = new WebSocket(`ws://${ipAddress}/collection_names`);
 
     socket.addEventListener("message", function (event) {
         const collectionNames = JSON.parse(event.data);

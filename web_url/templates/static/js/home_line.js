@@ -5,11 +5,11 @@ document.addEventListener("DOMContentLoaded", function () {
     let ctx = document.getElementById("chart").getContext('2d');
 
     var gradientStroke = ctx.createLinearGradient(500, 0, 100, 0);
-    gradientStroke.addColorStop(0, "#ff6c00");
-    gradientStroke.addColorStop(1, "#ff3b74");
+    gradientStroke.addColorStop(0, "rgba(142,226,245,0.62)");
+    gradientStroke.addColorStop(1, "#8ebbf5");
 
     var gradientBkgrd = ctx.createLinearGradient(0, 100, 0, 400);
-    gradientBkgrd.addColorStop(0, "rgba(244,94,132,0.2)");
+    gradientBkgrd.addColorStop(0, "rgba(142,242,245,0.59)");
     gradientBkgrd.addColorStop(1, "rgba(249,135,94,0)");
 
     let draw = Chart.controllers.line.prototype.draw;
