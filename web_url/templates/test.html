@@ -11,67 +11,54 @@
 <div id="main" style="height:400px;border: 1px solid red"></div>
 <script type="text/javascript">
     // 初始化echarts实例
-    var myChart = echarts.init(document.getElementById('main'));
 
-    // 定义数据数组
-    var dates = [];
-    var counts = [];
+var chartDom = document.getElementById('main');
+var myChart = echarts.init(chartDom);
+var option;
 
-    // 图表的配置项
-    var option = {
-        xAxis: {
-            type: 'category',
-            boundaryGap: false,
-            data: dates
-        },
-        yAxis: {
-            type: 'value',
-            boundaryGap: [0, '50%']
-        },
-        series: [{
-            name: '成交',
-            type: 'line',
-            data: counts,
-            smooth: true,
-            symbol:'none',
-            stack:'a',
-            areaStyle: {}
-        }]
-    };
-
-    // 使用配置项和数据显示图表
-
-
-    // 建立WebSocket连接
-    const ws = new WebSocket('ws://192.168.212.79:8000/count_last_second');
-    ws.onmessage = function(event) {
-        const response = JSON.parse(event.data);
-        // 更新图表数据
-        dates.push(response.time);
-        counts.push(response.count);
-
-        // 保持数据数组不超过一定长度
-        if (dates.length > 20) {
-            dates.shift();
-            counts.shift();
+option = {
+  tooltip: {
+    trigger: 'item'
+  },
+  legend: {
+    top: '5%',
+    left: 'center'
+  },
+  series: [
+    {
+      name: 'Access From',
+      type: 'pie',
+      radius: ['40%', '70%'],
+      avoidLabelOverlap: false,
+      itemStyle: {
+        borderRadius: 10,
+        borderColor: '#fff',
+        borderWidth: 2
+      },
+      label: {
+        show: false,
+        position: 'center'
+      },
+      emphasis: {
+        label: {
+          show: true,
+          fontSize: 40,
+          fontWeight: 'bold'
         }
+      },
+      labelLine: {
+        show: false
+      },
+      data: [
+        { value: 1048, name: 'Search Engine' },
+        { value: 735, name: 'Direct' }
+      ]
+    }
+  ]
+};
 
-        // 更新图表
-        myChart.setOption({
-            xAxis: {
-                data: dates
-            },
-            series: [{
-                data: counts
-            }]
-        });
-    };
-     myChart.setOption(option);
+option && myChart.setOption(option);
 
-    // 处理窗口尺寸变化
-    window.onresize = function() {
-        myChart.resize();
-    };
 </script>
 </body>
 </html>

@@ -3,6 +3,7 @@ import datetime
 import json
 import socket
 import time
+import datetime
 from datetime import datetime, timedelta
 from uvicorn import run
 from fastapi.websockets import WebSocketState
@@ -55,7 +56,7 @@ today = datetime.today().strftime("%Y-%m-%d")
 
 async def get_data_list():
     # 获取当天的起始时间戳和结束时间戳
-    start_of_day = int(time.mktime(datetime.datetime.strptime(today, "%Y-%m-%d").timetuple()) * 1000)
+    start_of_day = int(time.mktime(datetime.strptime(today, "%Y-%m-%d").timetuple()) * 1000)
     end_of_day = start_of_day + 86400000  # 一天的毫秒数
 
     # 使用聚合框架执行统计操作
@@ -257,7 +258,7 @@ async def websocket_endpoint(websocket: WebSocket):
             City_Data = await get_city_data()
             print("City Data:", City_Data)
             await websocket.send_text(dumps(City_Data))
-            await asyncio.sleep(0.1)
+            await asyncio.sleep(1)
     finally:
         # 关闭连接时的清理工作
         await websocket.close()
