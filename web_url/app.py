@@ -257,7 +257,7 @@ async def websocket_endpoint(websocket: WebSocket):
             City_Data = await get_city_data()
             print("City Data:", City_Data)
             await websocket.send_text(dumps(City_Data))
-            await asyncio.sleep(1)
+            await asyncio.sleep(0.1)
     finally:
         # 关闭连接时的清理工作
         await websocket.close()
