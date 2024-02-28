@@ -315,10 +315,6 @@ async def read_root(request: Request):
 async def read_root(request: Request):
     return templates.TemplateResponse("home.html", {"request": request,"ipAddress":ipAddress})
 
-@app.get("/id.html")
-async def read_root(request: Request):
-    return templates.TemplateResponse("database.html", {"request": request,"ipAddress":ipAddress})
-
 @app.get("/database.html")
 async def read_root(request: Request):
     return templates.TemplateResponse("database.html", {"request": request,"ipAddress":ipAddress})

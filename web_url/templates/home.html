@@ -67,8 +67,7 @@
     </aside>
 
     <div class="wrapper">
-        <div data-v-10c91e1e="" class="home-item" style="height: 10%">
-            <div><p data-v-daf72762="" class="card-title" style="text-align: center">快捷入口</p>
+        <div data-v-10c91e1e="" class="home-item" style="height: 12%">
                 <div data-v-daf72762="" class="entry-wrap flex flex-between">
                     <div data-v-daf72762="" class="entry-item"><img data-v-daf72762=""
                                                                     src="//res.orayimg.com/hsk/console/2.0/img/f351ea2.png"
@@ -96,8 +95,7 @@
                         <p data-v-daf72762="" class="entry-text">联系客服</p></div>
                 </div>
             </div>
-        </div>
-        <div class="home-item" style="height: 10%">
+        <div class="home-item" style="height: 6%">
             <p style="text-align: center;">今日域名访问总数量:<span id="All"></span></p>
             <p style="float: left">正常域名访问数量:<span id="Good"></span></p>
             <p style="float: right">异常域名访问数量:<span id="Bad"></span></p>
@@ -1136,7 +1134,7 @@
     };
 
 
-    const ws = new WebSocket('ws://192.168.212.79:8000/count_last_second');
+    const ws = new WebSocket(`ws://${ipAddress}/count_last_second`);
     ws.onmessage = function(event) {
         const response = JSON.parse(event.data);
         // 更新图表数据
