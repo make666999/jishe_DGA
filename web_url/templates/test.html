@@ -12,9 +12,22 @@
 <script type="text/javascript">
     // 初始化echarts实例
 
+
+
+
 var chartDom = document.getElementById('main');
 var myChart = echarts.init(chartDom);
 var option;
+
+
+ const ipAddress = "{{ipAddress}}";
+    console.log(ipAddress);
+    const count_data = new WebSocket(`ws://192.168.137.97:8000/data_list`);
+    count_data.onmessage = (event) => {
+        const count_data2 = JSON.parse(event.data);
+
+
+
 
 option = {
   tooltip: {
@@ -41,7 +54,7 @@ option = {
       },
       emphasis: {
         label: {
-          show: true,
+          show: false,
           fontSize: 40,
           fontWeight: 'bold'
         }
@@ -50,15 +63,15 @@ option = {
         show: false
       },
       data: [
-        { value: 1048, name: 'Search Engine' },
-        { value: 735, name: 'Direct' }
+        { value: count_data2.Good, name: 'Good' },
+        { value: count_data2.Bad, name: 'Bad' }
       ]
     }
   ]
 };
 
 option && myChart.setOption(option);
-
+}
 </script>
 </body>
 </html>

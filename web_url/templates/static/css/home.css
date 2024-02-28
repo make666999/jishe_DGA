@@ -45,11 +45,11 @@ body {
     font-family: 'Microsoft YaHei', sans-serif; /* Use a font that supports Chinese characters */
 }
 .home-item {
-    border: 1px solid #ccc;
+    /*border: 1px solid #ccc;*/
     margin-left: 16px;
     margin-right: 10px;
-    margin-top: 16px;
-    margin-bottom: 16px;
+    /*margin-top: 16px;*/
+    /*margin-bottom: 16px;*/
 }
 
 .card-sub {

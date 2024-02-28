@@ -98,7 +98,9 @@
         <div class="home-item" style="height: 6%">
             <p style="text-align: center;">今日域名访问总数量:<span id="All"></span></p>
             <p style="float: left">正常域名访问数量:<span id="Good"></span></p>
+
             <p style="float: right">异常域名访问数量:<span id="Bad"></span></p>
+             <div id="main2" style="height:90px;"></div>
         </div>
         <footer>
             <div class="visual_con">
@@ -146,11 +148,7 @@
                 </div>
             </div>
         </div>
-
-
                 <div id="main" style="height:400px;"></div>
-
-
     </div>
 
 </div>
@@ -164,7 +162,6 @@
 <script type="text/javascript">
     const ipAddress = "{{ipAddress}}";
     console.log(ipAddress);
-    let count_data2 = null;
     const count_data = new WebSocket(`ws://${ipAddress}/data_list`);
     count_data.onmessage = (event) => {
         const count_data2 = JSON.parse(event.data);
@@ -176,6 +173,60 @@
         count_data_good.innerHTML = count_data2.Good;
         count_data_bad.innerHTML = count_data2.Bad;
     }
+
+    var chartDom = document.getElementById('main2');
+var myChart = echarts.init(chartDom);
+var option;
+
+
+    console.log(ipAddress);
+    const count_data3 = new WebSocket(`ws://${ipAddress}/data_list`);
+    count_data3.onmessage = (event) => {
+        const count_data2 = JSON.parse(event.data);
+
+option = {
+  tooltip: {
+    trigger: 'item'
+  },
+  legend: {
+    top: '5%',
+    left: 'center'
+  },
+  series: [
+    {
+      name: 'Access From',
+      type: 'pie',
+      radius: ['40%', '70%'],
+      avoidLabelOverlap: false,
+      itemStyle: {
+        borderRadius: 1,
+        borderColor: '#fff',
+        borderWidth: 1
+      },
+      label: {
+        show: false,
+        position: 'left'
+      },
+      emphasis: {
+        label: {
+          show: true,
+          fontSize: 1,
+          fontWeight: 'bold'
+        }
+      },
+      labelLine: {
+        show: false
+      },
+      data: [
+        { value: count_data2.Good, name: 'Good' },
+        { value: count_data2.Bad, name: 'Bad' }
+      ]
+    }
+  ]
+};
+
+option && myChart.setOption(option);
+}
 
     let currentData = null;
     const socket_city_map = new WebSocket(`ws://${ipAddress}/city_map`);
@@ -1106,13 +1157,13 @@
 
 
 
-    var myChart = echarts.init(document.getElementById('main'));
+    var myChart2 = echarts.init(document.getElementById('main'));
 
     var dates = [];
     var counts = [];
 
 
-    var option = {
+    var option2 = {
         xAxis: {
             type: 'category',
             boundaryGap: false,
@@ -1148,7 +1199,7 @@
         }
 
 
-        myChart.setOption({
+        myChart2.setOption({
             xAxis: {
                 data: dates
             },
@@ -1157,11 +1208,11 @@
             }]
         });
     };
-     myChart.setOption(option);
+     myChart2.setOption(option2);
 
 
     window.onresize = function() {
-        myChart.resize();
+        myChart2.resize();
     };
 </script>
 
