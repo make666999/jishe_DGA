@@ -1236,26 +1236,29 @@ option && myChart.setOption(option);
     });
 
   function updateCollectionList(collectionNames) {
-    // 获取列表的 HTML 元素
     const listElement = document.getElementById("collectionList");
+    listElement.innerHTML = ""; // 清空现有的列表项
 
-    // 清空现有的列表项
-    listElement.innerHTML = "";
-
-    // 遍历所有集合名称并为每个名称创建一个新的列表项
     collectionNames.forEach(function(collectionName) {
-        // 创建一个新的 <li> 元素
         const listItem = document.createElement("li");
-        // 设置列表项的文本内容为集合名称
         listItem.textContent = collectionName;
-        // 设置列表项的点击事件
         listItem.onclick = function() {
+            // 移除其他所有列表项的 'selected' 类
+            const existingSelected = listElement.getElementsByClassName('selected');
+            Array.from(existingSelected).forEach(item => {
+                item.classList.remove('selected');
+            });
+
+            // 给当前点击的列表项添加 'selected' 类
+            listItem.classList.add('selected');
+
+            // 发送数据
             sendData(collectionName);
         };
-        // 将列表项添加到列表中
         listElement.appendChild(listItem);
     });
 }
+
 
 
 
