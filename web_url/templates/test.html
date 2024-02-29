@@ -1,77 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <title>ECharts</title>
-    <!-- 引入 ECharts 文件 -->
-    <script src="./static/echarts.min.js"></script>
+    <meta charset="UTF-8">
+    <title>集合列表展示</title>
+    <!-- 引入样式文件等 -->
 </head>
 <body>
-<!-- 为 ECharts 准备一个定义了宽高的 DOM -->
-<div id="main" style="height:400px;border: 1px solid red"></div>
-<script type="text/javascript">
-    // 初始化echarts实例
+    <div class="collection-list-container">
+        <h2>数据库集合</h2>
+        <ul id="collection-list">
+            <!-- WebSocket数据将在这里显示 -->
+        </ul>
+    </div>
 
+    <!-- WebSocket 脚本 -->
+    <script >
+        document.addEventListener('DOMContentLoaded', () => {  // 确保DOM完全加载完成
+    const wsUrl = 'ws://192.168.137.97:8000/collection_names'; // 根据实际情况调整WebSocket地址
+    const ws = new WebSocket(wsUrl);
 
+    ws.onopen = function(event) {
+        console.log('Connected to WebSocket');
+    };
 
+    ws.onerror = function(error) {
+        console.log('WebSocket Error: ' + error);
+    };
 
-var chartDom = document.getElementById('main');
-var myChart = echarts.init(chartDom);
-var option;
+    ws.onmessage = function(event) {
+        const collectionList = document.getElementById('collection-list');
+        const data = JSON.parse(event.data); // 假设服务器发送的是JSON格式的集合名称数组
 
+        collectionList.innerHTML = ''; // 清空当前列表
 
- const ipAddress = "{{ipAddress}}";
-    console.log(ipAddress);
-    const count_data = new WebSocket(`ws://192.168.137.97:8000/data_list`);
-    count_data.onmessage = (event) => {
-        const count_data2 = JSON.parse(event.data);
+        data.forEach((collectionName) => {
+            const listItem = document.createElement('li');
+            listItem.textContent = collectionName;
+            collectionList.appendChild(listItem);
+        });
+    };
 
+    ws.onclose = function(event) {
+        console.log('WebSocket connection closed');
+    };
+});
 
-
-
-option = {
-  tooltip: {
-    trigger: 'item'
-  },
-  legend: {
-    top: '5%',
-    left: 'center'
-  },
-  series: [
-    {
-      name: 'Access From',
-      type: 'pie',
-      radius: ['40%', '70%'],
-      avoidLabelOverlap: false,
-      itemStyle: {
-        borderRadius: 10,
-        borderColor: '#fff',
-        borderWidth: 2
-      },
-      label: {
-        show: false,
-        position: 'center'
-      },
-      emphasis: {
-        label: {
-          show: false,
-          fontSize: 40,
-          fontWeight: 'bold'
-        }
-      },
-      labelLine: {
-        show: false
-      },
-      data: [
-        { value: count_data2.Good, name: 'Good' },
-        { value: count_data2.Bad, name: 'Bad' }
-      ]
-    }
-  ]
-};
-
-option && myChart.setOption(option);
-}
-</script>
+    </script>
 </body>
 </html>

@@ -124,7 +124,7 @@
                 <div class="additional">
                     <div class="user-card">
                         <div class="level center">
-                            账号：123456789
+                            <h4 id="User">当前暂无</h4>
                         </div>
                         <div class="points center">
                             登陆地点：滁州
@@ -141,10 +141,11 @@
                     </div>
                 </div>
                 <div class="general">
-                    <h1>Username</h1>
-                    <p>服务代码：111111</p>
-                    <p>授权代码：222222</p>
-                    <p>实名认证：未实名</p>
+                    <h1>设备列表</h1>
+                    <div id="collectionList" class="collection-list">
+                        <!-- 集合名称将作为列表项添加到这里 -->
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -168,10 +169,12 @@
 
         var count_data_good = document.getElementById("Good");
         var count_data_bad = document.getElementById("Bad");
+        var count_data_all = document.getElementById("All");
 
         // 将变量的值插入到HTML元素的内容中
         count_data_good.innerHTML = count_data2.Good;
         count_data_bad.innerHTML = count_data2.Bad;
+        count_data_all.innerHTML = count_data2.Good +count_data2.Bad;
     }
 
     var chartDom = document.getElementById('main2');
@@ -188,7 +191,6 @@ option = {
   tooltip: {
     trigger: 'item'
   },
-
   series: [
     {
       name: 'Access From',
@@ -196,9 +198,9 @@ option = {
       radius: ['40%', '70%'],
       avoidLabelOverlap: false,
       itemStyle: {
-        borderRadius: 1,
+        borderRadius: 10,
         borderColor: '#fff',
-        borderWidth: 1
+        borderWidth: 2
       },
       label: {
         show: true,
@@ -1211,6 +1213,74 @@ option && myChart.setOption(option);
     window.onresize = function() {
         myChart2.resize();
     };
+
+
+
+
+
+
+
+
+
+
+
+
+    const selectElement = document.getElementById("collectionSelect");
+    // 创建WebSocket连接
+
+    const socket = new WebSocket(`ws://${ipAddress}/collection_names`);
+
+    socket.addEventListener("message", function (event) {
+        const collectionNames = JSON.parse(event.data);
+        updateCollectionList(collectionNames);
+    });
+
+  function updateCollectionList(collectionNames) {
+    // 获取列表的 HTML 元素
+    const listElement = document.getElementById("collectionList");
+
+    // 清空现有的列表项
+    listElement.innerHTML = "";
+
+    // 遍历所有集合名称并为每个名称创建一个新的列表项
+    collectionNames.forEach(function(collectionName) {
+        // 创建一个新的 <li> 元素
+        const listItem = document.createElement("li");
+        // 设置列表项的文本内容为集合名称
+        listItem.textContent = collectionName;
+        // 设置列表项的点击事件
+        listItem.onclick = function() {
+            sendData(collectionName);
+        };
+        // 将列表项添加到列表中
+        listElement.appendChild(listItem);
+    });
+}
+
+
+
+    function sendData(collectionName) {
+    const dataToSend = { Local: collectionName, Time: "value2" }; // 假设你需要发送的数据
+    // 更新界面上显示的选中的集合名
+    document.getElementById("User").innerHTML = dataToSend.Local;
+    // 发送数据到服务器
+    fetch('/api/send_data', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dataToSend)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Response from FastAPI:', data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+    selectElement.addEventListener("change", sendData);
 </script>
 
 <!--?<script src="./static/js/home_line.js"></script>-->
