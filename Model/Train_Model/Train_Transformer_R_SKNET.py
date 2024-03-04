@@ -847,10 +847,10 @@ def test(model):
         iter = 0
         loss_sum = 0
         metric_collection = torchmetrics.MetricCollection({
-            'acc': torchmetrics.Accuracy(task="multiclass", num_classes=34, average="weighted"),
-            'prec': torchmetrics.Precision(task="multiclass", num_classes=34, average="weighted"),
-            'rec': torchmetrics.Recall(task="multiclass", num_classes=34, average="weighted"),
-            "F1": torchmetrics.F1Score(task="multiclass", num_classes=34, average="weighted")
+            'acc': torchmetrics.Accuracy(task="multiclass", num_classes=34, average=average),
+            'prec': torchmetrics.Precision(task="multiclass", num_classes=34, average=average),
+            'rec': torchmetrics.Recall(task="multiclass", num_classes=34, average=average),
+            "F1": torchmetrics.F1Score(task="multiclass", num_classes=34, average=average)
         }).to(device)
 
         for i, (inputs, labels) in enumerate(test_loader):
@@ -883,10 +883,10 @@ def train(model, optimizer, loss_meter, epochs, path):
 
     model.train()
     metric_collection = torchmetrics.MetricCollection({
-        'acc': torchmetrics.Accuracy(task="multiclass", num_classes=34, average='weighted'),
-        'prec': torchmetrics.Precision(task="multiclass", num_classes=34, average='weighted'),
-        'rec': torchmetrics.Recall(task="multiclass", num_classes=34, average='weighted'),
-        "F1": torchmetrics.F1Score(task="multiclass", num_classes=34, average='weighted')
+        'acc': torchmetrics.Accuracy(task="multiclass", num_classes=34, average=average),
+        'prec': torchmetrics.Precision(task="multiclass", num_classes=34, average=average),
+        'rec': torchmetrics.Recall(task="multiclass", num_classes=34, average=average),
+        "F1": torchmetrics.F1Score(task="multiclass", num_classes=34, average=average)
     }).to(device)
     for epoch in range(epochs):
         epoch_acc_count = 0
@@ -955,7 +955,7 @@ def loss_value_plot(losses):
 
 if __name__ == '__main__':
     datalist=[]
-    average="weighted" #weighted
+    average=None #weighted
     name = "Transformer+R_SKNET"  ###准确率最高
     model_path = f"../Model_File/{name}.pth"
     png_path = f"./png/{name}.png"

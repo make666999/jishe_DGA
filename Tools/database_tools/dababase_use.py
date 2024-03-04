@@ -17,8 +17,9 @@ def get_ip():
     except requests.RequestException as e:
         print(f"Error fetching IP: {e}")
         return None
-loc_city=get_ip()['city']
-loc_x_y=[get_ip()["lon"],get_ip()["lat"]]
+ip_data=get_ip()
+loc_city=ip_data['city']
+loc_x_y=[ip_data["lon"],ip_data["lat"]]
 
 def mongo_link_database(database_name):
 
