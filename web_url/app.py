@@ -3,6 +3,7 @@ import datetime
 import json
 import socket
 import time
+import datetime
 from datetime import datetime, timedelta
 from uvicorn import run
 from fastapi.websockets import WebSocketState
@@ -55,7 +56,7 @@ today = datetime.today().strftime("%Y-%m-%d")
 
 async def get_data_list():
     # 获取当天的起始时间戳和结束时间戳
-    start_of_day = int(time.mktime(datetime.datetime.strptime(today, "%Y-%m-%d").timetuple()) * 1000)
+    start_of_day = int(time.mktime(datetime.strptime(today, "%Y-%m-%d").timetuple()) * 1000)
     end_of_day = start_of_day + 86400000  # 一天的毫秒数
 
     # 使用聚合框架执行统计操作
@@ -159,6 +160,34 @@ async def websocket_endpoint(websocket: WebSocket):
     finally:
         await websocket.close()
 
+# 获取前一秒的数据统计量
+async def get_count_last_second():
+    current_timestamp = int(time.time() * 1000)
+    one_second_ago = current_timestamp - 1000  # 1秒等于1000毫秒
+
+    # 使用 count_documents 方法计算最近一秒内的文档数量
+    count_last_second = collection.count_documents({
+        "Timestamp": {"$gte": one_second_ago, "$lte": current_timestamp}
+    })
+
+    # 获取当前时间字符串
+    current_time_str = time.strftime("%H:%M:%S", time.localtime(current_timestamp // 1000))
+
+    return {"time": current_time_str, "count": count_last_second}
+
+@app.websocket("/count_last_second")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            result = await get_count_last_second()
+            # 使用 json.dumps 将字典转换为 JSON 字符串
+            await websocket.send_text(json.dumps(result))
+            await asyncio.sleep(1)  # 每秒检查一次
+    except Exception as e:
+        print(f"错误: {e}")
+    finally:
+        await websocket.close()
 
 # 统计当前前60秒每隔5秒内的数据数量
 async def get_count_per_six_seconds():
@@ -285,10 +314,6 @@ async def read_root(request: Request):
 @app.get("/home.html")
 async def read_root(request: Request):
     return templates.TemplateResponse("home.html", {"request": request,"ipAddress":ipAddress})
-
-@app.get("/id.html")
-async def read_root(request: Request):
-    return templates.TemplateResponse("database.html", {"request": request,"ipAddress":ipAddress})
 
 @app.get("/database.html")
 async def read_root(request: Request):
