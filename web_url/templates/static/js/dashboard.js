@@ -193,88 +193,77 @@ $(function () {
 
     customerRating();
 
-    function salesChart() {
-        if ($('#sales-chart').length) {
-            const options = {
-                series: [
-                    {
-                        name: "Sales",
-                        data: [65, 60, 62, 69, 71, 65, 68, 67, 60, 61, 59, 64]
-                    },
-                    {
-                        name: 'Orders',
-                        data: [78, 75, 73, 78, 75, 73, 77, 74, 75, 77, 71, 75]
-                    }
-                ],
-                theme: {
-                    mode: $('body').hasClass('dark') ? 'dark' : 'light',
-                },
-                chart: {
-                    height: 350,
-                    type: 'line',
-                    foreColor: colors.chartTextColor,
-                    zoom: {
-                        enabled: false
-                    },
-                    toolbar: {
-                        show: false
-                    }
-                },
-                dataLabels: {
-                    enabled: false
-                },
-                colors: [colors.primary, colors.success],
-                stroke: {
-                    width: 4,
-                    curve: 'smooth',
-                },
-                legend: {
-                    show: false
-                },
-                markers: {
-                    size: 0,
-                    hover: {
-                        sizeOffset: 6
-                    }
-                },
-                xaxis: {
-                    categories: ['01 May', '02 May', '03 May', '04 May', '05 May', '06 May', '07 May', '08 May', '09 May', '10 May', '11 May', '13 May'],
-                },
-                tooltip: {
-                    y: [
-                        {
-                            title: {
-                                formatter: function (val) {
-                                    return val
-                                }
-                            }
-                        },
-                        {
-                            title: {
-                                formatter: function (val) {
-                                    return val
-                                }
-                            }
-                        },
-                        {
-                            title: {
-                                formatter: function (val) {
-                                    return val;
-                                }
-                            }
-                        }
-                    ]
-                },
-                grid: {
-                    borderColor: colors.chartBorderColor,
+  function salesChart() {
+    var ws = new WebSocket("ws://192.168.78.98:8000/collection_stats"); // 更改为你的WebSocket URL
+    var chart; // 在函数外部声明图表变量
+
+    // 初始化图表
+    const options = {
+        series: [],
+        chart: {
+            height: 350,
+            type: 'line',
+            zoom: {
+                enabled: false
+            }
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            width: 4,
+            curve: 'smooth'
+        },
+        xaxis: {
+            categories: [],
+        },
+        tooltip: {
+            y: {
+                formatter: function (val) {
+                    return val + " units";
                 }
-            };
-
-            new ApexCharts(document.querySelector("#sales-chart"), options).render();
+            }
+        },
+        legend: {
+            show: true
         }
-    }
+    };
+    chart = new ApexCharts(document.querySelector("#sales-chart"), options);
+    chart.render();
 
-    salesChart();
+    ws.onmessage = function(event) {
+        var data = JSON.parse(event.data);
+        updateChart(data);
+    };
+
+    function updateChart(data) {
+        var series = [];
+        var categories = Object.keys(data[Object.keys(data)[0]]).sort(); // 假设所有设备都有相同的时间标签
+
+        Object.keys(data).slice(0, 5).forEach(function(device) { // 最多处理五个设备
+            var dataPoints = [];
+            categories.forEach(function(time) {
+                dataPoints.push(data[device][time]);
+            });
+            series.push({
+                name: device,
+                data: dataPoints
+            });
+        });
+
+        // 更新图表而不是创建新的
+        chart.updateOptions({
+            xaxis: {
+                categories: categories
+            },
+            series: series
+        });
+    }
+}
+
+salesChart();
+
+
 
     function salesChannels() {
         if ($('#sales-channels').length) {
