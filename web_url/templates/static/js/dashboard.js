@@ -197,6 +197,7 @@ $(function () {
     var ws = new WebSocket("ws://192.168.78.98:8000/collection_stats"); // 更改为你的WebSocket URL
     var chart; // 在函数外部声明图表变量
 
+
     // 初始化图表
     const options = {
         series: [],
@@ -234,31 +235,36 @@ $(function () {
     ws.onmessage = function(event) {
         var data = JSON.parse(event.data);
         updateChart(data);
+
+
     };
 
     function updateChart(data) {
-        var series = [];
-        var categories = Object.keys(data[Object.keys(data)[0]]).sort(); // 假设所有设备都有相同的时间标签
+    var newSeries = [];
+    var categories = Object.keys(data[Object.keys(data)[0]]).sort(); // 假设所有设备都有相同的时间标签
 
-        Object.keys(data).slice(0, 5).forEach(function(device) { // 最多处理五个设备
-            var dataPoints = [];
-            categories.forEach(function(time) {
-                dataPoints.push(data[device][time]);
-            });
-            series.push({
-                name: device,
-                data: dataPoints
-            });
+    Object.keys(data).slice(0, 5).forEach(function(device) { // 最多处理五个设备
+        var dataPoints = [];
+        categories.forEach(function(time) {
+            dataPoints.push(data[device][time]);
         });
+        newSeries.push({
+            name: device,
+            data: dataPoints
+        });
+    });
 
-        // 更新图表而不是创建新的
-        chart.updateOptions({
-            xaxis: {
-                categories: categories
-            },
-            series: series
-        });
-    }
+    // 仅更新图表的数据系列，而不是整个图表
+    chart.updateSeries(newSeries);
+
+    // 仅在必要时更新分类轴（x轴）
+    chart.updateOptions({
+        xaxis: {
+            categories: categories
+        }
+    }, false, false); // 第二个参数表示是否重绘动画，第三个参数表示是否更新所有配置项
+}
+
 }
 
 salesChart();
@@ -298,80 +304,120 @@ salesChart();
 
     salesChannels();
 
-    function productsSold() {
-        if ($('#products-sold').length) {
-            const options = {
-                series: [{
-                    name: 'Sales',
-                    data: [30, 25, 35, 25, 35, 20, 30]
-                }],
-                chart: {
-                    type: 'bar',
-                    height: 180,
-                    foreColor: 'rgba(255,255,255,55%)',
-                    toolbar: {
-                        show: false
-                    }
-                },
-                theme: {
-                    mode: $('body').hasClass('dark') ? 'dark' : 'light',
-                },
-                plotOptions: {
-                    bar: {
-                        borderRadius: 6,
-                        columnWidth: '35%',
-                        dataLabels: {
-                            position: 'top', // top, center, bottom
-                        },
-                    }
-                },
-                colors: ['rgba(255,255,255,60%)'],
-                dataLabels: {
-                    enabled: true,
-                    formatter: function (val) {
-                        return "$" + val;
-                    },
-                    offsetY: -20,
-                    style: {
-                        fontSize: '12px',
-                        colors: ['rgba(255,255,255,55%)']
-                    }
-                },
-                xaxis: {
-                    show: false,
-                    categories: ["Mon", "Tue", "Wed", "Thu", "Fri", "Fri", "Sun"],
-                    axisBorder: {
-                        show: false
-                    },
-                    axisTicks: {
-                        show: false
-                    },
-                },
-                yaxis: {
-                    axisBorder: {
-                        show: false
-                    },
-                    axisTicks: {
-                        show: false,
-                    },
-                    labels: {
-                        show: false,
-                        formatter: function (val) {
-                            return "$" + val;
-                        }
-                    }
 
-                },
-                grid: {
-                    show: false
+
+
+
+function productsSold() {
+    var ws = new WebSocket("ws://192.168.78.98:8000/week_day_data_total"); // 更改为你的WebSocket URL
+
+    // 初始化图表
+    const options = {
+        series: [{
+            name: 'Total',
+            data: []
+        }],
+        chart: {
+            type: 'bar',
+            height: 180,
+            foreColor: 'rgba(255,255,255,55%)',
+            toolbar: {
+                show: false
+            }
+        },
+        theme: {
+            mode: $('body').hasClass('dark') ? 'dark' : 'light',
+        },
+        plotOptions: {
+            bar: {
+                borderRadius: 6,
+                columnWidth: '35%',
+            }
+        },
+        colors: ['rgba(255,255,255,60%)'],
+        dataLabels: {
+            enabled: true,
+            formatter: function (val) {
+                return  val;
+            },
+            offsetY: -20,
+            style: {
+                fontSize: '12px',
+                colors: ['rgba(255,255,255,55%)']
+            }
+        },
+        xaxis: {
+            categories: [],
+        },
+        yaxis: {
+            axisBorder: {
+                show: false
+            },
+            axisTicks: {
+                show: false,
+            },
+            labels: {
+                show: false,
+                formatter: function (val) {
+                    return  val;
                 }
-            };
-
-            new ApexCharts(document.querySelector('#products-sold'), options).render();
+            }
+        },
+        grid: {
+            show: false
         }
+    };
+
+    chart = new ApexCharts(document.querySelector('#products-sold'), options);
+    chart.render();
+
+    ws.onmessage = function(event) {
+        var data = JSON.parse(event.data);
+        updateChart(data);
+    };
+
+    function updateChart(data) {
+    var categories = []; // 用于存储日期
+    var originalDataSeries = []; // 用于存储原始的销售数据
+
+    // 假设数据格式为 { '2024-03-10': 10, '2024-03-11': 15, ... }
+    for (const [date, count] of Object.entries(data)) {
+        // 转换日期格式从 'YYYY-MM-DD' 到 'MM-DD'
+        const shortDate = date.substring(5); // 移除前4个字符和分隔符
+        categories.push(shortDate);
+        originalDataSeries.push({date: shortDate, count: count});
     }
 
-    productsSold();
+    // 对日期和数据进行升序排序
+    originalDataSeries.sort((a, b) => {
+        // 转换回 'YYYY-MM-DD' 格式进行正确的日期比较
+        return new Date(`2020-${a.date}`).getTime() - new Date(`2020-${b.date}`).getTime();
+    });
+
+    // 分离排序后的日期和数据
+    const sortedCategories = originalDataSeries.map(item => item.date);
+    const sortedDataSeries = originalDataSeries.map(item => item.count);
+
+    // 更新图表而不是创建新的
+    chart.updateOptions({
+        xaxis: {
+            categories: sortedCategories
+        },
+        series: [{
+            name: 'Total',
+            data: sortedDataSeries
+        }]
+    });
+}
+
+
+}
+
+productsSold(); // 调用函数以初始化图表和WebSocket连接
+
+
+
+
 
     if ($('.summary-cards').length) {
         $('.summary-cards').slick({

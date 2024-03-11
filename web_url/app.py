@@ -31,6 +31,46 @@ db = mongo_client["DGA"]
 # 模板配置
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="templates/static"), name="static")
+# 统计集合数量以及名字
+@app.websocket("/latest_location_data")
+async def websocket_latest_location_data(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            # 初始化一个列表来存储每个集合的最新Loc_Address数据
+            latest_location_data_list = []
+            # 获取所有集合的名称
+            collection_names = db.list_collection_names()
+            # 遍历所有集合
+            for collection_name in collection_names:
+                collection = db[collection_name]
+                # 查询每个集合中Loc_Address字段最新的数据
+                # 假设每个文档都有一个名为"Timestamp"的时间戳字段
+                latest_document = collection.find_one({}, sort=[('Timestamp', -1)])
+                # 构建包含集合名称和最新Loc_Address数据的字典
+                collection_data = {"collection_name": collection_name}
+                if latest_document and "Loc_Address" in latest_document:
+                    collection_data["latest_loc_address"] = latest_document["Loc_Address"]
+                else:
+                    collection_data["latest_loc_address"] = "No data or Loc_Address not found"
+                # 将字典添加到列表中
+                latest_location_data_list.append(collection_data)
+
+            # 构建最终发送的数据结构，包含集合数量和集合数据列表
+            final_data = {
+                "total_collections": len(collection_names),
+                "collections_data": latest_location_data_list
+            }
+
+            # 发送数据
+            await websocket.send_text(json.dumps(final_data))
+            await asyncio.sleep(1)  # 暂停1秒，减少消息发送频率
+    except Exception as e:
+        print(f"错误: {e}")
+    finally:
+        await websocket.close()
+
+
 
 @app.websocket("/collection_stats")
 async def websocket_endpoint(websocket: WebSocket):
@@ -41,15 +81,16 @@ async def websocket_endpoint(websocket: WebSocket):
             for collection_name in db.list_collection_names():
                 collection = db[collection_name]
                 # 统计不同分钟的数据量
-                current_timestamp = int(time.time())
+                current_timestamp = int(time.time() * 1000)  # 当前时间戳转换为毫秒
                 for i in range(10):  # 统计最近10分钟的数据量
-                    start_timestamp = current_timestamp - (i + 1) * 60  # 60秒 * (i + 1)分钟
-                    end_timestamp = current_timestamp - i * 60  # 60秒 * i分钟
+                    start_timestamp = current_timestamp - (i + 1) * 60000  # 60000毫秒 * (i + 1)分钟
+                    end_timestamp = current_timestamp - i * 60000  # 60000毫秒 * i分钟
                     count = collection.count_documents({
                         "Timestamp": {"$gte": start_timestamp, "$lt": end_timestamp}
                     })
                     # 将时间戳转换为datetime对象，然后格式化为小时:分钟格式
-                    start_time_str = datetime.datetime.fromtimestamp(start_timestamp).strftime("%H:%M")
+                    # 注意：datetime.fromtimestamp() 需要秒为单位，所以这里要将毫秒转换回秒
+                    start_time_str = datetime.datetime.fromtimestamp(start_timestamp / 1000).strftime("%H:%M")
                     collection_stats.setdefault(collection_name, {})[start_time_str] = count
             await websocket.send_text(json.dumps(collection_stats))
             await asyncio.sleep(1)
@@ -62,40 +103,46 @@ class DataToReceive(BaseModel):
     Local: str
     Timestamp: int  # 接受整数类型的时间戳
 
-
-
 # WebSocket 端点，用于返回数据库中所有表在每周每一天的数据总量
 @app.websocket("/week_day_data_total")
 async def websocket_week_day_data_total(websocket: WebSocket):
     await websocket.accept()
     try:
         while websocket.client_state == WebSocketState.CONNECTED:
+            # 初始化一个字典来存储每天的总数据量
             week_day_data_total = {}
+            # 获取当前时间戳（毫秒）
+            current_timestamp = int(time.time() * 1000)
+            # 初始化每天的数据量为0
+            for i in range(7):  # 从今天往前推7天
+                start_timestamp = current_timestamp - (i + 1) * 86400000  # 一天的毫秒数
+                start_date = time.strftime("%Y-%m-%d", time.localtime(start_timestamp / 1000))
+                week_day_data_total[start_date] = 0  # 初始化每天的总数为0
+
+
+            # 遍历所有集合
             for collection_name in db.list_collection_names():
                 collection = db[collection_name]
-                # 获取一周内每一天的起始时间戳和结束时间戳，并统计数据量
-                current_timestamp = int(time.time())
+                # 统计每天的数据量
                 for i in range(7):  # 从今天往前推7天
-                    start_timestamp = current_timestamp - (i + 1) * 86400  # 86400秒 = 一天的秒数
-                    end_of_day_timestamp = current_timestamp - i * 86400
-                    count = 0
-                    data_points = collection.find({
-                        "Timestamp": {"$gte": start_timestamp * 1000, "$lt": end_of_day_timestamp * 1000}
+                    start_timestamp = current_timestamp - (i + 1) * 86400000
+                    end_of_day_timestamp = current_timestamp - i * 86400000
+                    # 计算当前集合在当前天的数据量
+                    count = collection.count_documents({
+                        "Timestamp": {"$gte": start_timestamp, "$lt": end_of_day_timestamp}
                     })
-                    for data_point in data_points:
-                        timestamp = data_point["Timestamp"] // 1000
-                        six_second_interval = (timestamp - start_timestamp) // 5  # 计算六秒间隔
-                        if six_second_interval in range(10):
-                            count += 1
-                    # 将时间戳转换为日期字符串，作为字典的键
-                    start_date = time.strftime("%Y-%m-%d", time.localtime(start_timestamp))
-                    week_day_data_total.setdefault(collection_name, {})[start_date] = count
+                    # 更新总数据量
+                    start_date = time.strftime("%Y-%m-%d", time.localtime(start_timestamp / 1000))
+                    week_day_data_total[start_date] += count  # 累加每天的数据量
+
+            # 发送每天的总数据量
             await websocket.send_text(json.dumps(week_day_data_total))
             await asyncio.sleep(1)
     except Exception as e:
         print(f"错误: {e}")
     finally:
         await websocket.close()
+
 
 
 
