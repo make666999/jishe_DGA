@@ -90,7 +90,7 @@ async def websocket_endpoint(websocket: WebSocket):
                     })
                     # 将时间戳转换为datetime对象，然后格式化为小时:分钟格式
                     # 注意：datetime.fromtimestamp() 需要秒为单位，所以这里要将毫秒转换回秒
-                    start_time_str = datetime.datetime.fromtimestamp(start_timestamp / 1000).strftime("%H:%M")
+                    start_time_str = datetime.fromtimestamp(start_timestamp / 1000).strftime("%H:%M")
                     collection_stats.setdefault(collection_name, {})[start_time_str] = count
             await websocket.send_text(json.dumps(collection_stats))
             await asyncio.sleep(1)
