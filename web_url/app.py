@@ -7,8 +7,8 @@ import datetime
 
 from uvicorn import run
 from fastapi.websockets import WebSocketState
-from datetime import timedelta
 
+from datetime import datetime, timedelta
 from fastapi import FastAPI, WebSocket, Request
 from pymongo import MongoClient
 import pymongo
@@ -144,6 +144,68 @@ async def websocket_week_day_data_total(websocket: WebSocket):
         await websocket.close()
 
 
+# 用于返回oreder页面的数据
+@app.websocket("/latest_order_data")
+async def websocket_latest_order_data(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            latest_order_data_list = []
+            collection_names = db.list_collection_names()
+            # 获取今天的日期范围
+            now = datetime.now()
+            start_of_day = datetime(now.year, now.month, now.day)
+            end_of_day = start_of_day + timedelta(days=1)
+            # 转换为毫秒
+            start_of_day_ms = int(start_of_day.timestamp() * 1000)
+            end_of_day_ms = int(end_of_day.timestamp() * 1000)
+
+            for collection_name in collection_names:
+                collection = db[collection_name]
+                daily_count = collection.count_documents({
+                    "Timestamp": {
+                        "$gte": start_of_day_ms,
+                        "$lt": end_of_day_ms
+                    }
+                })
+                latest_document = collection.find_one({
+                    "Timestamp": {
+                        "$gte": start_of_day_ms,
+                        "$lt": end_of_day_ms
+                    }
+                }, sort=[('Timestamp', -1)])
+
+                collection_data = {
+                    "collection_name": collection_name,
+                    "daily_count": daily_count
+                }
+                if latest_document:
+                    # 将毫秒时间戳转换为正常的日期时间格式
+                    latest_timestamp = datetime.fromtimestamp(latest_document.get("Timestamp", 0) / 1000)
+                    collection_data.update({
+                        "latest_loc_address": latest_document.get("Loc_Address", "No Loc_Address found"),
+                        "latest_timestamp": latest_timestamp.strftime('%Y-%m-%d %H:%M:%S'),  # 格式化日期时间
+                        "latest_domain_type": latest_document.get("Domain_Type", "No Domain_Type found")
+                    })
+                else:
+                    collection_data.update({
+                        "latest_loc_address": "No data found",
+                        "latest_timestamp": "No data found",
+                        "latest_domain_type": "No data found"
+                    })
+                latest_order_data_list.append(collection_data)
+
+            final_data = {
+                "total_collections": len(collection_names),
+                "collections_data": latest_order_data_list
+            }
+
+            await websocket.send_text(json.dumps(final_data))
+            await asyncio.sleep(5)  # 暂停1秒，减少消息发送频率
+    except Exception as e:
+        print(f"错误: {e}")
+    finally:
+        await websocket.close()
 
 
 
