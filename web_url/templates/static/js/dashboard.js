@@ -416,7 +416,37 @@ function productsSold() {
 productsSold(); // 调用函数以初始化图表和WebSocket连接
 
 
+// 更新数据列表
+      // 建立WebSocket连接
+                                var ws = new WebSocket("ws://192.168.78.98:8000/latest_location_data");
 
+                                ws.onmessage = function(event) {
+    var data = JSON.parse(event.data);
+    var deviceList = document.getElementById('device-list');
+    var deviceCount = document.getElementById('device-count'); // 获取显示设备数量的元素
+
+    deviceList.innerHTML = ''; // 清空现有的列表项
+    deviceCount.textContent = data.total_collections; // 更新设备数量
+
+    // 遍历每个集合的数据
+    data.collections_data.forEach(function(collection) {
+        // 创建新的列表项
+        var listItem = document.createElement('div');
+        listItem.className = 'list-group-item d-flex justify-content-between align-items-center px-0';
+
+        // 设置集合名称和Loc_Address数据
+        listItem.innerHTML = `
+            <div class="d-flex flex-grow-1 align-items-center">
+                <img width="45" class="me-3" src="static/picture/venezuela.svg" alt="..."> <!-- 更换为适当的图标或去除 -->
+                <span>${collection.collection_name}</span>
+            </div>
+            <span>${collection.latest_loc_address}</span>
+        `;
+
+        // 将新的列表项添加到设备列表中
+        deviceList.appendChild(listItem);
+    });
+};
 
 
     if ($('.summary-cards').length) {
