@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title> Vetra | E-Commerce HTML Admin Dashboard Template </title>
+    <title> 数据看板 | DGA域名检测系统 </title>
 
     <!-- Google fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com/">
@@ -25,6 +26,9 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <!--?    fish-->
+    <link rel="stylesheet" href="static/css/fish.css">
 </head>
 <body>
 
@@ -46,17 +50,6 @@
                 <i class="bi bi-arrow-right"></i>
             </button>
         </div>
-        <ul class="nav nav-pills">
-            <li class="nav-item">
-                <a class="nav-link  nav-link-notify" data-bs-toggle="tab" href="#activities">Activities</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" data-bs-toggle="tab" href="#notes">Notes</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#alerts">Alerts</a>
-            </li>
-        </ul>
     </div>
     <div class="sidebar-content">
         <div class="tab-content">
@@ -67,17 +60,15 @@
                             <a href="#" class="d-flex">
                                 <div class="flex-shrink-0">
                                     <figure class="avatar avatar-info me-3">
-                                            <span class="avatar-text rounded-circle">
-                                                <i class="bi bi-person"></i>
-                                            </span>
+                                        <img src="static/picture/robot.jpg" class="rounded-circle" alt="image">
                                     </figure>
                                 </div>
                                 <div class="flex-grow-1">
                                     <p class="mb-0 fw-bold d-flex justify-content-between">
-                                        You joined a group
+                                        域名检测助手
                                     </p>
                                     <span class="text-muted small">
-                                        <i class="bi bi-clock me-1"></i> Today
+                                        <i class="bi bi-clock me-1"></i> 2023-11-28 16:08
                                     </span>
                                 </div>
                             </a>
@@ -86,17 +77,15 @@
                             <a href="#" class="d-flex">
                                 <div class="flex-shrink-0">
                                     <figure class="avatar avatar-warning me-3">
-                                            <span class="avatar-text rounded-circle">
-                                                <i class="bi bi-hdd"></i>
-                                            </span>
+                                        <img src="static/picture/banshou.png" class="rounded-circle" alt="image">
                                     </figure>
                                 </div>
                                 <div class="flex-grow-1">
                                     <p class="mb-0 fw-bold d-flex justify-content-between">
-                                        Storage is running low!
+                                        系统通知
                                     </p>
                                     <span class="text-muted small">
-                                        <i class="bi bi-clock me-1"></i> Today
+                                        <i class="bi bi-clock me-1"></i> 2024-2-12 12:08
                                     </span>
                                 </div>
                             </a>
@@ -105,223 +94,18 @@
                             <a href="#" class="d-flex">
                                 <div class="flex-shrink-0">
                                     <figure class="avatar avatar-secondary me-3">
-                                            <span class="avatar-text rounded-circle">
-                                                <i class="bi bi-file-text"></i>
-                                            </span>
+                                        <img src="static/picture/cash.png" class="rounded-circle" alt="image">
                                     </figure>
                                 </div>
                                 <div class="flex-grow-1">
                                     <p class="mb-0 d-flex justify-content-between">
-                                        1 person sent a file
+                                        账号与用户
                                     </p>
                                     <span class="text-muted small">
-                                        <i class="bi bi-clock me-1"></i> Yesterday
+                                        <i class="bi bi-clock me-1"></i> 2024-3-20 09:23
                                     </span>
                                 </div>
                             </a>
-                        </li>
-                        <li class="px-0 list-group-item">
-                            <a href="#" class="d-flex">
-                                <div class="flex-shrink-0">
-                                    <figure class="avatar avatar-success me-3">
-                                            <span class="avatar-text rounded-circle">
-                                                <i class="bi bi-download"></i>
-                                            </span>
-                                    </figure>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <p class="mb-0 d-flex justify-content-between">
-                                        Reports ready to download
-                                    </p>
-                                    <span class="text-muted small">
-                                        <i class="bi bi-clock me-1"></i> Yesterday
-                                    </span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="px-0 list-group-item">
-                            <a href="#" class="d-flex">
-                                <div class="flex-shrink-0">
-                                    <figure class="avatar avatar-info me-3">
-                                            <span class="avatar-text rounded-circle">
-                                                <i class="bi bi-lock"></i>
-                                            </span>
-                                    </figure>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <p class="mb-0 d-flex justify-content-between">
-                                        2 steps verification
-                                    </p>
-                                    <span class="text-muted small">
-                                        <i class="bi bi-clock me-1"></i> 20 min ago
-                                    </span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="tab-pane-footer">
-                    <a href="#" class="btn btn-success">
-                        <i class="bi bi-check2 me-2"></i> Make All Read
-                    </a>
-                    <a href="#" class="btn btn-danger ms-2">
-                        <i class="bi bi-trash me-2"></i> Delete all
-                    </a>
-                </div>
-            </div>
-            <div class="tab-pane" id="notes">
-                <div class="tab-pane-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="px-0 list-group-item">
-                            <p class="mb-0 fw-bold text-success d-flex justify-content-between">
-                                This month's report will be prepared.
-                            </p>
-                            <span class="text-muted small">
-                                <i class="bi bi-clock me-1"></i> Today
-                            </span>
-                            <div class="mt-2">
-                                <a href="#">Edit</a>
-                                <a href="#" class="text-danger ms-2">Delete</a>
-                            </div>
-                        </li>
-                        <li class="px-0 list-group-item">
-                            <p class="mb-0 fw-bold text-success d-flex justify-content-between">
-                                An email will be sent to the customer.
-                            </p>
-                            <span class="text-muted small">
-                                <i class="bi bi-clock me-1"></i> Today
-                            </span>
-                            <div class="mt-2">
-                                <a href="#">Edit</a>
-                                <a href="#" class="text-danger ms-2">Delete</a>
-                            </div>
-                        </li>
-                        <li class="px-0 list-group-item">
-                            <p class="mb-0 d-flex justify-content-between">
-                                The meeting will be held.
-                            </p>
-                            <span class="text-muted small">
-                                <i class="bi bi-clock me-1"></i> Yesterday
-                            </span>
-                            <div class="mt-2">
-                                <a href="#">Edit</a>
-                                <a href="#" class="text-danger ms-2">Delete</a>
-                            </div>
-                        </li>
-                        <li class="px-0 list-group-item">
-                            <p class="mb-0 fw-bold text-success d-flex justify-content-between">
-                                Conversation with users.
-                            </p>
-                            <span class="text-muted small">
-                                <i class="bi bi-clock me-1"></i> Yesterday
-                            </span>
-                            <div class="mt-2">
-                                <a href="#">Edit</a>
-                                <a href="#" class="text-danger ms-2">Delete</a>
-                            </div>
-                        </li>
-                        <li class="px-0 list-group-item">
-                            <p class="mb-0 fw-bold text-warning d-flex justify-content-between">
-                                Payment refund will be made to the customer.
-                            </p>
-                            <span class="text-muted small">
-                                <i class="bi bi-clock me-1"></i> 20 min ago
-                            </span>
-                            <div class="mt-2">
-                                <a href="#">Edit</a>
-                                <a href="#" class="text-danger ms-2">Delete</a>
-                            </div>
-                        </li>
-                        <li class="px-0 list-group-item">
-                            <p class="mb-0 d-flex justify-content-between">
-                                Payment form will be activated.
-                            </p>
-                            <span class="text-muted small">
-                                <i class="bi bi-clock me-1"></i> 20 min ago
-                            </span>
-                            <div class="mt-2">
-                                <a href="#">Edit</a>
-                                <a href="#" class="text-danger ms-2">Delete</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="tab-pane-footer">
-                    <a href="#" class="btn btn-primary btn-block">
-                        <i class="bi bi-plus me-2"></i> Add Notes
-                    </a>
-                </div>
-            </div>
-            <div class="tab-pane" id="alerts">
-                <div class="tab-pane-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="px-0 list-group-item d-flex">
-                            <div class="flex-shrink-0">
-                                <figure class="avatar avatar-warning me-3">
-                                        <span class="avatar-text rounded-circle">
-                                            <i class="bi bi-lock"></i>
-                                        </span>
-                                </figure>
-                            </div>
-                            <div class="flex-grow-1">
-                                <p class="mb-0 fw-bold d-flex justify-content-between">
-                                    Signed in with a different device.
-                                </p>
-                                <span class="text-muted small">
-                                        <i class="bi bi-clock me-1"></i> Yesterday
-                                    </span>
-                            </div>
-                        </li>
-                        <li class="px-0 list-group-item d-flex">
-                            <div class="flex-shrink-0">
-                                <figure class="avatar avatar-warning me-3">
-                                        <span class="avatar-text fw-bold rounded-circle">
-                                            <i class="bi bi-file-text"></i>
-                                        </span>
-                                </figure>
-                            </div>
-                            <div class="flex-grow-1">
-                                <p class="mb-0 fw-bold d-flex justify-content-between">
-                                    Your billing information is not active.
-                                </p>
-                                <span class="text-muted small">
-                                        <i class="bi bi-clock me-1"></i> Yesterday
-                                    </span>
-                            </div>
-                        </li>
-                        <li class="px-0 list-group-item d-flex">
-                            <div class="flex-shrink-0">
-                                <figure class="avatar avatar-warning me-3">
-                                        <span class="avatar-text rounded-circle">
-                                            <i class="bi bi-person"></i>
-                                        </span>
-                                </figure>
-                            </div>
-                            <div class="flex-grow-1">
-                                <p class="mb-0 d-flex justify-content-between">
-                                    Your subscription has expired.
-                                </p>
-                                <span class="text-muted small">
-                                        <i class="bi bi-clock me-1"></i> Today
-                                    </span>
-                            </div>
-                        </li>
-                        <li class="px-0 list-group-item d-flex">
-                            <div class="flex-shrink-0">
-                                <figure class="avatar avatar-warning me-3">
-                                        <span class="avatar-text rounded-circle">
-                                            <i class="bi bi-hdd"></i>
-                                        </span>
-                                </figure>
-                            </div>
-                            <div class="flex-grow-1">
-                                <p class="mb-0 d-flex justify-content-between">
-                                    Your storage space is running low
-                                </p>
-                                <span class="text-muted small">
-                                        <i class="bi bi-clock me-1"></i> Today
-                                    </span>
-                            </div>
                         </li>
                     </ul>
                 </div>
@@ -336,6 +120,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 <!-- ./ notifications sidebar -->
 
@@ -575,7 +360,7 @@
                         <a href="orders.html">设备列表</a>
                     </li>
                     <li>
-                        <a href="order-detail.html">Detail</a>
+                        <a href="order-detail.html">设备详情</a>
                     </li>
                 </ul>
             </li>
@@ -584,7 +369,7 @@
                     <span class="nav-link-icon">
                         <i class="bi bi-person-badge"></i>
                     </span>
-                    <span>用户信息</span>
+                    <span>流量日志</span>
                 </a>
             </li>
         </ul>
@@ -607,23 +392,11 @@
             <img width="100" src="static/picture/logo.svg" alt="logo">
         </a>
         <!-- ./ Logo -->
-        <div class="page-title">Overview</div>
-        <form class="search-form">
-            <div class="input-group">
-                <button class="btn btn-outline-light" type="button" id="button-addon1">
-                    <i class="bi bi-search"></i>
-                </button>
-                <input type="text" class="form-control" placeholder="Search..."
-                       aria-label="Example text with button addon" aria-describedby="button-addon1">
-                <a href="#" class="btn btn-outline-light close-header-search-bar">
-                    <i class="bi bi-x"></i>
-                </a>
-            </div>
-        </form>
+        <div class="page-title">数据看板</div>
         <div class="header-bar ms-auto">
             <ul class="navbar-nav justify-content-end">
                 <li class="nav-item">
-                    <a href="#" class="nav-link nav-link-notify" data-count="2" data-sidebar-target="#notifications">
+                    <a href="#" class="nav-link nav-link-notify" data-count="3" data-sidebar-target="#notifications">
                         <i class="bi bi-bell icon-lg"></i>
                     </a>
                 </li>
@@ -697,7 +470,7 @@
                 </li>
                 <li class="nav-item ms-3">
                     <button class="btn btn-primary btn-icon">
-                        <i class="bi bi-plus-circle"></i> Add Product
+                        <i class="bi bi-plus-circle"></i> Create New
                     </button>
                 </li>
             </ul>
@@ -722,58 +495,16 @@
             <div class="col-lg-4 col-md-12">
                 <div class="card h-100">
                     <div class="card-body">
-                        <div class="d-flex mb-3">
-                            <div class="display-7">
-                                <i class="bi bi-basket"></i>
-                            </div>
-                            <div class="dropdown ms-auto">
-                                <a href="#" data-bs-toggle="dropdown" class="btn btn-sm" aria-haspopup="true"
-                                   aria-expanded="false">
-                                    <i class="bi bi-three-dots"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end">
-                                    <a href="#" class="dropdown-item">View Detail</a>
-                                    <a href="#" class="dropdown-item">Download</a>
-                                </div>
-                            </div>
-                        </div>
-                        <h4 class="mb-3">设备数量</h4>
-                        <div class="d-flex mb-3">
-                            <div class="display-7">3</div>
-                            <div class="ms-auto" id="total-orders"></div>
-                        </div>
-                        <div class="text-success">
-                            Over last month 1.4% <i class="small bi bi-arrow-up"></i>
-                        </div>
+                        <h6 class="card-title">异常与正常域名比例</h6>
+                        <div id="domain_count" style="height: 100%;width: 100%;"></div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-4 col-md-12">
                 <div class="card h-100">
                     <div class="card-body">
-                        <div class="d-flex mb-3">
-                            <div class="display-7">
-                                <i class="bi bi-credit-card-2-front"></i>
-                            </div>
-                            <div class="dropdown ms-auto">
-                                <a href="#" data-bs-toggle="dropdown" class="btn btn-sm" aria-haspopup="true"
-                                   aria-expanded="false">
-                                    <i class="bi bi-three-dots"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end">
-                                    <a href="#" class="dropdown-item">View Detail</a>
-                                    <a href="#" class="dropdown-item">Download</a>
-                                </div>
-                            </div>
-                        </div>
-                        <h4 class="mb-3">数据总量</h4>
-                        <div class="d-flex mb-3">
-                            <div class="display-7">$3.759,00</div>
-                            <div class="ms-auto" id="total-sales"></div>
-                        </div>
-                        <div class="text-danger">
-                            Over last month 2.4% <i class="small bi bi-arrow-down"></i>
-                        </div>
+                        <h6 class="card-title">集群状态</h6>
+                        <div id="type_rate" style="height: 100%;width: 100%;"></div>
                     </div>
                 </div>
             </div>
@@ -781,7 +512,7 @@
                 <div class="card h-100">
                     <div class="card-body">
                         <div class="d-flex align-items-center mb-4">
-                            <h6 class="card-title">Recent Reviews</h6>
+                            <h6 class="card-title">新消息通知</h6>
                             <div class="dropdown ms-auto">
                             </div>
                         </div>
@@ -789,89 +520,87 @@
                             <div>
                                 <div class="d-flex align-items-center mb-3">
                                     <div class="avatar me-3">
-                                        <img src="static/picture/women_avatar5.jpg" class="rounded-circle" alt="image">
+                                        <img src="static/picture/robot.jpg" class="rounded-circle" alt="image">
                                     </div>
                                     <div>
-                                        <h5 class="mb-1">Amara Keel</h5>
+                                        <h5 class="mb-1">域名检测助手</h5>
                                         <ul class="list-inline ms-auto mb-0">
                                             <li class="list-inline-item mb-0">
-                                                <i class="bi bi-star-fill text-warning"></i>
+                                                <h6>2023-11-28 16:08</h6>
                                             </li>
                                             <li class="list-inline-item mb-0">
-                                                <i class="bi bi-star-fill text-warning"></i>
                                             </li>
                                             <li class="list-inline-item mb-0">
-                                                <i class="bi bi-star-fill text-warning"></i>
                                             </li>
                                             <li class="list-inline-item mb-0">
-                                                <i class="bi bi-star-fill text-warning"></i>
                                             </li>
                                             <li class="list-inline-item mb-0">
-                                                <i class="bi bi-star-fill text-muted"></i>
                                             </li>
-                                            <li class="list-inline-item mb-0">(4)</li>
                                         </ul>
                                     </div>
                                 </div>
-                                <div>I love your products. It is very easy and fun to use this panel.</div>
+                                <h6>检测结果：您的域名检测结果已生成，请查看您提供的邮箱或登录我们的平台查看详细报告。</h6>
                             </div>
                             <div>
                                 <div class="d-flex align-items-center mb-3">
                                     <div class="avatar me-3">
-                                        <span class="avatar-text bg-indigo rounded-circle">J</span>
+                                        <img src="static/picture/banshou.png" class="rounded-circle" alt="image">
                                     </div>
                                     <div>
-                                        <h5 class="mb-1">Johnath Siddeley</h5>
+                                        <h5 class="mb-1">系统通知</h5>
                                         <ul class="list-inline ms-auto mb-0">
                                             <li class="list-inline-item mb-0">
-                                                <i class="bi bi-star-fill text-warning"></i>
+                                                <h6>2024-2-12 12:08</h6>
                                             </li>
                                             <li class="list-inline-item mb-0">
-                                                <i class="bi bi-star-fill text-warning"></i>
                                             </li>
                                             <li class="list-inline-item mb-0">
-                                                <i class="bi bi-star-fill text-warning"></i>
                                             </li>
                                             <li class="list-inline-item mb-0">
-                                                <i class="bi bi-star-fill text-warning"></i>
                                             </li>
                                             <li class="list-inline-item mb-0">
-                                                <i class="bi bi-star-fill text-warning"></i>
                                             </li>
-                                            <li class="list-inline-item mb-0">(5)</li>
                                         </ul>
                                     </div>
                                 </div>
-                                <div>Very nice glasses. I ordered for my friend.</div>
+                                <h6>恭喜！您查询的域名目前可供注册使用，请尽快完成注册以确保您拥有该域名。</h6>
                             </div>
                             <div>
                                 <div class="d-flex align-items-center mb-3">
                                     <div class="avatar me-3">
-                                        <span class="avatar-text bg-yellow rounded-circle">D</span>
+                                        <img src="static/picture/cash.png" class="rounded-circle" alt="image">
                                     </div>
                                     <div>
-                                        <h5 class="mb-1">David Berks</h5>
+                                        <h5 class="mb-1">账号与用户</h5>
                                         <ul class="list-inline ms-auto mb-0">
                                             <li class="list-inline-item mb-0">
-                                                <i class="bi bi-star-fill text-warning"></i>
+                                                <h6>2024-3-20 09:23</h6>
                                             </li>
                                             <li class="list-inline-item mb-0">
-                                                <i class="bi bi-star-fill text-warning"></i>
                                             </li>
                                             <li class="list-inline-item mb-0">
-                                                <i class="bi bi-star-fill text-warning"></i>
                                             </li>
                                             <li class="list-inline-item mb-0">
-                                                <i class="bi bi-star-fill text-warning"></i>
                                             </li>
                                             <li class="list-inline-item mb-0">
-                                                <i class="bi bi-star-fill text-warning"></i>
                                             </li>
-                                            <li class="list-inline-item mb-0">(5)</li>
                                         </ul>
                                     </div>
                                 </div>
-                                <div>I am very satisfied with this product.</div>
+                                <h6>
+                                    当您的域名即将到期时，我们会发送一封提醒您续订的通知邮件，以确保您不会失去您重要的域名。</h6>
+                            </div>
+                        </div>
+                        <div class="fish">
+                            <div class="bowl"></div>
+                            <div class="water">
+                                <div class="body">
+                                    <div class="eye"></div>
+                                    <div class="fin-center"></div>
+                                    <div class="fin top"></div>
+                                    <div class="fin bottom"></div>
+                                    <div class="tail"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -882,33 +611,20 @@
                     <div class="card-header d-flex">
                         <h6 class="card-title">
                             实时流量监控
-                            <a href="#" class="bi bi-question-circle ms-1 small" data-bs-toggle="tooltip"
-                               title="Daily orders and sales"></a>
+                            <a class="bi bi-question-circle ms-1 small" data-bs-toggle="tooltip"
+                               title="Multi-device data volume"></a>
                         </h6>
-                        <div class="d-flex gap-3 align-items-center ms-auto">
-                            <div class="dropdown">
-                                <a href="#" data-bs-toggle="dropdown" class="btn btn-sm" aria-haspopup="true"
-                                   aria-expanded="false">
-                                    <i class="bi bi-three-dots"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end">
-                                    <a href="#" class="dropdown-item">View Detail</a>
-                                    <a href="#" class="dropdown-item">Download</a>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="card-body">
                         <div class="d-md-flex align-items-center mb-3">
                             <div class="d-flex align-items-center">
                                 <div class="display-7 me-3">
-                                    <i class="bi bi-bag-check me-2 text-success"></i> 多设备动态数据量变化/m
+                                    <i class="bi bi-bag-check me-2 text-success">每分钟多设备数据量变化</i>
                                 </div>
                             </div>
                         </div>
                         <div id="sales-chart"></div>
                         <div class="d-flex justify-content-center gap-4 align-items-center ms-auto mt-3 mt-lg-0">
-
                         </div>
                     </div>
                 </div>
@@ -921,69 +637,20 @@
                         <!--?                    世界地图-->
                         <h6 class="card-title">
                             流量路径
-                            <a href="#" class="bi bi-question-circle ms-1 small" data-bs-toggle="tooltip"
-                               title="Channels where your products are sold"></a>
+                            <a class="bi bi-question-circle ms-1 small" data-bs-toggle="tooltip"
+                               title="Data traffic path"></a>
                         </h6>
-                        <div class="d-flex gap-3 align-items-center ms-auto">
-                            <div class="dropdown">
-                                <a href="#" data-bs-toggle="dropdown" class="btn btn-sm" aria-haspopup="true"
-                                   aria-expanded="false">
-                                    <i class="bi bi-three-dots"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end">
-                                    <a href="#" class="dropdown-item">View Detail</a>
-                                    <a href="#" class="dropdown-item">Download</a>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="card-body">
-                        <h1>这里放世界地图</h1>
+                        <!--?                        世界地图-->
                     </div>
                 </div>
             </div>
             <div class="col-lg-4 col-md-12">
                 <div class="card h-100">
                     <div class="card-body">
-                        <div class="d-flex mb-4">
-                            <h6 class="card-title mb-0">每日域名状态占比</h6>
-                            <div class="dropdown ms-auto">
-                                <a href="#" data-bs-toggle="dropdown" class="btn btn-sm" aria-haspopup="true"
-                                   aria-expanded="false">
-                                    <i class="bi bi-three-dots"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end">
-                                    <a href="#" class="dropdown-item">View Detail</a>
-                                    <a href="#" class="dropdown-item">Download</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="text-center">
-                            <div class="display-6">3.0</div>
-                            <div class="d-flex justify-content-center gap-3 my-3">
-                                <i class="bi bi-star-fill icon-lg text-warning"></i>
-                                <i class="bi bi-star-fill icon-lg text-warning"></i>
-                                <i class="bi bi-star-fill icon-lg text-warning"></i>
-                                <i class="bi bi-star-fill icon-lg text-muted"></i>
-                                <i class="bi bi-star-fill icon-lg text-muted"></i>
-                                <span>(318)</span>
-                            </div>
-                        </div>
-                        <div class="text-muted d-flex align-items-center justify-content-center">
-                        <span class="text-success me-3 d-block">
-                            <i class="bi bi-arrow-up me-1 small"></i>+35
-                        </span> Point from last month
-                        </div>
-                        <div class="row my-4">
-                            <div class="col-md-6 m-auto">
-                                <div id="customer-rating"></div>
-                            </div>
-                        </div>
-                        <div class="text-center">
-                            <button class="btn btn-outline-primary btn-icon">
-                                <i class="bi bi-download"></i> Download Report
-                            </button>
-                        </div>
+                        <h6 class="card-title">域名种类统计（过去五天每天的类别数量）</h6>
+                        <div id="domain_kinds" style="height: 300px;"></div>
                     </div>
                 </div>
             </div>
@@ -1012,247 +679,13 @@
                     </div>
                     <div class="card-body">
                         <div class="list-group list-group-flush" id="device-list">
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--?        这后面考虑是否需要-->
-            <div class="col-lg-5 col-md-12">
-                <div class="card widget">
-                    <div class="card-header">
-                        <h5 class="card-title">Activity Overview</h5>
-                    </div>
-                    <div class="row g-4">
-                        <div class="col-md-6">
-                            <div class="card border-0">
-                                <div class="card-body text-center">
-                                    <div class="display-5">
-                                        <i class="bi bi-truck text-secondary"></i>
-                                    </div>
-                                    <h5 class="my-3">Delivered</h5>
-                                    <div class="text-muted">15 New Packages</div>
-                                    <div class="progress mt-3" style="height: 5px">
-                                        <div class="progress-bar bg-secondary" role="progressbar" style="width: 25%"
-                                             aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card border-0">
-                                <div class="card-body text-center">
-                                    <div class="display-5">
-                                        <i class="bi bi-receipt text-warning"></i>
-                                    </div>
-                                    <h5 class="my-3">Ordered</h5>
-                                    <div class="text-muted">72 New Items</div>
-                                    <div class="progress mt-3" style="height: 5px">
-                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 67%"
-                                             aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card border-0">
-                                <div class="card-body text-center">
-                                    <div class="display-5">
-                                        <i class="bi bi-bar-chart text-info"></i>
-                                    </div>
-                                    <h5 class="my-3">Reported</h5>
-                                    <div class="text-muted">50 Support New Cases</div>
-                                    <div class="progress mt-3" style="height: 5px">
-                                        <div class="progress-bar bg-info" role="progressbar" style="width: 80%"
-                                             aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card border-0">
-                                <div class="card-body text-center">
-                                    <div class="display-5">
-                                        <i class="bi bi-cursor text-success"></i>
-                                    </div>
-                                    <h5 class="my-3">Arrived</h5>
-                                    <div class="text-muted">34 Upgraded Boxed</div>
-                                    <div class="progress mt-3" style="height: 5px">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 55%"
-                                             aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-7 col-md-12">
-                <div class="card widget">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                        <h5 class="card-title">Recent Products</h5>
-                        <div class="dropdown ms-auto">
-                            <a href="#" data-bs-toggle="dropdown" class="btn btn-sm btn-floating" aria-haspopup="true"
-                               aria-expanded="false">
-                                <i class="bi bi-three-dots"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a href="#" class="dropdown-item">Action</a>
-                                <a href="#" class="dropdown-item">Another action</a>
-                                <a href="#" class="dropdown-item">Something else here</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <p class="text-muted">Products added today. Click <a href="#">here</a> for more details</p>
-                        <div class="table-responsive">
-                            <table class="table table-custom mb-0" id="recent-products">
-                                <thead>
-                                <tr>
-                                    <th>
-                                        <input class="form-check-input select-all" type="checkbox"
-                                               data-select-all-target="#recent-products" id="defaultCheck1">
-                                    </th>
-                                    <th>Photo</th>
-                                    <th>Name</th>
-                                    <th>Stock</th>
-                                    <th>Price</th>
-                                    <th class="text-end">Actions</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>
-                                        <input class="form-check-input" type="checkbox">
-                                    </td>
-                                    <td>
-                                        <a href="#">
-                                            <img src="static/picture/10.jpg" class="rounded" width="40" alt="...">
-                                        </a>
-                                    </td>
-                                    <td>Cookie</td>
-                                    <td>
-                                        <span class="text-danger">Out of Stock</span>
-                                    </td>
-                                    <td>$10,50</td>
-                                    <td class="text-end">
-                                        <div class="d-flex">
-                                            <div class="dropdown ms-auto">
-                                                <a href="#" data-bs-toggle="dropdown" class="btn btn-floating"
-                                                   aria-haspopup="true" aria-expanded="false">
-                                                    <i class="bi bi-three-dots"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <a href="#" class="dropdown-item">Action</a>
-                                                    <a href="#" class="dropdown-item">Another action</a>
-                                                    <a href="#" class="dropdown-item">Something else here</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input class="form-check-input" type="checkbox">
-                                    </td>
-                                    <td>
-                                        <a href="#">
-                                            <img src="static/picture/7.jpg" class="rounded" width="40" alt="...">
-                                        </a>
-                                    </td>
-                                    <td>Glass</td>
-                                    <td>
-                                        <span class="text-success">In Stock</span>
-                                    </td>
-                                    <td>$70,20</td>
-                                    <td class="text-end">
-                                        <div class="d-flex">
-                                            <div class="dropdown ms-auto">
-                                                <a href="#" data-bs-toggle="dropdown" class="btn btn-floating"
-                                                   aria-haspopup="true" aria-expanded="false">
-                                                    <i class="bi bi-three-dots"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <a href="#" class="dropdown-item">Action</a>
-                                                    <a href="#" class="dropdown-item">Another action</a>
-                                                    <a href="#" class="dropdown-item">Something else here</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input class="form-check-input" type="checkbox">
-                                    </td>
-                                    <td>
-                                        <a href="#">
-                                            <img src="static/picture/8.jpg" class="rounded" width="40" alt="...">
-                                        </a>
-                                    </td>
-                                    <td>Headphone</td>
-                                    <td>
-                                        <span class="text-success">In Stock</span>
-                                    </td>
-                                    <td>$870,50</td>
-                                    <td class="text-end">
-                                        <div class="d-flex">
-                                            <div class="dropdown ms-auto">
-                                                <a href="#" data-bs-toggle="dropdown" class="btn btn-floating"
-                                                   aria-haspopup="true" aria-expanded="false">
-                                                    <i class="bi bi-three-dots"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <a href="#" class="dropdown-item">Action</a>
-                                                    <a href="#" class="dropdown-item">Another action</a>
-                                                    <a href="#" class="dropdown-item">Something else here</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input class="form-check-input" type="checkbox">
-                                    </td>
-                                    <td>
-                                        <a href="#">
-                                            <img src="static/picture/9.jpg" class="rounded" width="40" alt="...">
-                                        </a>
-                                    </td>
-                                    <td>Perfume</td>
-                                    <td>
-                                        <span class="text-success">In Stock</span>
-                                    </td>
-                                    <td>$170,50</td>
-                                    <td class="text-end">
-                                        <div class="d-flex">
-                                            <div class="dropdown ms-auto">
-                                                <a href="#" data-bs-toggle="dropdown" class="btn btn-floating"
-                                                   aria-haspopup="true" aria-expanded="false">
-                                                    <i class="bi bi-three-dots"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <a href="#" class="dropdown-item">Action</a>
-                                                    <a href="#" class="dropdown-item">Another action</a>
-                                                    <a href="#" class="dropdown-item">Something else here</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
     <!-- ./ content -->
-
-
 </div>
 <!-- ./ layout-wrapper -->
 
@@ -1270,5 +703,11 @@
 
 <!-- Main Javascript file -->
 <script src="static/js/app.min.js"></script>
+
+<!--?charts-->
+<script src="static/js/echarts.min.js"></script>
+<script src="static/js/mychart_domain_count.js"></script>
+<script src="static/js/mychart_type_rate.js"></script>
+<script src="static/js/mychart_domain_kinds.js"></script>
 </body>
 </html>

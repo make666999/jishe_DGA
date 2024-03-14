@@ -437,7 +437,7 @@ productsSold(); // 调用函数以初始化图表和WebSocket连接
         // 设置集合名称和Loc_Address数据
         listItem.innerHTML = `
             <div class="d-flex flex-grow-1 align-items-center">
-                <img width="45" class="me-3" src="static/picture/venezuela.svg" alt="..."> <!-- 更换为适当的图标或去除 -->
+                <img width="45" class="me-3" src="static/picture/computer.png" alt="..."> <!-- 更换为适当的图标或去除 -->
                 <span>${collection.collection_name}</span>
             </div>
             <span>${collection.latest_loc_address}</span>

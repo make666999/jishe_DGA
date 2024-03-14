@@ -4182,7 +4182,7 @@ textarea.form-control-lg {
 }
 
 .card-title {
-    margin-bottom: .5rem
+    margin-bottom: .5rem;
 }
 
 .card-subtitle {
@@ -12128,7 +12128,7 @@ textarea.form-control-lg {
 }
 
 .bg-purple {
-    background-color: rgba(111, 66, 193, .75) !important
+    background-image: linear-gradient(to top, #3f51b1 0%, #5a55ae 13%, #7b5fac 25%, #8f6aae 38%, #a86aa4 50%, #cc6b8e 62%, #f18271 75%, #f3a469 87%, #f7c978 100%);!important
 }
 
 .bg-pink {
@@ -12407,7 +12407,8 @@ body.plate-show:after {
 }
 
 .card .card-title {
-    font-size: 1.2rem
+    font-size: 1.4rem;
+    font-family: "幼圆", YouYuan, sans-serif;
 }
 
 .card .card {

@@ -1,0 +1,190 @@
+.fish {
+  position: absolute;
+  left: 50%;
+  bottom: 0; /* 将鱼缸放置在页面底部 */
+  transform: translateX(-50%);
+}
+
+.bowl {
+  height: 100px; /* 缩小一倍 */
+  width: 100px; /* 缩小一倍 */
+  border-radius: 50%;
+  border: 1px solid white; /* 缩小一倍 */
+  position: relative;
+  animation: move 8s infinite;
+}
+
+@keyframes move {
+  0% {
+    transform: rotate(0);
+  }
+  33% {
+    transform: rotate(-20deg);
+  }
+  67% {
+    transform: rotate(20deg);
+  }
+  100% {
+    transform: rotate(0);
+  }
+}
+
+.bowl:after {
+  content: "";
+  position: absolute;
+  width: 50px; /* 缩小一倍 */
+  height: 13px; /* 缩小一倍 */
+  border-radius: 50%;
+  background: black;
+  border: 1px solid white; /* 缩小一倍 */
+  left: 50%;
+  top: -2px; /* 缩小一倍 */
+  transform: translateX(-50%);
+  z-index: 100;
+}
+
+.water {
+  height: 95px; /* 缩小一倍 */
+  width: 95px; /* 缩小一倍 */
+  background: linear-gradient(to bottom, black 0% 50%, #2389da 50% 100%);
+  border-radius: 50%;
+  position: absolute;
+  top: 3.5px; /* 缩小一倍 */
+  left: 3.5px; /* 缩小一倍 */
+  animation: move1 8s infinite;
+  z-index: -100;
+}
+
+@keyframes move1 {
+  0% {
+    transform: rotate(0);
+  }
+  33% {
+    transform: rotate(20deg);
+  }
+  67% {
+    transform: rotate(-20deg);
+  }
+  100% {
+    transform: rotate(0);
+  }
+}
+
+.water:after {
+  content: "";
+  position: absolute;
+  width: 50%; /* 缩小一倍 */
+  height: 15px; /* 缩小一倍 */
+  background: #0f5e9c;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.body {
+  width: 35px; /* 缩小一倍 */
+  height: 18px; /* 缩小一倍 */
+  background: orange;
+  border-radius: 40% 50% 50% 40%;
+  bottom: 15px; /* 缩小一倍 */
+  right: 30px; /* 缩小一倍 */
+  position: absolute;
+}
+
+.fin {
+  width: 20px; /* 缩小一倍 */
+  height: 12px; /* 缩小一倍 */
+  position: absolute;
+  background: #EF8A1F;
+  border-radius: 50%;
+}
+
+.fin.top {
+  z-index: -100;
+  transform: rotate(-20deg);
+  left: 7px; /* 缩小一倍 */
+  bottom: 12px; /* 缩小一倍 */
+  border-radius: 50% 50% 0% 0%;
+}
+
+.fin.bottom {
+  z-index: -100;
+  transform: rotate(20deg);
+  left: 7px; /* 缩小一倍 */
+  bottom: -6px; /* 缩小一倍 */
+  border-radius: 50% 0% 50% 50%;
+}
+
+.fin-center {
+  height: 5px; /* 缩小一倍 */
+  width: 6px; /* 缩小一倍 */
+  background: #EF8A1F;
+  border-radius: 50% 0 0 50%;
+  position: absolute;
+  left: 15px; /* 缩小一倍 */
+  top: 6px; /* 缩小一倍 */
+}
+
+.eye {
+  height: 8px; /* 缩小一倍 */
+  width: 8px; /* 缩小一倍 */
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  left: 1px; /* 缩小一倍 */
+  top: 5px; /* 缩小一倍 */
+}
+
+.eye:before {
+  content: "";
+  background: black;
+  height: 4px; /* 缩小一倍 */
+  width: 4px; /* 缩小一倍 */
+  border-radius: 50%;
+  position: absolute;
+  left: 1px; /* 缩小一倍 */
+  top: 2px; /* 缩小一倍 */
+}
+
+.eye:after {
+  content: "";
+  background: white;
+  height: 2px; /* 缩小一倍 */
+  width: 2px; /* 缩小一倍 */
+  border-radius: 50%;
+  position: absolute;
+  left: 2px; /* 缩小一倍 */
+  top: 2.5px; /* 缩小一倍 */
+}
+
+.tail {
+  width: 16px; /* 缩小一倍 */
+  height: 36px; /* 缩小一倍 */
+  position: absolute;
+  right: -10px; /* 缩小一倍 */
+  bottom: -21px; /* 缩小一倍 */
+  z-index: -200;
+}
+
+.tail::before {
+  content: '';
+  position: absolute;
+  width: 16px; /* 缩小一倍 */
+  height: 10px; /* 缩小一倍 */
+  border-radius: 50%;
+  background: #EF8A1F;
+  transform: rotate(-30deg);
+  top: -5px; /* 缩小一倍 */
+}
+
+.tail::after {
+  content: '';
+  position: absolute;
+  width: 16px; /* 缩小一倍 */
+  height: 10px; /* 缩小一倍 */
+  border-radius: 50%;
+  background: #EF8A1F;
+  transform: rotate(30deg);
+  top: 5px; /* 缩小一倍 */
+}
