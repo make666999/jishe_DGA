@@ -208,6 +208,138 @@ async def websocket_latest_order_data(websocket: WebSocket):
         await websocket.close()
 
 
+#对每天的good和bad数据进行统计
+@app.websocket("/count_benign_nonbenign")
+async def count_benign_nonbenign(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            stats_list = []
+            collection_names = db.list_collection_names()
+            # 获取今天的日期范围
+            now = datetime.now()
+            start_of_day = datetime(now.year, now.month, now.day)
+            end_of_day = start_of_day + timedelta(days=1)
+            # 转换为毫秒
+            start_of_day_ms = int(start_of_day.timestamp() * 1000)
+            end_of_day_ms = int(end_of_day.timestamp() * 1000)
+
+            for collection_name in collection_names:
+                collection = db[collection_name]
+                # 统计Domain_Type为BENIGN的数量
+                benign_count = collection.count_documents({
+                    "Timestamp": {
+                        "$gte": start_of_day_ms,
+                        "$lt": end_of_day_ms
+                    },
+                    "Domain_Type": "BENIGN"
+                })
+                # 统计Domain_Type不为BENIGN的数量
+                non_benign_count = collection.count_documents({
+                    "Timestamp": {
+                        "$gte": start_of_day_ms,
+                        "$lt": end_of_day_ms
+                    },
+                    "Domain_Type": {"$ne": "BENIGN"}
+                })
+
+                # 添加到统计列表
+                stats_list.append({
+                    "collection_name": collection_name,
+                    "benign_count": benign_count,
+                    "non_benign_count": non_benign_count
+                })
+
+            # 准备最终的数据
+            final_data = {
+                "total_collections": len(collection_names),
+                "stats": stats_list
+            }
+
+            # 发送数据
+            await websocket.send_text(json.dumps(final_data))
+            await asyncio.sleep(5)  # 暂停5秒，减少消息发送频率
+    except Exception as e:
+        print(f"错误: {e}")
+    finally:
+        await websocket.close()
+
+
+# 查找最近五天出现次数最高的域名
+@app.websocket("/top_remain_type_daily")
+async def top_remain_type_daily(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            top_types_daily = []
+            collection_names = db.list_collection_names()
+            # 获取过去五天的日期
+            now = datetime.now()
+            for day_back in range(5):
+                specific_day = now - timedelta(days=day_back)
+                start_of_day = datetime(specific_day.year, specific_day.month, specific_day.day)
+                end_of_day = start_of_day + timedelta(days=1)
+                # 转换为毫秒
+                start_of_day_ms = int(start_of_day.timestamp() * 1000)
+                end_of_day_ms = int(end_of_day.timestamp() * 1000)
+
+                daily_top_type = {}
+                total_counts = {}
+
+                for collection_name in collection_names:
+                    collection = db[collection_name]
+                    # 使用聚合管道查找每个集合在特定一天内Remain_Type出现的频率
+                    pipeline = [
+                        {"$match": {
+                            "Timestamp": {"$gte": start_of_day_ms, "$lt": end_of_day_ms},
+                            "Remote_Domain": {"$ne": None}  # 排除Remain_Type为null的文档
+                        }},
+                        {"$group": {
+                            "_id": "$Remote_Domain",
+                            "count": {"$sum": 1}
+                        }},
+                        {"$sort": {"count": -1}},
+                        {"$limit": 1}
+                    ]
+                    results = list(collection.aggregate(pipeline))
+                    for result in results:
+                        remain_type = result['_id']
+                        count = result['count']
+                        if remain_type in total_counts:
+                            total_counts[remain_type] += count
+                        else:
+                            total_counts[remain_type] = count
+
+                # 找出出现频率最高的Remain_Type
+                if total_counts:
+                    top_remain_type = max(total_counts, key=total_counts.get)
+                    daily_top_type['date'] = start_of_day.strftime('%m-%d')
+                    daily_top_type['top_remain_type'] = top_remain_type
+                    daily_top_type['count'] = total_counts[top_remain_type]
+                else:
+                    daily_top_type['date'] = start_of_day.strftime('%m-%d')
+                    daily_top_type['top_remain_type'] = 'None'
+                    daily_top_type['count'] = 0
+
+                top_types_daily.append(daily_top_type)
+
+            # 准备最终的数据
+            final_data = {
+                "top_types_daily": top_types_daily
+            }
+
+            # 发送数据
+            await websocket.send_text(json.dumps(final_data))
+            await asyncio.sleep(5)  # 暂停5秒，减少消息发送频率
+    except Exception as e:
+        print(f"错误: {e}")
+    finally:
+        await websocket.close()
+
+
+#流量日志
+
+
 
 @app.post("/api/send_data")
 async def receive_data(data: DataToReceive):

@@ -449,6 +449,229 @@ productsSold(); // 调用函数以初始化图表和WebSocket连接
 };
 
 
+
+// 统计用户集合中good和bad的数量
+var chartContainer = document.getElementById('domain_count');
+
+// 实例化图表
+var myChart = echarts.init(chartContainer);
+
+// 定义原始高度和宽度
+var originalHeight = myChart.getHeight();
+var originalWidth = myChart.getWidth();
+
+// 图表的选项
+var option = {
+    legend: {
+        top: 'bottom'
+    },
+    tooltip: {
+        trigger: 'item'
+    },
+    toolbox: {
+        show: true,
+        right: 10, // 调整水平偏移量
+        top: 10, // 调整垂直偏移量
+        feature: {
+            mark: {show: true},
+            dataView: {show: true, readOnly: false},
+            restore: {show: true},
+            saveAsImage: {show: true}
+        }
+    },
+    series: [
+        {
+            name: 'Domain Type',
+            type: 'pie',
+            radius: ['40%', '70%'],
+            avoidLabelOverlap: false,
+            padAngle: 5,
+            itemStyle: {
+                borderRadius: 10
+            },
+            label: {
+                show: false,
+                position: 'center'
+            },
+            emphasis: {
+                label: {
+                    show: true,
+                    fontSize: 40,
+                    fontWeight: 'bold'
+                }
+            },
+            labelLine: {
+                show: false
+            },
+            data: [
+                {value: 0, name: 'BENIGN'}, // 初始值设为0
+                {value: 0, name: 'NON-BENIGN'}, // 初始值设为0
+            ],
+            color: ['#99CC99', '#FFCCCC'] // 自定义颜色
+        }
+    ]
+};
+
+// 设置图表选项
+myChart.setOption(option);
+
+// 缩小图表一倍
+myChart.resize({
+    height: originalHeight / 1.2,
+    width: originalWidth / 1.2
+});
+
+// 监听窗口大小变化，重新渲染图表
+window.addEventListener('resize', function () {
+    myChart.resize();
+});
+
+// 创建WebSocket连接
+var ws = new WebSocket('ws://192.168.78.98:8000/count_benign_nonbenign'); // 修改为你的WebSocket地址
+ws.onmessage = function(event) {
+    var data = JSON.parse(event.data);
+    var totalBenign = 0;
+    var totalNonBenign = 0;
+    data.stats.forEach(function(stat) {
+        totalBenign += stat.benign_count;
+        totalNonBenign += stat.non_benign_count;
+    });
+    // 更新图表数据
+    myChart.setOption({
+        series: [{
+            data: [
+                {value: totalBenign, name: 'BENIGN'},
+                {value: totalNonBenign, name: 'NON-BENIGN'}
+            ]
+        }]
+    });
+};
+
+//统计五天域名访问量最高的数据
+var chartContainer = document.getElementById('domain_kinds');
+var myChart = echarts.init(chartContainer);
+
+// 初始化空数据
+var dates = [];
+var values = [];
+var topTypes = [];
+
+// WebSocket连接
+var ws = new WebSocket('ws://192.168.78.98:8000/top_remain_type_daily');
+ws.onmessage = function(event) {
+    // 解析从服务器接收到的数据
+    var data = JSON.parse(event.data);
+    var topTypesDaily = data.top_types_daily;
+
+    // 清空当前数据
+    dates = [];
+    values = [];
+    topTypes = [];
+
+    // 填充新数据
+    topTypesDaily.forEach(function(item) {
+        dates.push(item.date);
+        values.push(item.count);
+        topTypes.push({
+            value: item.count,
+            symbol: pathSymbols[item.top_remain_type] || 'circle', // 如果没有匹配的图标，使用默认形状
+            symbolSize: 50 // 可以根据需要调整大小
+        });
+    });
+
+    // 更新图表
+    myChart.setOption({
+        xAxis: {
+            data: dates
+        },
+        series: [
+            {
+                name: 'Top Domain Type Count',
+                data: values
+            },
+            {
+                name: 'Top Domain Type',
+                data: topTypes
+            }
+        ]
+    });
+};
+
+// 图表的初始选项
+var option = {
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'none'
+        },
+        formatter: function (params) {
+            return params[0].name + ': ' + params[0].value;
+        }
+    },
+    toolbox: {
+        show: true,
+        right: 10, // 调整水平偏移量
+        top: 10, // 调整垂直偏移量
+        feature: {
+            mark: {show: true},
+            dataView: {show: true, readOnly: false},
+            restore: {show: true},
+            saveAsImage: {show: true}
+        }
+    },
+    xAxis: {
+        data: dates, // 初始日期数据为空
+        axisTick: {show: false},
+        axisLine: {show: false},
+        axisLabel: {
+            color: '#e54035'
+        }
+    },
+    yAxis: {
+        splitLine: {show: false},
+        axisTick: {show: false},
+        axisLine: {show: false},
+        axisLabel: {show: false}
+    },
+    color: ['#e54035'],
+    series: [
+        {
+            name: 'Top Domain Type Count',
+            type: 'pictorialBar',
+            barCategoryGap: '-130%',
+            symbol: 'path://M0,10 L10,10 C5.5,10 5.5,5 5,0 C4.5,5 4.5,10 0,10 z',
+            itemStyle: {
+                opacity: 0.5
+            },
+            emphasis: {
+                itemStyle: {
+                    opacity: 1
+                }
+            },
+            data: values, // 初始值数据为空
+            z: 10
+        },
+        {
+            name: 'Top Domain Type',
+            type: 'pictorialBar',
+            barGap: '-100%',
+            symbolPosition: 'end',
+            symbolSize: 50,
+            symbolOffset: [0, '-120%'],
+            data: topTypes // 初始类型数据为空
+        }
+    ]
+};
+
+// 设置图表选项
+myChart.setOption(option);
+
+// 监听窗口大小变化，重新渲染图表
+window.addEventListener('resize', function () {
+    myChart.resize();
+});
+
+
     if ($('.summary-cards').length) {
         $('.summary-cards').slick({
             infinite: true,
