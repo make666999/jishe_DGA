@@ -25,7 +25,7 @@ from starlette.responses import JSONResponse
 app = FastAPI()
 
 # 连接到MongoDB数据库
-mongo_client = MongoClient("mongodb://8c630x9121.goho.co:23593")
+mongo_client = MongoClient("mongodb://886xt49626.goho.co:23904")
 db = mongo_client["DGA"]
 
 # 模板配置
@@ -64,7 +64,7 @@ async def websocket_latest_location_data(websocket: WebSocket):
 
             # 发送数据
             await websocket.send_text(json.dumps(final_data))
-            await asyncio.sleep(1)  # 暂停1秒，减少消息发送频率
+            await asyncio.sleep(3)  # 暂停1秒，减少消息发送频率
     except Exception as e:
         print(f"错误: {e}")
     finally:
@@ -337,7 +337,34 @@ async def top_remain_type_daily(websocket: WebSocket):
         await websocket.close()
 
 
-#流量日志
+async def get_latest_data():
+    # 获取最新的十条数据
+    latest_data = list(collection.find().sort("Timestamp", -1).limit(10))
+    return latest_data
+
+async def get_city_data():
+    collection = db["GPU-SERVER"]
+    query = {"moveLines": {"$ne": None}}
+    projection = {"_id": 0,"moveLines": 1}
+    city_data = collection.find(query,projection).sort("Timestamp", -1).limit(50)
+    city_datas = [document["moveLines"] for document in city_data]
+    city_data= {"moveLines":city_datas}
+    return city_data
+
+
+
+@app.websocket("/city_map")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            City_Data = await get_city_data()
+            await websocket.send_text(dumps(City_Data))
+            await asyncio.sleep(1)
+    finally:
+        # 关闭连接时的清理工作
+        await websocket.close()
+
 
 
 
@@ -352,9 +379,25 @@ async def receive_data(data: DataToReceive):
     # return received_data
 
 
+@app.get("/")
+async def read_root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request,"ipAddress":ipAddress})
+
 @app.get("/index.html")
 async def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request,"ipAddress":ipAddress})
+
+@app.get("/orders.html")
+async def read_root(request: Request):
+    return templates.TemplateResponse("orders.html", {"request": request,"ipAddress":ipAddress})
+
+@app.get("/order-detail.html")
+async def read_root(request: Request):
+    return templates.TemplateResponse("order-detail.html", {"request": request,"ipAddress":ipAddress})
+
+@app.get("/customers.html")
+async def read_root(request: Request):
+    return templates.TemplateResponse("customers.html", {"request": request,"ipAddress":ipAddress})
 
 def get_local_ip():
     try:

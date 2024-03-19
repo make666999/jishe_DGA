@@ -29,14 +29,12 @@
 
     <!--?    fish-->
     <link rel="stylesheet" href="static/css/fish.css">
+    <!-- 引入 ECharts -->
+
+
 </head>
 <body>
 
-<!-- preloader -->
-<div class="preloader">
-    <img src="static/picture/logo.svg" alt="logo">
-    <div class="preloader-icon"></div>
-</div>
 <!-- ./ preloader -->
 
 <!-- sidebars -->
@@ -384,7 +382,7 @@
     <div class="header">
         <div class="menu-toggle-btn"> <!-- Menu close button for mobile devices -->
             <a href="#">
-                <i class="bi bi-list"></i>
+                <i class="bi bi-list"></i> 
             </a>
         </div>
         <!-- Logo -->
@@ -642,7 +640,9 @@
                         </h6>
                     </div>
                     <div class="card-body">
-                        <!--?                        世界地图-->
+                        <!-- 地图容器 -->
+<div id="map" style="width: 600px;height:400px;"></div>
+
                     </div>
                 </div>
             </div>
@@ -708,6 +708,8 @@
 <script src="static/js/echarts.min.js"></script>
 
 <script src="static/js/mychart_type_rate.js"></script>
-
+<script>
+    var serverIp = "{{ ipAddress }}";
+</script>
 </body>
 </html>

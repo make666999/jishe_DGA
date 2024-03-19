@@ -243,7 +243,6 @@ async def get_city_data():
     city_data = collection.find(query,projection).sort("Timestamp", -1).limit(50)
     city_datas = [document["moveLines"] for document in city_data]
     city_data= {"moveLines":city_datas}
-    # city_data = {"moveLines": document["moveLines"] for document in city_data}
     return city_data
 
 

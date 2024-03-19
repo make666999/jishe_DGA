@@ -1,5 +1,6 @@
 $(function () {
-
+    var protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+var wsHost = window.location.hostname;
     // Dashboard chart colors
     const body_styles = window.getComputedStyle(document.body);
     const colors = {
@@ -194,7 +195,9 @@ $(function () {
     customerRating();
 
   function salesChart() {
-    var ws = new WebSocket("ws://192.168.78.98:8000/collection_stats"); // 更改为你的WebSocket URL
+    var ws = new WebSocket(`ws://${serverIp}/collection_stats`);
+
+
     var chart; // 在函数外部声明图表变量
 
 
@@ -309,7 +312,8 @@ salesChart();
 
 
 function productsSold() {
-    var ws = new WebSocket("ws://192.168.78.98:8000/week_day_data_total"); // 更改为你的WebSocket URL
+    var ws = new WebSocket(`ws://${serverIp}/week_day_data_total`);
+
 
     // 初始化图表
     const options = {
@@ -418,8 +422,8 @@ productsSold(); // 调用函数以初始化图表和WebSocket连接
 
 // 更新数据列表
       // 建立WebSocket连接
-                                var ws = new WebSocket("ws://192.168.78.98:8000/latest_location_data");
 
+var ws = new WebSocket(`ws://${serverIp}/latest_location_data`);
                                 ws.onmessage = function(event) {
     var data = JSON.parse(event.data);
     var deviceList = document.getElementById('device-list');
@@ -527,7 +531,8 @@ window.addEventListener('resize', function () {
 });
 
 // 创建WebSocket连接
-var ws = new WebSocket('ws://192.168.78.98:8000/count_benign_nonbenign'); // 修改为你的WebSocket地址
+    var ws = new WebSocket(`ws://${serverIp}/count_benign_nonbenign`);
+
 ws.onmessage = function(event) {
     var data = JSON.parse(event.data);
     var totalBenign = 0;
@@ -557,7 +562,9 @@ var values = [];
 var topTypes = [];
 
 // WebSocket连接
-var ws = new WebSocket('ws://192.168.78.98:8000/top_remain_type_daily');
+       var ws = new WebSocket(`ws://${serverIp}/top_remain_type_daily`);
+
+
 ws.onmessage = function(event) {
     // 解析从服务器接收到的数据
     var data = JSON.parse(event.data);
@@ -574,27 +581,28 @@ ws.onmessage = function(event) {
         values.push(item.count);
         topTypes.push({
             value: item.count,
-            symbol: pathSymbols[item.top_remain_type] || 'circle', // 如果没有匹配的图标，使用默认形状
+
             symbolSize: 50 // 可以根据需要调整大小
         });
     });
 
     // 更新图表
-    myChart.setOption({
-        xAxis: {
-            data: dates
+   myChart.setOption({
+    xAxis: {
+        data: dates
+    },
+    series: [
+        {
+            name: 'Top Domain Type Count',
+            data: values
         },
-        series: [
-            {
-                name: 'Top Domain Type Count',
-                data: values
-            },
-            {
-                name: 'Top Domain Type',
-                data: topTypes
-            }
-        ]
-    });
+        {
+            name: 'Top Domain Type',
+            // 使用默认形状为所有条目
+            data: topTypes.map(item => ({ ...item, symbol: 'circle' })) // 这里假设所有条目都使用圆形图标
+        }
+    ]
+});
 };
 
 // 图表的初始选项
