@@ -1,4 +1,84 @@
+//地图显示
+var uploadedDataURL = "flight.json";
+var myChart2 = echarts.init(document.getElementById('main'));
+
+myChart2.showLoading();
+$.getJSON(uploadedDataURL, function (data) {
+  myChart2.hideLoading();
+  function getAirportCoord(idx) {
+    return [data.airports[idx][3], data.airports[idx][4]];
+  }
+  var routes = data.routes.map(function (airline) {
+    return [getAirportCoord(airline[1]), getAirportCoord(airline[2])];
+  });
+
+  myChart2.setOption({
+    geo3D: {
+      map: 'world',
+      shading: 'realistic',
+      silent: true,
+      environment: '#333',
+      realisticMaterial: {
+        roughness: 0.8,
+        metalness: 0
+      },
+      postEffect: {
+        enable: true
+      },
+      groundPlane: {
+        show: false
+      },
+      light: {
+        main: {
+          intensity: 1,
+          alpha: 30
+        },
+        ambient: {
+          intensity: 0
+        }
+      },
+      viewControl: {
+        distance: 70,
+        alpha: 89,
+        panMouseButton: 'left',
+        rotateMouseButton: 'right'
+      },
+      itemStyle: {
+        color: '#000'
+      },
+      regionHeight: 0.5
+    },
+    series: [
+      {
+        type: 'lines3D',
+        coordinateSystem: 'geo3D',
+        effect: {
+          show: true,
+          trailWidth: 1,
+          trailOpacity: 0.5,
+          trailLength: 0.2,
+          constantSpeed: 5
+        },
+        blendMode: 'lighter',
+        lineStyle: {
+          width: 0.2,
+          opacity: 0.05
+        },
+        data: routes
+      }
+    ]
+  });
+  window.addEventListener('keydown', function () {
+    myChart2.dispatchAction({
+      type: 'lines3DToggleEffect',
+      seriesIndex: 0
+    });
+  });
+});
+
+
 $(function () {
+
     var protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
 var wsHost = window.location.hostname;
     // Dashboard chart colors
@@ -779,6 +859,7 @@ var option = {
 // 设置图表选项
 myChart.setOption(option);
 
+
 // 监听窗口大小变化，重新渲染图表
 window.addEventListener('resize', function () {
     myChart.resize();
@@ -798,3 +879,7 @@ window.addEventListener('resize', function () {
     }
 
 });
+
+
+    // 基于准备好的dom，初始化echarts实例
+

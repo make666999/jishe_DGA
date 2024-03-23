@@ -20,7 +20,7 @@ from pydantic import BaseModel
 from bson.json_util import dumps
 import asyncio
 
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, FileResponse
 
 app = FastAPI()
 
@@ -398,6 +398,14 @@ async def read_root(request: Request):
 @app.get("/customers.html")
 async def read_root(request: Request):
     return templates.TemplateResponse("customers.html", {"request": request,"ipAddress":ipAddress})
+@app.get("/flight.json")
+async def read_root():
+    import os
+
+    current_path = os.getcwd()
+    print("当前访问的路径是：", current_path)
+
+    return FileResponse("templates/static/js/flight.json")
 
 def get_local_ip():
     try:
