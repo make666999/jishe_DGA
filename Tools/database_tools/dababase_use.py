@@ -18,12 +18,13 @@ def get_ip():
         print(f"Error fetching IP: {e}")
         return None
 ip_data=get_ip()
+
 loc_city=ip_data['city']
 loc_x_y=[ip_data["lon"],ip_data["lat"]]
 
 def mongo_link_database(database_name):
 
-    client = MongoClient("mongodb://8c630x9121.goho.co:23593")
+    client = MongoClient("mongodb://886xt49626.goho.co:23904")
     # 选择数据库
     db = client["DGA"]
     # 选择集合

@@ -10,6 +10,8 @@ import os.path
 from matplotlib import MatplotlibDeprecationWarning
 from collections import defaultdict
 from sklearn.preprocessing import LabelEncoder
+import matplotlib
+matplotlib.use('TkAgg')
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 warnings.filterwarnings("ignore", category=MatplotlibDeprecationWarning)
 
@@ -135,36 +137,36 @@ def UnderSampler(df):
     return df
 def get_feature_charseq():
 
-    load_dga()
-    load_alexa()
-    BENIGN = writeData("./Data-clean/top-1m.csv")
-    DGA = writeData("./Data-clean/dga-domain.csv")
-    frame=[BENIGN,DGA]
-    result = pd.concat(frame)
+    # load_dga()
+    # load_alexa()
+    # BENIGN = writeData("./Data-clean/top-1m.csv")
+    # DGA = writeData("./Data-clean/dga-domain.csv")
+    # frame=[BENIGN,DGA]
+    # result = pd.concat(frame)
+    #
+    # counts=result[0].value_counts()
+    #
+    # invalid_labels = counts[counts < 200].index
+    #
+    # # 根据条件筛选出现次数大于等于 20 的数据
+    # filtered_result = result[~result[0].isin(invalid_labels)]
+    #
+    # filtered_result.columns = ["Label", "url"]
+    #
+    # filtered_result.loc[:,"url"]=filtered_result["url"].str.lower()
+    #
+    # filtered_result = filtered_result.drop_duplicates(subset='url').reset_index(drop=True)
+    #
+    # print(filtered_result["Label"].value_counts())
+    # df, class_map = encode_labels_in_df(filtered_result, "Label")
+    # df = UnderSampler(df)
+    #
+    # print(66666,df["Label"].value_counts())  # num_class 44
+    # print(class_map)
 
-    counts=result[0].value_counts()
+    # df.to_csv("./Data-clean/data_all.csv",index=False)
 
-    invalid_labels = counts[counts < 200].index
-
-    # 根据条件筛选出现次数大于等于 20 的数据
-    filtered_result = result[~result[0].isin(invalid_labels)]
-
-    filtered_result.columns = ["Label", "url"]
-
-    filtered_result.loc[:,"url"]=filtered_result["url"].str.lower()
-
-    filtered_result = filtered_result.drop_duplicates(subset='url').reset_index(drop=True)
-
-    print(filtered_result["Label"].value_counts())
-    df, class_map = encode_labels_in_df(filtered_result, "Label")
-    df = UnderSampler(df)
-
-    print(66666,df["Label"].value_counts())  # num_class 44
-    print(class_map)
-
-    df.to_csv("./Data-clean/data_all.csv",index=False)
-
-    df = pd.read_csv('./Data-clean/data_all.csv')
+    df = pd.read_csv('./clean_data/data_all.csv')
 
 
 
@@ -185,6 +187,29 @@ def get_feature_charseq():
     # 使用LabelEncoder对标签列进行编码，并统计分类总数
     df , class_map= encode_labels_in_df(df, "Label")
     print(df["Label"].value_counts())# num_class 34
+    output_counts = {
+        0: 55000, 13: 2500, 26: 2500, 30: 2500, 27: 2500, 17: 2500, 16: 2500, 33: 2500,
+        24: 2500, 23: 2500, 28: 2500, 19: 2500, 31: 2500, 25: 2500, 8: 2500, 1: 2500,
+        29: 2234, 22: 2000, 14: 1158, 5: 1000, 3: 1000, 7: 1000, 2: 1000, 15: 908,
+        32: 828, 20: 800, 6: 742, 9: 500, 4: 495, 18: 330, 12: 300, 11: 299, 10: 247, 21: 200
+    }
+
+    label2idx = {'BENIGN': 0, 'banjori': 1, 'bigviktor': 2, 'chinad': 3, 'conficker': 4, 'cryptolocker': 5,
+                 'dircrypt': 6, 'dyre': 7, 'emotet': 8, 'enviserv': 9, 'feodo': 10, 'fobber_v1': 11, 'fobber_v2': 12,
+                 'gameover': 13, 'locky': 14, 'matsnu': 15, 'murofet': 16, 'necurs': 17, 'nymaim': 18, 'pykspa_v1': 19,
+                 'pykspa_v2_fake': 20, 'pykspa_v2_real': 21, 'qadars': 22, 'ramnit': 23, 'ranbyus': 24, 'rovnix': 25,
+                 'shifu': 26, 'shiotob': 27, 'simda': 28, 'suppobox': 29, 'symmi': 30, 'tinba': 31, 'vawtrak': 32,
+                 'virut': 33}
+    idx2label = {idx: label for label, idx in label2idx.items()}
+    # 将输出索引映射到标签
+    label_counts = {idx2label[idx]: count for idx, count in output_counts.items()}
+
+    # 打印结果
+    for index, (label, count) in enumerate(label_counts.items()):
+        print(f"Index: {index}, Label: {label}, Count: {count}")
+
+
+
     print(class_map)  #{'BENIGN': 0, 'bamital': 1, 'banjori': 2, 'bigviktor': 3, 'chinad': 4, 'conficker': 5, 'cryptolocker': 6, 'dircrypt': 7, 'dyre': 8, 'emotet': 9, 'enviserv': 10, 'feodo': 11, 'fobber_v1': 12, 'fobber_v2': 13, 'gameover': 14, 'gspy': 15, 'locky': 16, 'matsnu': 17, 'murofet': 18, 'mydoom': 19, 'necurs': 20, 'nymaim': 21, 'omexo': 22, 'padcrypt': 23, 'proslikefan': 24, 'pykspa_v1': 25, 'pykspa_v2_fake': 26, 'pykspa_v2_real': 27, 'qadars': 28, 'ramnit': 29, 'ranbyus': 30, 'rovnix': 31, 'shifu': 32, 'shiotob': 33, 'simda': 34, 'suppobox': 35, 'symmi': 36, 'tempedreve': 37, 'tinba': 38, 'tinynuke': 39, 'tofsee': 40, 'vawtrak': 41, 'vidro': 42, 'virut': 43}
 
     # 制作label反向索引

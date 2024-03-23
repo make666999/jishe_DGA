@@ -16,6 +16,7 @@ import matplotlib.pyplot as plt
 import warnings
 from matplotlib import MatplotlibDeprecationWarning
 from torchinfo import summary
+
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 warnings.filterwarnings("ignore", category=MatplotlibDeprecationWarning)
 
@@ -804,6 +805,7 @@ class Transformer(nn.Module):
         # 将输入的数据进行词嵌入，得到数据的维度为[序列长度,批次,嵌入向量]
 
         x = self.embedding(x)
+
         # y = x.permute(1, 2, 0)
         # df = pd.DataFrame(y[0].tolist())
         # sns.heatmap(df, cmap='viridis')
@@ -872,6 +874,58 @@ def test(model):
 
         val_metrics = metric_collection.compute()
         print(f"Metrics on all data: {val_metrics}")
+
+        idx2label = {idx: label for label, idx in label2idx.items()}
+        print(idx2label)
+        label_counts = {idx2label[idx]: count for idx, count in output_counts.items()}
+        print(label_counts)
+        df =pd.DataFrame()
+        index={
+            'BENIGN': 55000,
+            'banjori': 2500,
+            'bigviktor': 1000,
+            'chinad': 1000,
+            'conficker': 495,
+            'cryptolocker': 1000,
+            'dircrypt': 742,
+            'dyre': 1000,
+            'emotet': 2500,
+            'enviserv': 500,
+            'feodo': 247,
+            'fobber_v1': 299,
+            'fobber_v2': 300,
+            'gameover': 2500,
+            'locky': 1158,
+            'matsnu': 908,
+            'murofet': 2500,
+            'necurs': 2500,
+            'nymaim': 330,
+            'pykspa_v1': 2500,
+            'pykspa_v2_fake': 800,
+            'pykspa_v2_real': 200,
+            'qadars': 2000,
+            'ramnit': 2500,
+            'ranbyus': 2500,
+            'rovnix': 2500,
+            'shifu': 2500,
+            'shiotob': 2500,
+            'simda': 2500,
+            'suppobox': 2234,
+            'symmi': 2500,
+            'tinba': 2500,
+            'vawtrak': 828,
+            'virut': 2500
+        }
+        df['Label'] = index.keys()
+        df['Count'] = index.values()
+        for index, (label, count) in enumerate(idx2label.items()):
+            print(f"Label: {label}, Count: {count}")
+
+            for index,(metric_name, values) in enumerate(val_metrics.items()):
+                df[metric_name] = [round(value, 4) for value in values.tolist()]
+
+        df.to_excel('output.xlsx', index=False)
+
         metric_collection.reset()
         avg_loss = loss_sum / iter
 
@@ -978,7 +1032,12 @@ if __name__ == '__main__':
                  'pykspa_v2_fake': 20, 'pykspa_v2_real': 21, 'qadars': 22, 'ramnit': 23, 'ranbyus': 24, 'rovnix': 25,
                  'shifu': 26, 'shiotob': 27, 'simda': 28, 'suppobox': 29, 'symmi': 30, 'tinba': 31, 'vawtrak': 32,
                  'virut': 33}
-
+    output_counts = {
+        0: 55000, 13: 2500, 26: 2500, 30: 2500, 27: 2500, 17: 2500, 16: 2500, 33: 2500,
+        24: 2500, 23: 2500, 28: 2500, 19: 2500, 31: 2500, 25: 2500, 8: 2500, 1: 2500,
+        29: 2234, 22: 2000, 14: 1158, 5: 1000, 3: 1000, 7: 1000, 2: 1000, 15: 908,
+        32: 828, 20: 800, 6: 742, 9: 500, 4: 495, 18: 330, 12: 300, 11: 299, 10: 247, 21: 200
+    }
     x, y, vocab_size, labels_size, index2char, idx2label, char2index = load_data()
 
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
