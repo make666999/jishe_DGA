@@ -452,7 +452,7 @@ var ws = new WebSocket(`ws://${serverIp}/latest_location_data`);
     });
 };
 
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////第一个大框的第一个
 
 // 统计用户集合中good和bad的数量
 var chartContainer = document.getElementById('domain_count');
@@ -477,10 +477,107 @@ var option = {
         right: 10, // 调整水平偏移量
         top: 10, // 调整垂直偏移量
         feature: {
-            mark: {show: true},
-            dataView: {show: true, readOnly: false},
-            restore: {show: true},
-            saveAsImage: {show: true}
+
+        }
+    },
+    series: [
+        {
+            name: 'Domain Type',
+            type: 'pie',
+            radius: ['40%', '70%'],
+            avoidLabelOverlap: false,
+            padAngle: 5,
+            itemStyle: {
+                borderRadius: 10
+            },
+            label: {
+                show: false,
+                position: 'center'
+            },
+            emphasis: {
+                label: {
+                    show: true,
+                    fontSize: 40,
+                    fontWeight: 'bold'
+                }
+            },
+            labelLine: {
+                show: false
+            },
+            data: [
+                {value: 0, name: 'repend'}, // 初始值设为0
+                {value: 0, name: 'attact'}, // 初始值设为0
+            ],
+            color: ['#99CC99', '#FFCCCC'] // 自定义颜色
+        }
+    ]
+};
+
+// 设置图表选项
+myChart.setOption(option);
+
+// 缩小图表一倍
+myChart.resize({
+    height: originalHeight / 1.2,
+    width: originalWidth / 1.2
+});
+
+// 监听窗口大小变化，重新渲染图表
+window.addEventListener('resize', function () {
+    myChart.resize();
+});
+
+// 创建WebSocket连接
+    var ws = new WebSocket(`ws://${serverIp}/count_benign_nonbenign`);
+
+ws.onmessage = function(event) {
+    var data = JSON.parse(event.data);
+    var totalBenign = 0;
+    var totalNonBenign = 0;
+    data.stats.forEach(function(stat) {
+        totalBenign += stat.benign_count;
+        totalNonBenign += stat.non_benign_count;
+    });
+    // 更新图表数据
+    myChart.setOption({
+        series: [{
+            data: [
+                {value: totalBenign, name: 'BENIGN'},
+                {value: totalNonBenign, name: 'NON-BENIGN'}
+            ]
+        }]
+    });
+};
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////第一个框，第二个图表
+    // 统计用户集合中good和bad的数量
+var chartContainer = document.getElementById('domain_count2');
+
+// 实例化图表
+var myChart = echarts.init(chartContainer);
+
+// 定义原始高度和宽度
+var originalHeight = myChart.getHeight();
+var originalWidth = myChart.getWidth();
+
+// 图表的选项
+var option = {
+    legend: {
+        top: 'bottom'
+    },
+    tooltip: {
+        trigger: 'item'
+    },
+    toolbox: {
+        show: true,
+        right: 10, // 调整水平偏移量
+        top: 10, // 调整垂直偏移量
+        feature: {
+
+
+
         }
     },
     series: [
@@ -533,24 +630,32 @@ window.addEventListener('resize', function () {
 // 创建WebSocket连接
     var ws = new WebSocket(`ws://${serverIp}/count_benign_nonbenign`);
 
-ws.onmessage = function(event) {
-    var data = JSON.parse(event.data);
-    var totalBenign = 0;
-    var totalNonBenign = 0;
-    data.stats.forEach(function(stat) {
-        totalBenign += stat.benign_count;
-        totalNonBenign += stat.non_benign_count;
-    });
+
+
     // 更新图表数据
     myChart.setOption({
         series: [{
             data: [
-                {value: totalBenign, name: 'BENIGN'},
-                {value: totalNonBenign, name: 'NON-BENIGN'}
+                {value: 1, name: '好的'},
+                {value: 2, name: '坏的'},
+                 {value: 1, name: '好的'},
+                {value: 2, name: '坏的'}
             ]
         }]
     });
-};
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////第一个框的第三个图
+
+
+
+
+
+
+
+
+
+
 
 //统计五天域名访问量最高的数据
 var chartContainer = document.getElementById('domain_kinds');

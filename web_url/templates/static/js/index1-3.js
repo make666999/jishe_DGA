@@ -1,9 +1,7 @@
-var chartContainer = document.getElementById('pie-chart');
+var chartDom = document.getElementById('domain_count3');
+var myChart = echarts.init(chartDom);
+var option;
 
-// 实例化图表
-const myChart = echarts.init(chartContainer);
-
-// 图表的选项
 const data = [];
 for (let i = 0; i < 5; ++i) {
   data.push(Math.round(Math.random() * 200));
@@ -14,7 +12,7 @@ option = {
   },
   yAxis: {
     type: 'category',
-    data: ['A', 'B', 'C', 'D', 'E'],
+    data: ['GPU_SERVER', 'Elaline', 'tabuaihua', 'D', 'E'],
     inverse: true,
     animationDuration: 300,
     animationDurationUpdate: 300,
@@ -23,7 +21,7 @@ option = {
   series: [
     {
       realtimeSort: true,
-      name: 'X',
+      name: '不同设备访问量',
       type: 'bar',
       data: data,
       label: {
@@ -34,7 +32,7 @@ option = {
     }
   ],
   legend: {
-    show: true
+
   },
   animationDuration: 0,
   animationDurationUpdate: 3000,
@@ -60,13 +58,9 @@ function run() {
 }
 setTimeout(function () {
   run();
-}, 1000);
+}, 0);
+setInterval(function () {
+  run();
+}, 3000);
 
-
-// 设置图表选项
-myChart.setOption(option);
-
-// 监听窗口大小变化，重新渲染图表
-window.addEventListener('resize', function () {
-    myChart.resize();
-});
+option && myChart.setOption(option);

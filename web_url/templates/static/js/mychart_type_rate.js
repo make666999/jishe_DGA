@@ -29,7 +29,7 @@ option = {
         {
             name: 'Nightingale Chart',
             type: 'pie',
-            radius: [10, 100],
+            radius: [4, 50],
             center: ['50%', '50%'],
             roseType: 'area',
             itemStyle: {
