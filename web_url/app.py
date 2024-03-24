@@ -398,6 +398,15 @@ async def read_root(request: Request):
 @app.get("/customers.html")
 async def read_root(request: Request):
     return templates.TemplateResponse("customers.html", {"request": request,"ipAddress":ipAddress})
+
+@app.get("/mode.html")
+async def read_root(request: Request):
+    return templates.TemplateResponse("mode.html", {"request": request,"ipAddress":ipAddress})
+
+@app.get("/Security_policy.html")
+async def read_root(request: Request):
+    return templates.TemplateResponse("Security_policy.html", {"request": request,"ipAddress":ipAddress})
+
 @app.get("/flight.json")
 async def read_root():
     import os

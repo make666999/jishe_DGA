@@ -1,0 +1,342 @@
+.info-boxes {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-left: 350px;
+    background: rgb(255, 255, 255); /* Translucent background for the container */
+    padding: 10px;
+    border-radius: 15px; /* Slightly rounded corners for the container */
+    width: 70%;
+}
+
+.info-box {
+    background: rgba(76, 76, 76, 0.5); /* Darker, translucent background */
+    padding: 20px;
+    margin: 0 10px;
+    text-align: center;
+    border-radius: 15px; /* Adjust this value to get the desired roundness */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Soft shadow for depth */
+    transition: all 0.3s ease; /* Smooth transition for interactive effects */
+}
+
+.info-box:hover {
+    transform: translateY(-5px); /* Slight lift effect on hover */
+    background: rgba(95, 95, 95, 0.5); /* Lighten background on hover */
+}
+
+.info-number {
+    color: #FFA07A; /* Adjusted for the color seen in the provided image */
+    font-size: 36px; /* Larger size for emphasis */
+    font-weight: bold;
+    margin-bottom: 5px; /* Spacing between number and label */
+}
+
+.info-label {
+    color: white; /* White color for better contrast */
+    font-size: 20px; /* Larger label text */
+    opacity: 0.9; /* Slightly less prominent */
+}
+
+.current-time-container {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    text-align: right;
+    color: #FFA07A; /* 你可以根据需要调整这个颜色 */
+}
+
+.current-time {
+    display: block; /* 让时间显示在标签上方 */
+    font-size: 24px; /* 或任何适合你设计的大小 */
+    font-weight: bold;
+}
+
+.current-time-label {
+    font-size: 16px; /* 标签的大小应小于时间 */
+}
+
+
+@import url(https://fonts.googleapis.com/css?family=Concert+One);
+@import url(https://fonts.googleapis.com/css?family=Advent+Pro:300);
+
+label[for=range] {
+position: absolute;
+top: 25%;
+left: 80%;
+margin-left: -175px;
+margin-top: -32px;
+height: 49px;
+padding-top: 6px;
+width: 350px;
+padding-left: 13px;
+-webkit-transform: skew(-62deg);
+overflow: hidden;
+padding-bottom: 10px;
+}
+label[for=range]:after {
+content: "";
+position: absolute;
+bottom: 11px;
+left: 69px;
+height: 9px;
+width: 278px;
+box-shadow: 0px 3px 10px -3px rgba(0, 0, 0, 0.51);
+-webkit-transform: skew(62deg);
+}
+input[type=range] {
+-webkit-appearance: none;
+background-color: transparent;
+width: 300px;
+height: 38px;
+  padding-top:10px;
+  overflow:hidden;
+margin: 0;
+margin-left: -20px;
+transform-style: preserve-3d;
+perspective: 300;
+transform-origin: 50% 50% 300px;
+perspective-origin: 50% -121%;
+transform: skew(62deg);
+}
+input[type=range]:focus{
+  outline:none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  position:relative;
+     -webkit-appearance: none;
+    cursor:pointer;
+    background-color: transparent;
+    width: 30px;
+    height: 18px;
+    box-shadow: 1px 5px 10px -1px rgba(0, 0, 0,0.2),
+    -25px 0 0 10px rgba(90, 184, 6, 0.5),
+    -75px 0 0 10px rgba(90, 184, 6, 0.5),
+    -125px 0 0 10px rgba(90, 184, 6, 0.5),
+    -175px 0 0 10px rgba(90, 184, 6, 0.5),
+    -225px 0 0 10px rgba(90, 184, 6, 0.5),
+    -275px 0 0 10px rgba(90, 184, 6, 0.5),
+    -325px 0 0 10px rgba(90, 184, 6, 0.5);
+  z-index:2;
+}
+input[type="range"]::-webkit-slider-thumb:after {
+content: "";
+position: absolute;
+z-index: 1;
+left: -285px;
+top: -28px;
+width: 300px;
+height: 140px;
+background: #9FE472;
+transform: rotateX(90deg);
+transform-origin: 0 0px 0;
+transform: rotateX(90deg) translateY(-140px) translateZ(-18px);
+}
+input[type="range"]::-webkit-slider-thumb:before {
+content: "< >";
+font-family: 'Concert One', cursive;
+position: absolute;
+background: #eaebe5;
+background: -moz-linear-gradient(top, #eaebe5 0%, #dcdedd 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eaebe5), color-stop(100%,#dcdedd));
+background: -webkit-linear-gradient(top, #eaebe5 0%,#dcdedd 100%);
+background: -o-linear-gradient(top, #eaebe5 0%,#dcdedd 100%);
+background: -ms-linear-gradient(top, #eaebe5 0%,#dcdedd 100%);
+background: linear-gradient(to bottom, #eaebe5 0%,#dcdedd 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eaebe5', endColorstr='#dcdedd',GradientType=0 );
+top: -2px;
+left: 0px;
+border-radius: 2px;
+color: #5a5a5a;
+text-shadow: 0 1px 0 white;
+height: 22px;
+width: 32px;
+border-top: 1px solid white;
+border-left: 1px solid white;
+box-sizing: border-box;
+text-align: center;
+line-height: 19px;
+font-size: 17px;
+}
+input[type="range"]::-webkit-slider-runnable-track:before {
+content: "";
+position: absolute;
+height: 38px;
+width: 283px;
+background: #e8e8e8;
+background: -moz-linear-gradient(top, #dfdfdf 0%, #d8d8d8 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dfdfdf), color-stop(100%,#d8d8d8));
+background: -webkit-linear-gradient(top, #dfdfdf 0%,#d8d8d8 100%);
+background: -o-linear-gradient(top, #dfdfdf 0%,#d8d8d8 100%);
+background: -ms-linear-gradient(top, #dfdfdf 0%,#d8d8d8 100%);
+background: linear-gradient(to bottom, #dfdfdf 0%,#d8d8d8 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dfdfdf', endColorstr='#d8d8d8',GradientType=0 );
+bottom: 0;
+left: 0;
+}
+input[type="range"]::-webkit-slider-runnable-track:after {
+content: "";
+position: absolute;
+height: 10px;
+width: 270px;
+background: rgb(247, 247, 247);
+top: 0;
+right: 26px;
+transform: skew(62deg);
+}
+input[type=range]:before {
+content: "";
+position: absolute;
+background: rgb(190, 190, 190);
+box-shadow:0 1px 0 rgb(235, 235, 235);
+width: 283px;
+left: 0;
+height: 1px;
+top: 29px;
+z-index: 1;
+}
+input[type=range]:after {
+content: "";
+position: absolute;
+background: rgb(190, 190, 190);
+width: 7px;
+left: 3px;
+border-radius: 50%;
+height: 6px;
+top: 26px;
+z-index: 1;
+box-shadow:30px 0 0 rgb(190, 190, 190),
+60px 0 0 rgb(190, 190, 190),
+90px 0 0 rgb(190, 190, 190),
+120px 0 0 rgb(190, 190, 190),
+150px 0 0 rgb(190, 190, 190),
+180px 0 0 rgb(190, 190, 190),
+210px 0 0 rgb(190, 190, 190),
+240px 0 0 rgb(190, 190, 190),
+270px 0 0 rgb(190, 190, 190),
+60px 1px 0 rgb(235, 235, 235),
+90px 1px 0 rgb(235, 235, 235),
+120px 1px 0 rgb(255, 255, 255),
+150px 1px 0 rgb(235, 235, 235),
+180px 1px 0 rgb(235, 235, 235),
+210px 1px 0 rgb(235, 235, 235),
+240px 1px 0 rgb(235, 235, 235),
+270px 1px 0 rgb(235, 235, 235);
+}
+
+.budget {
+position: absolute;
+top: 26%;
+left:500px;
+margin-top: -100px;
+text-align: center;
+width: 100%;
+font-size: 1.7em;
+font-family: 'Advent Pro', sans-serif;
+color: rgb(58, 58, 58);
+}
+.output {
+position: absolute;
+bottom: 91%;
+left: 690px;
+margin-bottom: -100px;
+text-align: center;
+width: 100%;
+font-size: 2em;
+font-family: 'Advent Pro', sans-serif;
+color: rgba(132, 206, 66, 1);
+}
+
+.additional-info-boxes {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; /* 调整为需要的值 */
+
+    background: rgb(255, 255, 255); /* 与现有风格一致 */
+    padding: 10px;
+    border-radius: 15px; /* 和其他信息框一样 */
+    width: 50%; /* 根据实际情况调整 */
+}
+
+.additional-info-boxes .info-box {
+    background: rgba(76, 76, 76, 0.5); /* 与现有风格一致 */
+    padding: 20px;
+    margin: 0 10px;
+    text-align: center;
+    border-radius: 15px; /* 与现有风格一致 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* 与现有风格一致 */
+    transition: all 0.3s ease; /* 平滑过渡效果 */
+}
+
+.additional-info-boxes .info-box:hover {
+    transform: translateY(-5px); /* 鼠标悬停时上浮效果 */
+    background: rgba(95, 95, 95, 0.5); /* 鼠标悬停时背景色变浅 */
+}
+
+.additional-info-boxes .info-title {
+    color: #FFD700; /* 可以根据需要调整颜色 */
+    font-size: 24px; /* 标题大小 */
+    margin-bottom: 5px; /* 与内容的间距 */
+}
+
+.additional-info-boxes .info-content {
+    color: white; /* 内容文字颜色 */
+    font-size: 20px; /* 内容文字大小 */
+    opacity: 0.9; /* 文字透明度 */
+}
+
+.custom-info-boxes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 1%; /* 从顶部开始的偏移，原来是20px，现在调整为页面高度的20% */
+    padding: 20px;
+    gap: 20px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative; /* 使得transform属性有效 */
+    transform: translate(-25%, -49%); /* 向左移动10%，向上移动20% */
+}
+
+.custom-info-box {
+    background: rgba(76, 76, 76, 0.5);
+    padding: 20px;
+    margin: 10px;
+    text-align: center;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    flex-basis: calc(50% - 40px);
+    max-width: 360px;
+    height: 150px; /* 或根据内容进行调整 */
+}
+
+
+
+/* 保持其他样式不变 */
+
+
+.info-box-title {
+    color: #FFD700;
+    font-size: 24px;
+    margin-bottom: 10px; /* 可以根据需要调整 */
+}
+
+.info-box-content {
+    color: white;
+    font-size: 20px;
+    display: inline-block;
+    width: 60px; /* 或其他需要的宽度 */
+}
+
+.info-box-button {
+    color: #FFFFFF;
+    background-color: #5A5A5A;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+
