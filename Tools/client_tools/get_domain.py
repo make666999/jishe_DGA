@@ -30,8 +30,9 @@ def process_connection(domain,dst_ip,loc_ip, type, domain_ip=None):
         "Timestamp": int(time.time() * 1000)
     }
     db_log.insert_one(data)
-    print("\n[*] 新增连接: %s <- %s - 解析域名: %s : %s - 域名检查结果: %s - 时间: %s" % (
-        dst_ip, loc_ip, domain, domain_ip,domain_type,time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
+    print("\n[*] 数据写入完成: %s <- %s - 解析域名: %s : %s - 域名检查结果: %s - 时间: %s" % (
+        dst_ip, loc_ip, domain, domain_ip, domain_type, time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
+
 
 
 def dns_callback(packet):
@@ -48,7 +49,6 @@ def dns_callback(packet):
                 continue
         else:
             return
-
 
 def Get_Domain_Save():
     sniff(filter="port 53", prn=dns_callback, store=0,iface="以太网")
