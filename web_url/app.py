@@ -4,10 +4,11 @@ import json
 import socket
 import time
 import datetime
-from datetime import datetime, timedelta
+
 from uvicorn import run
 from fastapi.websockets import WebSocketState
 
+from datetime import datetime, timedelta
 from fastapi import FastAPI, WebSocket, Request
 from pymongo import MongoClient
 import pymongo
@@ -19,234 +20,336 @@ from pydantic import BaseModel
 from bson.json_util import dumps
 import asyncio
 
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, FileResponse
 
 app = FastAPI()
 
 # 连接到MongoDB数据库
-mongo_client = MongoClient("mongodb://8c630x9121.goho.co:23593")
+mongo_client = MongoClient("mongodb://886xt49626.goho.co:23904")
 db = mongo_client["DGA"]
-Local_db="GPU-SERVER"
-collection = db[Local_db]
+
 # 模板配置
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="templates/static"), name="static")
-
-# 获取数据库集合
-@app.websocket("/collection_names")
-async def websocket_endpoint(websocket: WebSocket):
+# 统计集合数量以及名字
+@app.websocket("/latest_location_data")
+async def websocket_latest_location_data(websocket: WebSocket):
     await websocket.accept()
     try:
         while websocket.client_state == WebSocketState.CONNECTED:
-            global db
-            collection_names =  db.list_collection_names()
-            print("collection_names:", collection_names)
-            await websocket.send_text(dumps(collection_names))
-            await asyncio.sleep(3)
-    except Exception as e:
-            print(f"Error: {e}")
-    finally:
-        # 关闭连接时的清理工作
-        await websocket.close()
+            # 初始化一个列表来存储每个集合的最新Loc_Address数据
+            latest_location_data_list = []
+            # 获取所有集合的名称
+            collection_names = db.list_collection_names()
+            # 遍历所有集合
+            for collection_name in collection_names:
+                collection = db[collection_name]
+                # 查询每个集合中Loc_Address字段最新的数据
+                # 假设每个文档都有一个名为"Timestamp"的时间戳字段
+                latest_document = collection.find_one({}, sort=[('Timestamp', -1)])
+                # 构建包含集合名称和最新Loc_Address数据的字典
+                collection_data = {"collection_name": collection_name}
+                if latest_document and "Loc_Address" in latest_document:
+                    collection_data["latest_loc_address"] = latest_document["Loc_Address"]
+                else:
+                    collection_data["latest_loc_address"] = "No data or Loc_Address not found"
+                # 将字典添加到列表中
+                latest_location_data_list.append(collection_data)
 
+            # 构建最终发送的数据结构，包含集合数量和集合数据列表
+            final_data = {
+                "total_collections": len(collection_names),
+                "collections_data": latest_location_data_list
+            }
 
-# 获取列表分类
-today = datetime.today().strftime("%Y-%m-%d")
-# today = datetime.date.today().strftime("%Y-%m-%d")
-
-async def get_data_list():
-    # 获取当天的起始时间戳和结束时间戳
-    start_of_day = int(time.mktime(datetime.strptime(today, "%Y-%m-%d").timetuple()) * 1000)
-    end_of_day = start_of_day + 86400000  # 一天的毫秒数
-
-    # 使用聚合框架执行统计操作
-    pipeline = [
-        {"$match": {"Domain_Type": "BENIGN", "Timestamp": {"$gte": start_of_day, "$lt": end_of_day}}},
-        {"$group": {"_id": None, "Good": {"$sum": 1}}}
-    ]
-    response_count = list(collection.aggregate(pipeline))
-
-    # 获取非"BENIGN"类型的数据数量
-    non_response_count = collection.count_documents({"Domain_Type": {"$ne": "BENIGN"}, "Timestamp": {"$gte": start_of_day, "$lt": end_of_day}})
-    return {
-        "Good": response_count[0]["Good"] if response_count else 0,
-        "Bad": non_response_count
-    }
-
-@app.websocket("/data_list")
-async def websocket_endpoint(websocket: WebSocket):
-    await websocket.accept()
-    try:
-        while websocket.client_state == WebSocketState.CONNECTED:
-            data_list = await get_data_list()
-            print("data_list:", data_list)
-            await websocket.send_text(dumps(data_list))
-            await asyncio.sleep(1)
-    except Exception as e:
-            print(f"Error: {e}")
-    finally:
-        # 关闭连接时的清理工作
-        await websocket.close()
-
-# 统计不同时间的数据
-async def get_data_count_per_second():
-    # 获取当前时间并只计算一次
-    current_timestamp = int(time.time() * 1000)
-    ten_seconds_ago = current_timestamp - 10000
-
-    data_points = collection.find({
-        "Timestamp": {"$gte": ten_seconds_ago, "$lte": current_timestamp}
-    })
-    results = list(data_points)
-    return results
-
-@app.websocket("/data_per_second")
-async def websocket_endpoint(websocket: WebSocket):
-    await websocket.accept()
-    try:
-        while websocket.client_state == WebSocketState.CONNECTED:
-            data_per_second = await get_data_count_per_second()
-            print("data_per_second:", data_per_second)
-            await websocket.send_text(dumps(data_per_second))
-            await asyncio.sleep(1)
-    except Exception as e:
-            print(f"Error: {e}")
-    finally:
-        # 关闭连接时的清理工作
-        await websocket.close()
-
-# 统计当前一天不同时间段的数据量
-async def get_count_per_day_for_last_eight_days():
-    current_date = datetime.now()  # 获取当前日期
-    eight_days_ago = current_date - timedelta(days=8)  # 计算八天前的日期
-
-    # 初始化每天的数据计数为0
-    data_per_day = {i: 0 for i in range(8)}
-
-    data_points = collection.find({
-        "Timestamp": {
-            "$gte": int(eight_days_ago.timestamp() * 1000),
-            "$lte": int(current_date.timestamp() * 1000)
-        }
-    })
-
-    for data_point in data_points:
-        timestamp = data_point["Timestamp"]
-        date = datetime.fromtimestamp(timestamp / 1000).date()  # 将时间戳转换为日期
-        day_difference = (date - eight_days_ago.date()).days  # 计算日期差
-        if 0 <= day_difference < 8:
-            data_per_day[day_difference] += 1
-
-    # 准备返回的数据
-    dates = []
-    counts = []
-    for i in range(8):
-        date_str = (eight_days_ago + timedelta(days=i)).strftime("%Y-%m-%d")
-        dates.append(date_str)
-        counts.append(data_per_day[i])
-
-    return {"dates": dates, "count": counts}
-
-@app.websocket("/count_per_day_for_last_eight_days")
-async def websocket_endpoint(websocket: WebSocket):
-    await websocket.accept()
-    try:
-        while websocket.client_state == WebSocketState.CONNECTED:
-            result = await get_count_per_day_for_last_eight_days()
-            await websocket.send_text(json.dumps(result))  # 使用json.dumps将字典转换为JSON字符串
-            await asyncio.sleep(86400)  # 每24小时更新一次
-    except Exception as e:
-        print(f"Error: {e}")
-    finally:
-        await websocket.close()
-
-# 获取前一秒的数据统计量
-async def get_count_last_second():
-    current_timestamp = int(time.time() * 1000)
-    one_second_ago = current_timestamp - 1000  # 1秒等于1000毫秒
-
-    # 使用 count_documents 方法计算最近一秒内的文档数量
-    count_last_second = collection.count_documents({
-        "Timestamp": {"$gte": one_second_ago, "$lte": current_timestamp}
-    })
-
-    # 获取当前时间字符串
-    current_time_str = time.strftime("%H:%M:%S", time.localtime(current_timestamp // 1000))
-
-    return {"time": current_time_str, "count": count_last_second}
-
-@app.websocket("/count_last_second")
-async def websocket_endpoint(websocket: WebSocket):
-    await websocket.accept()
-    try:
-        while websocket.client_state == WebSocketState.CONNECTED:
-            result = await get_count_last_second()
-            # 使用 json.dumps 将字典转换为 JSON 字符串
-            await websocket.send_text(json.dumps(result))
-            await asyncio.sleep(1)  # 每秒检查一次
+            # 发送数据
+            await websocket.send_text(json.dumps(final_data))
+            await asyncio.sleep(1)  # 暂停1秒，减少消息发送频率
     except Exception as e:
         print(f"错误: {e}")
     finally:
         await websocket.close()
 
-# 统计当前前60秒每隔5秒内的数据数量
-async def get_count_per_six_seconds():
-    current_timestamp = int(time.time() * 1000)
-    sixty_seconds_ago = current_timestamp - 60000
 
-    data_points = collection.find({
-        "Timestamp": {"$gte": sixty_seconds_ago, "$lte": current_timestamp}
-    })
 
-    # 初始化每个六秒间隔的数据计数为0
-    data_per_six_seconds = {i: 0 for i in range(10)}
-
-    for data_point in data_points:
-        timestamp = data_point["Timestamp"]
-        six_second_interval = (timestamp - sixty_seconds_ago) // 6000  # 计算六秒间隔
-        if six_second_interval in data_per_six_seconds:
-            data_per_six_seconds[six_second_interval] += 1
-
-    # 准备返回的数据
-    times = []
-    counts = []
-    for i in range(10):
-        time_str = time.strftime("%H:%M:%S", time.localtime((sixty_seconds_ago // 1000) + (i * 6)))
-        times.append(time_str)
-        counts.append(data_per_six_seconds[i])
-
-    return {"data": times, "count": counts}
-
-@app.websocket("/count_per_six_seconds")
+@app.websocket("/collection_stats")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     try:
         while websocket.client_state == WebSocketState.CONNECTED:
-            result = await get_count_per_six_seconds()
-            await websocket.send_text(json.dumps(result))  # 使用json.dumps将字典转换为JSON字符串
-            await asyncio.sleep(6)
+            collection_stats = {}
+            for collection_name in db.list_collection_names():
+                collection = db[collection_name]
+                # 统计不同分钟的数据量
+                current_timestamp = int(time.time() * 1000)  # 当前时间戳转换为毫秒
+                for i in range(10):  # 统计最近10分钟的数据量
+                    start_timestamp = current_timestamp - (i + 1) * 60000  # 60000毫秒 * (i + 1)分钟
+                    end_timestamp = current_timestamp - i * 60000  # 60000毫秒 * i分钟
+                    count = collection.count_documents({
+                        "Timestamp": {"$gte": start_timestamp, "$lt": end_timestamp}
+                    })
+                    # 将时间戳转换为datetime对象，然后格式化为小时:分钟格式
+                    # 注意：datetime.fromtimestamp() 需要秒为单位，所以这里要将毫秒转换回秒
+                    start_time_str = datetime.fromtimestamp(start_timestamp / 1000).strftime("%H:%M")
+                    collection_stats.setdefault(collection_name, {})[start_time_str] = count
+            await websocket.send_text(json.dumps(collection_stats))
+            await asyncio.sleep(1)
     except Exception as e:
         print(f"Error: {e}")
     finally:
         await websocket.close()
 
-# 获取十条最新数据和地图数据
+class DataToReceive(BaseModel):
+    Local: str
+    Timestamp: int  # 接受整数类型的时间戳
+
+# WebSocket 端点，用于返回数据库中所有表在每周每一天的数据总量
+@app.websocket("/week_day_data_total")
+async def websocket_week_day_data_total(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            # 初始化一个字典来存储每天的总数据量
+            week_day_data_total = {}
+            # 获取当前时间戳（毫秒）
+            current_timestamp = int(time.time() * 1000)
+            # 初始化每天的数据量为0
+            for i in range(7):  # 从今天往前推7天
+                start_timestamp = current_timestamp - (i + 1) * 86400000  # 一天的毫秒数
+                start_date = time.strftime("%Y-%m-%d", time.localtime(start_timestamp / 1000))
+                week_day_data_total[start_date] = 0  # 初始化每天的总数为0
+
+
+            # 遍历所有集合
+            for collection_name in db.list_collection_names():
+                collection = db[collection_name]
+                # 统计每天的数据量
+                for i in range(7):  # 从今天往前推7天
+                    start_timestamp = current_timestamp - (i + 1) * 86400000
+                    end_of_day_timestamp = current_timestamp - i * 86400000
+                    # 计算当前集合在当前天的数据量
+                    count = collection.count_documents({
+                        "Timestamp": {"$gte": start_timestamp, "$lt": end_of_day_timestamp}
+                    })
+                    # 更新总数据量
+                    start_date = time.strftime("%Y-%m-%d", time.localtime(start_timestamp / 1000))
+                    week_day_data_total[start_date] += count  # 累加每天的数据量
+
+            # 发送每天的总数据量
+            await websocket.send_text(json.dumps(week_day_data_total))
+            await asyncio.sleep(1)
+    except Exception as e:
+        print(f"错误: {e}")
+    finally:
+        await websocket.close()
+
+
+# 用于返回oreder页面的数据
+@app.websocket("/latest_order_data")
+async def websocket_latest_order_data(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            latest_order_data_list = []
+            collection_names = db.list_collection_names()
+            # 获取今天的日期范围
+            now = datetime.now()
+            start_of_day = datetime(now.year, now.month, now.day)
+            end_of_day = start_of_day + timedelta(days=1)
+            # 转换为毫秒
+            start_of_day_ms = int(start_of_day.timestamp() * 1000)
+            end_of_day_ms = int(end_of_day.timestamp() * 1000)
+
+            for collection_name in collection_names:
+                collection = db[collection_name]
+                daily_count = collection.count_documents({
+                    "Timestamp": {
+                        "$gte": start_of_day_ms,
+                        "$lt": end_of_day_ms
+                    }
+                })
+                latest_document = collection.find_one({
+                    "Timestamp": {
+                        "$gte": start_of_day_ms,
+                        "$lt": end_of_day_ms
+                    }
+                }, sort=[('Timestamp', -1)])
+
+                collection_data = {
+                    "collection_name": collection_name,
+                    "daily_count": daily_count
+                }
+                if latest_document:
+                    # 将毫秒时间戳转换为正常的日期时间格式
+                    latest_timestamp = datetime.fromtimestamp(latest_document.get("Timestamp", 0) / 1000)
+                    collection_data.update({
+                        "latest_loc_address": latest_document.get("Loc_Address", "No Loc_Address found"),
+                        "latest_timestamp": latest_timestamp.strftime('%Y-%m-%d %H:%M:%S'),  # 格式化日期时间
+                        "latest_domain_type": latest_document.get("Domain_Type", "No Domain_Type found")
+                    })
+                else:
+                    collection_data.update({
+                        "latest_loc_address": "No data found",
+                        "latest_timestamp": "No data found",
+                        "latest_domain_type": "No data found"
+                    })
+                latest_order_data_list.append(collection_data)
+
+            final_data = {
+                "total_collections": len(collection_names),
+                "collections_data": latest_order_data_list
+            }
+
+            await websocket.send_text(json.dumps(final_data))
+            await asyncio.sleep(5)  # 暂停1秒，减少消息发送频率
+    except Exception as e:
+        print(f"错误: {e}")
+    finally:
+        await websocket.close()
+
+
+#对每天的good和bad数据进行统计
+@app.websocket("/count_benign_nonbenign")
+async def count_benign_nonbenign(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            stats_list = []
+            collection_names = db.list_collection_names()
+            # 获取今天的日期范围
+            now = datetime.now()
+            start_of_day = datetime(now.year, now.month, now.day)
+            end_of_day = start_of_day + timedelta(days=1)
+            # 转换为毫秒
+            start_of_day_ms = int(start_of_day.timestamp() * 1000)
+            end_of_day_ms = int(end_of_day.timestamp() * 1000)
+
+            for collection_name in collection_names:
+                collection = db[collection_name]
+                # 统计Domain_Type为BENIGN的数量
+                benign_count = collection.count_documents({
+                    "Timestamp": {
+                        "$gte": start_of_day_ms,
+                        "$lt": end_of_day_ms
+                    },
+                    "Domain_Type": "BENIGN"
+                })
+                # 统计Domain_Type不为BENIGN的数量
+                non_benign_count = collection.count_documents({
+                    "Timestamp": {
+                        "$gte": start_of_day_ms,
+                        "$lt": end_of_day_ms
+                    },
+                    "Domain_Type": {"$ne": "BENIGN"}
+                })
+
+                # 添加到统计列表
+                stats_list.append({
+                    "collection_name": collection_name,
+                    "benign_count": benign_count,
+                    "non_benign_count": non_benign_count
+                })
+
+            # 准备最终的数据
+            final_data = {
+                "total_collections": len(collection_names),
+                "stats": stats_list
+            }
+
+            # 发送数据
+            await websocket.send_text(json.dumps(final_data))
+            await asyncio.sleep(5)  # 暂停5秒，减少消息发送频率
+    except Exception as e:
+        print(f"错误: {e}")
+    finally:
+        await websocket.close()
+
+
+# 查找最近五天出现次数最高的域名
+@app.websocket("/top_remain_type_daily")
+async def top_remain_type_daily(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            top_types_daily = []
+            collection_names = db.list_collection_names()
+            # 获取过去五天的日期
+            now = datetime.now()
+            for day_back in range(5):
+                specific_day = now - timedelta(days=day_back)
+                start_of_day = datetime(specific_day.year, specific_day.month, specific_day.day)
+                end_of_day = start_of_day + timedelta(days=1)
+                # 转换为毫秒
+                start_of_day_ms = int(start_of_day.timestamp() * 1000)
+                end_of_day_ms = int(end_of_day.timestamp() * 1000)
+
+                daily_top_type = {}
+                total_counts = {}
+
+                for collection_name in collection_names:
+                    collection = db[collection_name]
+                    # 使用聚合管道查找每个集合在特定一天内Remain_Type出现的频率
+                    pipeline = [
+                        {"$match": {
+                            "Timestamp": {"$gte": start_of_day_ms, "$lt": end_of_day_ms},
+                            "Remote_Domain": {"$ne": None}  # 排除Remain_Type为null的文档
+                        }},
+                        {"$group": {
+                            "_id": "$Remote_Domain",
+                            "count": {"$sum": 1}
+                        }},
+                        {"$sort": {"count": -1}},
+                        {"$limit": 1}
+                    ]
+                    results = list(collection.aggregate(pipeline))
+                    for result in results:
+                        remain_type = result['_id']
+                        count = result['count']
+                        if remain_type in total_counts:
+                            total_counts[remain_type] += count
+                        else:
+                            total_counts[remain_type] = count
+
+                # 找出出现频率最高的Remain_Type
+                if total_counts:
+                    top_remain_type = max(total_counts, key=total_counts.get)
+                    daily_top_type['date'] = start_of_day.strftime('%m-%d')
+                    daily_top_type['top_remain_type'] = top_remain_type
+                    daily_top_type['count'] = total_counts[top_remain_type]
+                else:
+                    daily_top_type['date'] = start_of_day.strftime('%m-%d')
+                    daily_top_type['top_remain_type'] = 'None'
+                    daily_top_type['count'] = 0
+
+                top_types_daily.append(daily_top_type)
+
+            # 准备最终的数据
+            final_data = {
+                "top_types_daily": top_types_daily
+            }
+
+            # 发送数据
+            await websocket.send_text(json.dumps(final_data))
+            await asyncio.sleep(5)  # 暂停5秒，减少消息发送频率
+    except Exception as e:
+        print(f"错误: {e}")
+    finally:
+        await websocket.close()
+
+
 async def get_latest_data():
     # 获取最新的十条数据
     latest_data = list(collection.find().sort("Timestamp", -1).limit(10))
     return latest_data
 
 async def get_city_data():
+    collection = db["GPU-SERVER"]
     query = {"moveLines": {"$ne": None}}
     projection = {"_id": 0,"moveLines": 1}
-
     city_data = collection.find(query,projection).sort("Timestamp", -1).limit(50)
     city_datas = [document["moveLines"] for document in city_data]
     city_data= {"moveLines":city_datas}
-    # city_data = {"moveLines": document["moveLines"] for document in city_data}
     return city_data
-
-
 
 
 
@@ -256,7 +359,6 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while websocket.client_state == WebSocketState.CONNECTED:
             City_Data = await get_city_data()
-            print("City Data:", City_Data)
             await websocket.send_text(dumps(City_Data))
             await asyncio.sleep(1)
     finally:
@@ -264,20 +366,55 @@ async def websocket_endpoint(websocket: WebSocket):
         await websocket.close()
 
 
-@app.websocket("/ws")
-async def websocket_endpoint(websocket: WebSocket):
-    await websocket.accept()
-    try:
-        while websocket.client_state == WebSocketState.CONNECTED:
-            latest_data = await get_latest_data()
-            print("Latest Data:", latest_data)
-            await websocket.send_text(dumps(latest_data))
-            await asyncio.sleep(1)
-    except:
-        print("Error")
-    finally:
-        # 关闭连接时的清理工作
-        await websocket.close()
+
+
+@app.post("/api/send_data")
+async def receive_data(data: DataToReceive):
+    # 在这里处理从前端发送过来的数据
+    global db
+    global collection
+    collection= db[data.Local]
+    print(data.Local)
+    # received_data = data.dict()
+    # return received_data
+
+
+@app.get("/")
+async def read_root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request,"ipAddress":ipAddress})
+
+@app.get("/index.html")
+async def read_root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request,"ipAddress":ipAddress})
+
+@app.get("/orders.html")
+async def read_root(request: Request):
+    return templates.TemplateResponse("orders.html", {"request": request,"ipAddress":ipAddress})
+
+@app.get("/order-detail.html")
+async def read_root(request: Request):
+    return templates.TemplateResponse("order-detail.html", {"request": request,"ipAddress":ipAddress})
+
+@app.get("/customers.html")
+async def read_root(request: Request):
+    return templates.TemplateResponse("customers.html", {"request": request,"ipAddress":ipAddress})
+
+@app.get("/mode.html")
+async def read_root(request: Request):
+    return templates.TemplateResponse("mode.html", {"request": request,"ipAddress":ipAddress})
+
+@app.get("/Security_policy.html")
+async def read_root(request: Request):
+    return templates.TemplateResponse("Security_policy.html", {"request": request,"ipAddress":ipAddress})
+
+@app.get("/flight.json")
+async def read_root():
+    import os
+
+    current_path = os.getcwd()
+    print("当前访问的路径是：", current_path)
+
+    return FileResponse("templates/static/js/flight.json")
 
 def get_local_ip():
     try:
@@ -294,58 +431,6 @@ def get_local_ip():
         print("Error occurred:", e)
         return None
 ipAddress=str(get_local_ip())+":8000"
-
-@app.get("/")
-async def read_root(request: Request):
-    latest_data = await get_latest_data()
-    return templates.TemplateResponse("index.html", {"request": request, "latest_data": latest_data,"ipAddress":ipAddress})
-
-
-@app.get("/data_ui.html")
-async def read_root(request: Request):
-    city_data = await get_city_data()
-    print(city_data)
-    return templates.TemplateResponse("data_ui.html", {"request": request, "allDataParam": city_data,"ipAddress":ipAddress})
-
-@app.get("/index.html")
-async def read_root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request,"ipAddress":ipAddress})
-
-@app.get("/home.html")
-async def read_root(request: Request):
-    return templates.TemplateResponse("home.html", {"request": request,"ipAddress":ipAddress})
-
-@app.get("/database.html")
-async def read_root(request: Request):
-    return templates.TemplateResponse("database.html", {"request": request,"ipAddress":ipAddress})
-
-@app.get("/type.html")
-async def read_root(request: Request):
-    return templates.TemplateResponse("type.html", {"request": request,"ipAddress":ipAddress})
-
-@app.get("/Charts.html")
-async def read_root(request: Request):
-    return templates.TemplateResponse("Charts.html", {"request": request,"ipAddress":ipAddress})
-
-
-class DataToReceive(BaseModel):
-    Local: str
-    Time: str
-
-
-
-@app.post("/api/send_data")
-async def receive_data(data: DataToReceive):
-    # 在这里处理从前端发送过来的数据
-    global db
-    global collection
-    collection= db[data.Local]
-    print(data.Local)
-    # received_data = data.dict()
-    # return received_data
-
-
-
 
 if __name__ == '__main__':
     local_ip = get_local_ip()

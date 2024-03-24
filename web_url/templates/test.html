@@ -1,50 +1,86 @@
 <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>ECharts</title>
+    <!-- 引入 jQuery -->
+
+
+    <!-- 引入 ECharts 文件 -->
+</head>
+
+<body><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>集合列表展示</title>
-    <!-- 引入样式文件等 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .status-card {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .status-card:not(:last-child) {
+            margin-right: 20px;
+        }
+        .status-indicator {
+            font-size: 24px;
+            color: #333;
+        }
+        .flex-container {
+            display: flex;
+        }
+    </style>
 </head>
 <body>
-    <div class="collection-list-container">
-        <h2>数据库集合</h2>
-        <ul id="collection-list">
-            <!-- WebSocket数据将在这里显示 -->
-        </ul>
+    <div class="sidebar">
+        <!-- Sidebar content -->
+        <div>User profile and navigation goes here</div>
     </div>
+    <div class="main-content">
+        <!-- Main content area -->
+        <div class="flex-container">
+            <!-- Status cards -->
+            <div class="status-card">
+                <span class="status-indicator">17</span>
+                <div>Tasks Pending</div>
+            </div>
+            <div class="status-card">
+                <span class="status-indicator">265</span>
+                <div>Tasks Completed</div>
+            </div>
+            <div class="status-card">
+                <span class="status-indicator">3</span>
+                <div>Projects in Progress</div>
+            </div>
+        </div>
+        <!-- Additional content can go here -->
+    </div>
+</body>
+</html>
 
-    <!-- WebSocket 脚本 -->
-    <script >
-        document.addEventListener('DOMContentLoaded', () => {  // 确保DOM完全加载完成
-    const wsUrl = 'ws://192.168.137.97:8000/collection_names'; // 根据实际情况调整WebSocket地址
-    const ws = new WebSocket(wsUrl);
-
-    ws.onopen = function(event) {
-        console.log('Connected to WebSocket');
-    };
-
-    ws.onerror = function(error) {
-        console.log('WebSocket Error: ' + error);
-    };
-
-    ws.onmessage = function(event) {
-        const collectionList = document.getElementById('collection-list');
-        const data = JSON.parse(event.data); // 假设服务器发送的是JSON格式的集合名称数组
-
-        collectionList.innerHTML = ''; // 清空当前列表
-
-        data.forEach((collectionName) => {
-            const listItem = document.createElement('li');
-            listItem.textContent = collectionName;
-            collectionList.appendChild(listItem);
-        });
-    };
-
-    ws.onclose = function(event) {
-        console.log('WebSocket connection closed');
-    };
-});
-
-    </script>
+<!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+<div id="chart" style="height: 400px;width: 60%;"></div>
+    <script src="./static/js/echarts.min.js"></script>
+<script src="./static/js/purple-passion.js"></script>
+<script  src="./static/js/networkMap.js"></script>
 </body>
 </html>
