@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
    const levels = {
     '安全等级': ['低', '中', '高'],
     '漏洞预警': ['低', '中', '高'],
-    '风险指数': ['低', '中', '高'],
+    '风险巡航': ['低', '中', '高'],
     '策略偏向': ['保守', '均衡', '积极']
 };
 
@@ -52,75 +52,56 @@ document.querySelectorAll('.custom-info-box').forEach(box => {
 });
 
 
-// 基于准备好的dom，初始化echarts实例
-var myChart = echarts.init(document.getElementById('radarChart'));
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+var raf = requestAnimationFrame;
+var TAU = Math.PI * 2;
 
-// 指定图表的配置项和数据
+var W = canvas.width = window.innerHeight/5;
+var H = canvas.height = window.innerHeight/5;
+var cX = W/2;//center point x
+var cY = H/2;//center point y
+var i = 0;
+var alpha;
+var rad = H/2;
+function Rardar(){
+  i += 1;
+  if(i==360)
+    i = 0;
+  alpha = TAU*i/360;
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+  ctx.fillRect(0,0,W,H);
+
+  ctx.strokeStyle = 'rgba(0, 255, 255, 1)';
+  ctx.beginPath();
+  ctx.moveTo(cX,cY);
+  ctx.lineTo(cX+Math.cos(alpha)*rad,cY+Math.sin(alpha)*rad);
+  ctx.stroke();
+	window.setTimeout(Rardar, 10);
+}
+raf(Rardar);
+
+
+
+
+var lineChart = echarts.init(document.getElementById('lineChart'));
 var option = {
-    title: {
-        text: '雷达扫描效果'
-    },
-    tooltip: {},
-    radar: {
-        // shape: 'circle',
-        name: {
-            textStyle: {
-                color: '#fff',
-                backgroundColor: '#999',
-                borderRadius: 3,
-                padding: [3, 5]
-           }
-        },
-        indicator: [
-           { name: '销售', max: 6500},
-           { name: '管理', max: 16000},
-           { name: '信息技术', max: 30000},
-           { name: '客户支持', max: 38000},
-           { name: '研发', max: 52000},
-           { name: '市场', max: 25000}
-        ]
-    },
-    series: [{
-        name: '预算 vs 开销',
-        type: 'radar',
-        data : [
-            {
-                value : [4300, 10000, 28000, 35000, 50000, 19000],
-                name : '预算分配',
-                areaStyle: {normal: {}}
-            },
-             {
-                value : [5000, 14000, 28000, 31000, 42000, 21000],
-                name : '实际开销',
-                areaStyle: {
-                    normal: {
-                        opacity: 0.9, // 区域透明度
-                        shadowBlur: 10, // 阴影模糊大小
-                        shadowColor: 'rgba(0, 0, 0, 0.5)' // 阴影颜色
-                    }
-                }
-            }
-        ]
-    }]
+
+  xAxis: {
+    type: 'category',
+    data: ['3-19', '3-20', '3-21', '3-22', '3-23', '3-24', '3-25']
+  },
+  yAxis: {
+    type: 'value'
+  },
+  series: [
+    {
+      data: [20, 32, 21, 27, 12, 19, 10],
+      type: 'line',
+      smooth: true
+    }
+  ]
 };
 
-// 使用刚指定的配置项和数据显示图表。
-myChart.setOption(option);
-
-// 模拟雷达扫描效果
-function radarScan() {
-    var index = 0;
-    setInterval(function () {
-        var data0 = option.series[0].data[0].value;
-        var data1 = option.series[0].data[1].value;
-        for (var i = 0; i < data0.length; i++) {
-            // 随机生成扫描数据
-            data0[i] = Math.random() * (option.radar.indicator[i].max - 500) + 500;
-            data1[i] = Math.random() * (option.radar.indicator[i].max - 500) + 500;
-        }
-        myChart.setOption(option);
-    }, 2000); // 每两秒更新一次数据
-}
-
-radarScan(); // 调用函数，开始扫描
-
+// Use the 'lineChart' instance to set the option
+option && lineChart.setOption(option);

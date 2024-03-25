@@ -394,6 +394,10 @@
             <span class="info-number">3</span>
             <span class="info-label">/台保护设备数量</span>
         </div>
+        <div class="info-box">
+            <span class="info-number">低</span>
+            <span class="info-label">风险指数</span>
+        </div>
 
 
         <div class="current-time-container">
@@ -401,7 +405,13 @@
             <span class="current-time-label">当前时间</span>
         </div>
     </div>
-<h2 style="padding-left: 390px">在线守护天数：28天</h2>
+    <h2 style="padding-left: 390px">在线守护天数：28天&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp近期恶意域名数量</h2>
+
+    <canvas style="display: block; margin: 20px 390px; border-radius: 50%; width: 150px; height: 150px;"
+            id='canvas'></canvas>
+
+    <div id="lineChart" style="margin: -180px 760px; width: 500px; height: 200px; background-color: #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-radius: 10px; border: 1px solid #ddd;"></div>
+
     <div style="width: 200px;height: 400px">
         <p class="budget">最大拦截恶意域名：</p>
         <label for="range">
@@ -410,68 +420,72 @@
         <output for="range" class="output"></output>
     </div>
 
-<div class="custom-info-boxes">
-    <div class="custom-info-box">
-        <div class="info-box-title">安全等级</div>
-        <button class="info-box-button decrease">-</button>
-        <span class="info-box-content" id="securityLevel">高</span>
-        <button class="info-box-button increase">+</button>
+    <div class="custom-info-boxes">
+        <div class="custom-info-box">
+            <div class="info-box-title">安全等级</div>
+            <button class="info-box-button decrease">-</button>
+            <span class="info-box-content" id="securityLevel">高</span>
+            <button class="info-box-button increase">+</button>
+        </div>
+        <div class="custom-info-box">
+            <div class="info-box-title">漏洞预警</div>
+            <button class="info-box-button decrease">-</button>
+            <span class="info-box-content" id="vulnerabilityAlert">中</span>
+            <button class="info-box-button increase">+</button>
+        </div>
+        <div class="custom-info-box">
+            <div class="info-box-title">风险巡航</div>
+            <button class="info-box-button decrease">-</button>
+            <span class="info-box-content" id="riskIndex">低</span>
+            <button class="info-box-button increase">+</button>
+        </div>
+        <div class="custom-info-box">
+            <div class="info-box-title">策略偏向</div>
+            <button class="info-box-button decrease">-</button>
+            <span class="info-box-content" id="strategyBias">均衡</span>
+            <button class="info-box-button increase">+</button>
+        </div>
+
+
     </div>
-    <div class="custom-info-box">
-        <div class="info-box-title">漏洞预警</div>
-        <button class="info-box-button decrease">-</button>
-        <span class="info-box-content" id="vulnerabilityAlert">中</span>
-        <button class="info-box-button increase">+</button>
-    </div>
-    <div class="custom-info-box">
-        <div class="info-box-title">风险指数</div>
-        <button class="info-box-button decrease">-</button>
-        <span class="info-box-content" id="riskIndex">低</span>
-        <button class="info-box-button increase">+</button>
-    </div>
-    <div class="custom-info-box">
-        <div class="info-box-title">策略偏向</div>
-        <button class="info-box-button decrease">-</button>
-        <span class="info-box-content" id="strategyBias">均衡</span>
-        <button class="info-box-button increase">+</button>
+    <!-- 雷达图容器 -->
+
+    <div class="switch-container">
+        <div class="switch-box">
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider round"></span>
+            </label>
+            <span>系统通知:对系统漏洞消息了如指掌</span>
+        </div>
+        <div class="switch-box">
+
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider round"></span>
+            </label>
+            <span>增强防护：对每日的日志进行细致检查，会增加大量性能</span>
+        </div>
+        <div class="switch-box">
+
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider round"></span>
+            </label>
+            <span>域名拦截；对存在于黑名单的域名，进行拒接访问</span>
+        </div>
+        <div class="switch-box">
+
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider round"></span>
+            </label>
+            <span>智慧筛查：开启实时漏洞预警</span>
+        </div>
     </div>
 
 
 </div>
-<!-- 雷达图容器 -->
-    <div class="container">
-<ul>
-        <li class="button2">
-            <input type="radio" id="f-option" name="selector">
-            <label for="f-option">Pizza</label>
-
-            <div class="check"></div>
-        </li>
-
-        <li  class="button2">
-            <input type="radio" id="s-option" name="selector">
-            <label for="s-option">Bacon</label>
-
-            <div class="check">
-                <div class="inside"></div>
-            </div>
-        </li>
-
-        <li class="button2">
-            <input type="radio" id="t-option" name="selector">
-            <label for="t-option">Cats</label>
-
-            <div class="check">
-                <div class="inside"></div>
-            </div>
-        </li>
-    </ul>
-    </div>
-
-
-
-</div>
-
 
 
 <script src="./static/js/jquery.js"></script>
