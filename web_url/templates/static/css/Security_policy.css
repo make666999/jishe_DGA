@@ -361,18 +361,18 @@ color: rgba(132, 206, 66, 1);
 }
 
 .feature-icon {
-    font-size: 24px; /* 根据实际图标大小调整 */
+    font-size: 20px; /* 根据实际图标大小调整 */
     margin-right: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 60px; /* 调整图标大小 */
-    height: 60px;
+    width: 40px; /* 调整图标大小 */
+    height: 40px;
     border-radius: 50%;
 }
 
-.blue {
-    background-color: #007bff;
+.green {
+    background-color: #73f377;
     color: white;
 }
 

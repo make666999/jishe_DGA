@@ -637,51 +637,36 @@ $(function () {
     var originalWidth = myChart.getWidth();
 
 // 图表的选项
-    var option = {
-        legend: {
-            top: 'bottom'
-        },
-        tooltip: {
-            trigger: 'item'
-        },
-        toolbox: {
-            show: true,
-            right: 10, // 调整水平偏移量
-            top: 10, // 调整垂直偏移量
-            feature: {}
-        },
-        series: [
-            {
-                name: 'Domain Type',
-                type: 'pie',
-                radius: ['40%', '70%'],
-                avoidLabelOverlap: false,
-                padAngle: 5,
-                itemStyle: {
-                    borderRadius: 10
-                },
-                label: {
-                    show: false,
-                    position: 'center'
-                },
-                emphasis: {
-                    label: {
-                        show: true,
-                        fontSize: 40,
-                        fontWeight: 'bold'
-                    }
-                },
-                labelLine: {
-                    show: false
-                },
-                data: [
-                    {value: 0, name: 'BENIGN'}, // 初始值设为0
-                    {value: 0, name: 'NON-BENIGN'}, // 初始值设为0
-                ],
-                color: ['#99CC99', '#FFCCCC'] // 自定义颜色
-            }
-        ]
-    };
+   option = {
+
+  tooltip: {
+    trigger: 'item'
+  },
+  legend: {
+    orient: 'vertical',
+    left: 'left'
+  },
+  series: [
+    {
+      name: 'Access From',
+      type: 'pie',
+      radius: '50%',
+      data: [
+          {value: 21, name: 'DDOS'},
+                {value: 17, name: 'DOS'},
+                {value: 14, name: 'MITM'},
+
+      ],
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      }
+    }
+  ]
+};
 
 // 设置图表选项
     myChart.setOption(option);
@@ -695,22 +680,6 @@ $(function () {
 // 监听窗口大小变化，重新渲染图表
     window.addEventListener('resize', function () {
         myChart.resize();
-    });
-
-// 创建WebSocket连接
-    var ws = new WebSocket(`ws://${serverIp}/count_benign_nonbenign`);
-
-
-    // 更新图表数据
-    myChart.setOption({
-        series: [{
-            data: [
-                {value: 21, name: 'DDOS'},
-                {value: 17, name: 'DOS'},
-                {value: 14, name: 'MITM'},
-                {value: 7, name: 'SQLi'}
-            ]
-        }]
     });
 
 
