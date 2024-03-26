@@ -295,11 +295,11 @@ color: rgba(132, 206, 66, 1);
     align-items: center;
     padding: 20px;
     gap: 20px;
-    max-width: 600px;
+    max-width: 30%;
     margin-left: 0;
     margin-right: auto;
     position: relative; /* 使得transform属性有效 */
-    transform: translate(0%, -5%); /* 向左移动10%，向上移动20% */
+    transform: translate(0%, -8%); /* 向左移动10%，向上移动20% */
 }
 
 .custom-info-box {
@@ -311,7 +311,7 @@ color: rgba(132, 206, 66, 1);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     flex-basis: calc(50% - 40px);
     max-width: 360px;
-    height: 150px; /* 或根据内容进行调整 */
+    height: 120px; /* 或根据内容进行调整 */
 }
 
 
@@ -342,11 +342,6 @@ color: rgba(132, 206, 66, 1);
     cursor: pointer;
 }
 
-
-
-
-
-
 .feature-container {
     display: flex;
     justify-content: space-between;
@@ -362,6 +357,7 @@ color: rgba(132, 206, 66, 1);
     padding-top: 20px;
     align-items: center;
     width: 100%; /* 使两个项目并排，留出间隙 */
+    margin-bottom: 30px;
 }
 
 .feature-icon {
@@ -461,4 +457,9 @@ input:focus + .slider {
 
 input:checked + .slider:before {
   transform: translateX(26px);
+}
+
+.features-container{
+    position: relative; /* 使得transform属性有效 */
+    transform: translate(0%, -20%); /* 向左移动10%，向上移动20% */
 }

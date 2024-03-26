@@ -705,10 +705,10 @@ $(function () {
     myChart.setOption({
         series: [{
             data: [
-                {value: 1, name: '好的'},
-                {value: 2, name: '坏的'},
-                {value: 1, name: '好的'},
-                {value: 2, name: '坏的'}
+                {value: 21, name: 'DDOS'},
+                {value: 17, name: 'DOS'},
+                {value: 14, name: 'MITM'},
+                {value: 7, name: 'SQLi'}
             ]
         }]
     });
