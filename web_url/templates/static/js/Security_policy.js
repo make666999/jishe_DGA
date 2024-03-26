@@ -20,36 +20,7 @@ $('#range').on("input", function() {
     }).trigger("change");
 
 
-document.addEventListener('DOMContentLoaded', () => {
-   const levels = {
-    '安全等级': ['低', '中', '高'],
-    '漏洞预警': ['低', '中', '高'],
-    '风险巡航': ['低', '中', '高'],
-    '策略偏向': ['保守', '均衡', '积极']
-};
 
-// 初始化每个盒子
-document.querySelectorAll('.custom-info-box').forEach(box => {
-    const title = box.querySelector('.info-box-title').textContent;
-    const content = box.querySelector('.info-box-content');
-    const decreaseButton = box.querySelector('.decrease');
-    const increaseButton = box.querySelector('.increase');
-
-    decreaseButton.onclick = () => {
-        const currentLevelIndex = levels[title].indexOf(content.textContent);
-        if (currentLevelIndex > 0) {
-            content.textContent = levels[title][currentLevelIndex - 1];
-        }
-    };
-
-    increaseButton.onclick = () => {
-        const currentLevelIndex = levels[title].indexOf(content.textContent);
-        if (currentLevelIndex < levels[title].length - 1) {
-            content.textContent = levels[title][currentLevelIndex + 1];
-        }
-    };
-});
-});
 
 
 var canvas = document.getElementById('canvas');
@@ -166,12 +137,76 @@ function toggleFeature(element, dataUsageId) {
     var dataUsageText = document.getElementById(dataUsageId);
 
     if (element.checked) {
-        container.style.backgroundColor = "#D1C4E9"; // Set to your active color
-        dataUsageText.textContent = "开启"; // Change to your active text
+        container.style.backgroundColor = "#D1C4E9"; // 设置为你的激活颜色
+        dataUsageText.textContent = "开启"; // 更改为你的激活文本
     } else {
-        container.style.backgroundColor = "#f3f3f3"; // Set back to original color
-        dataUsageText.textContent = "关闭"; // Change back to original text for the first and "未激活" for the second
+        container.style.backgroundColor = "#f3f3f3"; // 恢复原始颜色
+        // 根据 dataUsageId 来决定文本是显示“关闭”还是“未激活”
+        dataUsageText.textContent = (dataUsageId === 'dataUsage1') ? "关闭" : "未激活";
     }
 }
+
+// 当文档加载完毕
+// 当文档加载完毕
+document.addEventListener('DOMContentLoaded', () => {
+    // 安全等级改变时的逻辑
+    document.querySelectorAll('.info-box-button').forEach(button => {
+        button.addEventListener('click', function() {
+            // 获取当前的安全等级
+            const securityLevel = document.getElementById('securityLevel').textContent;
+            const switches = document.querySelectorAll('.features-container .feature-item .switch input[type="checkbox"]');
+
+            // 根据安全等级设置开关状态
+            switches.forEach(sw => {
+                if (securityLevel === '高' && sw.id === 'toggleSwitch1') {
+                    sw.checked = true; // 只打开系统通知
+                    toggleFeature(sw, sw.getAttribute('id').replace('toggleSwitch', 'dataUsage')); // 更新文本和背景
+                } else if (securityLevel === '中' && sw.id !== 'toggleSwitch4') {
+                    sw.checked = true; // 打开除了域名拦截外的所有开关
+                    toggleFeature(sw, sw.getAttribute('id').replace('toggleSwitch', 'dataUsage')); // 更新文本和背景
+                } else if (securityLevel === '低') {
+                    sw.checked = false; // 安全等级为低，关闭所有开关
+                    toggleFeature(sw, sw.getAttribute('id').replace('toggleSwitch', 'dataUsage')); // 更新文本和背景
+                } else {
+                    sw.checked = false; // 其他情况，关闭开关
+                    toggleFeature(sw, sw.getAttribute('id').replace('toggleSwitch', 'dataUsage')); // 更新文本和背景
+                }
+            });
+        });
+    });
+});
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+   const levels = {
+    '安全等级': ['低', '中', '高'],
+    '漏洞预警': ['低', '中', '高'],
+    '风险巡航': ['低', '中', '高'],
+    '策略偏向': ['保守', '均衡', '积极']
+};
+
+// 初始化每个盒子
+document.querySelectorAll('.custom-info-box').forEach(box => {
+    const title = box.querySelector('.info-box-title').textContent;
+    const content = box.querySelector('.info-box-content');
+    const decreaseButton = box.querySelector('.decrease');
+    const increaseButton = box.querySelector('.increase');
+
+    decreaseButton.onclick = () => {
+        const currentLevelIndex = levels[title].indexOf(content.textContent);
+        if (currentLevelIndex > 0) {
+            content.textContent = levels[title][currentLevelIndex - 1];
+        }
+    };
+
+    increaseButton.onclick = () => {
+        const currentLevelIndex = levels[title].indexOf(content.textContent);
+        if (currentLevelIndex < levels[title].length - 1) {
+            content.textContent = levels[title][currentLevelIndex + 1];
+        }
+    };
+});
+});
 
 

@@ -12,7 +12,7 @@
 }
 
 .info-box {
-    background: rgba(76, 76, 76, 0.5); /* Darker, translucent background */
+    background: rgba(183, 183, 183, 0.5); /* Darker, translucent background */
     padding: 20px;
     margin: 0 10px;
     text-align: center;
@@ -34,7 +34,7 @@
 }
 
 .info-label {
-    color: white; /* White color for better contrast */
+    color: #0c0101; /* White color for better contrast */
     font-size: 20px; /* Larger label text */
     opacity: 0.9; /* Slightly less prominent */
 }
@@ -303,7 +303,7 @@ color: rgba(132, 206, 66, 1);
 }
 
 .custom-info-box {
-    background: rgba(76, 76, 76, 0.5);
+    background: rgba(173, 173, 173, 0.5);
     padding: 20px;
     margin: 10px;
     text-align: center;
@@ -320,13 +320,13 @@ color: rgba(132, 206, 66, 1);
 
 
 .info-box-title {
-    color: #FFD700;
+    color: #ffa600;
     font-size: 24px;
     margin-bottom: 10px; /* 可以根据需要调整 */
 }
 
 .info-box-content {
-    color: white;
+    color: #0c0101;
     font-size: 20px;
     display: inline-block;
     width: 60px; /* 或其他需要的宽度 */
