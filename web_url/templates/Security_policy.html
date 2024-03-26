@@ -375,10 +375,116 @@
             </li>
         </ul>
     </div>
-
-
 </div>
-<div>
+<div class="layout-wrapper">
+
+    <!-- header -->
+    <div class="header">
+    <div class="menu-toggle-btn"> <!-- Menu close button for mobile devices -->
+        <a href="#">
+            <i class="bi bi-list"></i>
+        </a>
+    </div>
+    <!-- Logo -->
+    <a href="index.html" class="logo">
+        <img width="100" src="static/image/favicon.jpg" alt="logo">
+    </a>
+    <!-- ./ Logo -->
+    <div class="page-title">安全策略</div>
+        <div class="header-bar ms-auto">
+            <ul class="navbar-nav justify-content-end">
+                <li class="nav-item">
+                    <a href="#" class="nav-link nav-link-notify" data-count="3" data-sidebar-target="#notifications">
+                        <i class="bi bi-bell icon-lg"></i>
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link nav-link-notify" data-count="3" data-bs-toggle="dropdown">
+                        <i class="bi bi-cart2 icon-lg"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
+                        <h6 class="m-0 px-4 py-3 border-bottom">Shopping Cart</h6>
+                        <div class="dropdown-menu-body">
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item d-flex align-items-center">
+                                    <a href="#" class="text-danger me-3" title="Remove">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                    <a href="#" class="me-3 flex-shrink-0 ">
+                                        <img src="static/picture/3.jpg" class="rounded" width="60" alt="...">
+                                    </a>
+                                    <div>
+                                        <h6>Digital clock</h6>
+                                        <div>1 x $1.190,90</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item d-flex align-items-center">
+                                    <a href="#" class="text-danger me-3" title="Remove">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                    <a href="#" class="me-3 flex-shrink-0 ">
+                                        <img src="static/picture/4.jpg" class="rounded" width="60" alt="...">
+                                    </a>
+                                    <div>
+                                        <h6>Toy Car</h6>
+                                        <div>1 x $139.58</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item d-flex align-items-center">
+                                    <a href="#" class="text-danger me-3" title="Remove">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                    <a href="#" class="me-3 flex-shrink-0 ">
+                                        <img src="static/picture/5.jpg" class="rounded" width="60" alt="...">
+                                    </a>
+                                    <div>
+                                        <h6>Sunglasses</h6>
+                                        <div>2 x $50,90</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item d-flex align-items-center">
+                                    <a href="#" class="text-danger me-3" title="Remove">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                    <a href="#" class="me-3 flex-shrink-0 ">
+                                        <img src="static/picture/6.jpg" class="rounded" width="60" alt="...">
+                                    </a>
+                                    <div>
+                                        <h6>Cake</h6>
+                                        <div>1 x $10,50</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h6 class="m-0 px-4 py-3 border-top small">Sub Total : <strong
+                                class="text-primary">$1.442,78</strong></h6>
+                    </div>
+                </li>
+                <li class="nav-item ms-3">
+                    <button class="btn btn-primary btn-icon">
+                        <i class="bi bi-plus-circle"></i> Create New
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <!-- Header mobile buttons -->
+        <div class="header-mobile-buttons">
+            <a href="#" class="search-bar-btn">
+                <i class="bi bi-search"></i>
+            </a>
+            <a href="#" class="actions-btn">
+                <i class="bi bi-three-dots"></i>
+            </a>
+        </div>
+        <!-- ./ Header mobile buttons -->
+</div>
+
     <div class="info-boxes">
         <div class="info-box">
             <span class="info-number">17</span>
@@ -403,22 +509,68 @@
             <span class="current-time-label">当前时间</span>
         </div>
     </div>
-    <h2 style="padding-left: 390px">在线守护天数：28天&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp近期恶意域名数量</h2>
-、
-    <canvas style="display: block; margin: 20px 390px; border-radius: 50%; width: 150px; height: 150px;"
-            id='canvas'></canvas>
+<div>
+    <h2 style="padding-left: 1px">
+        在线守护天数：28天&nbsp&nbsp&nbsp&nbsp近期恶意域名数量</h2>
+    <div id="lineChart"
+         style="width: 600px; height: 250px; background-color: #fff; border-radius: 10px;display: inline-block"></div>
+<div style="width: 150px;display: inline-block">
+    <canvas style=" border-radius: 50%; width: 150px; height: 150px;" id='canvas'></canvas>
+</div>
 
-    <div id="lineChart" style="margin: -180px 760px; width: 600px; height: 300px; background-color: #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-radius: 10px; border: 1px solid #ddd;"></div>
-
-    <div style="width: 200px;height: 400px">
-        <p class="budget">最大拦截恶意域名：</p>
-        <label for="range">
-            <input type="range" name="range" id="range" min="0" max="300" step="5" value="175"/>
+<div class="features-container" style="display:inline-block; flex-direction: column; gap: 20px;width: 700px">
+    <div class="feature-item" style="padding: 20px; background-color: #f3f3f3; border-radius: 10px; display: flex; align-items: center; justify-content: space-between;">
+        <div>
+            <span style="background-color: #6200EA; width: 20px; height: 20px; border-radius: 50%; display: inline-block;"></span>
+            <span>系统通知</span><br>
+            <span>对系统漏洞消息了如指掌</span>
+        </div>
+        <label class="switch">
+            <input type="checkbox" id="toggleSwitch1" onchange="toggleFeature(this, 'dataUsage1');">
+            <span class="slider round"></span>
         </label>
-        <output for="range" class="output"></output>
+        <span id="dataUsage1">关闭</span>
     </div>
+    <div class="feature-item" style="padding: 20px; background-color: #f3f3f3; border-radius: 10px; display: flex; align-items: center; justify-content: space-between;">
+        <div>
+            <span style="background-color: #6200EA; width: 20px; height: 20px; border-radius: 50%; display: inline-block;"></span>
+            <span>增强防护</span><br>
+            <span>对每日的日志进行细致检查，会增加大量性能</span>
+        </div>
+        <label class="switch">
+            <input type="checkbox" id="toggleSwitch2" onchange="toggleFeature(this, 'dataUsage2');">
+            <span class="slider round"></span>
+        </label>
+        <span id="dataUsage2">关闭</span>
+    </div>
+<div class="feature-item" style="padding: 20px; background-color: #f3f3f3; border-radius: 10px; display: flex; align-items: center; justify-content: space-between;">
+        <div>
+            <span style="background-color: #6200EA; width: 20px; height: 20px; border-radius: 50%; display: inline-block;"></span>
+            <span>智慧筛查</span><br>
+            <span>开启实时漏洞预警</span>
+        </div>
+        <label class="switch">
+            <input type="checkbox" id="toggleSwitch3" onchange="toggleFeature(this, 'dataUsage3');">
+            <span class="slider round"></span>
+        </label>
+        <span id="dataUsage3">关闭</span>
+    </div>
+<div class="feature-item" style="padding: 20px; background-color: #f3f3f3; border-radius: 10px; display: flex; align-items: center; justify-content: space-between;">
+        <div>
+            <span style="background-color: #6200EA; width: 20px; height: 20px; border-radius: 50%; display: inline-block;"></span>
+            <span>增强防护</span><br>
+            <span>对每日的日志进行细致检查，会增加大量性能</span>
+        </div>
+        <label class="switch">
+            <input type="checkbox" id="toggleSwitch4" onchange="toggleFeature(this, 'dataUsage4');">
+            <span class="slider round"></span>
+        </label>
+        <span id="dataUsage4">关闭</span>
+    </div>
+</div>
 
-    <div class="custom-info-boxes">
+
+    <div class="custom-info-boxes" >
         <div class="custom-info-box">
             <div class="info-box-title">安全等级</div>
             <button class="info-box-button decrease">-</button>
@@ -443,48 +595,13 @@
             <span class="info-box-content" id="strategyBias">均衡</span>
             <button class="info-box-button increase">+</button>
         </div>
-
-
     </div>
-    <!-- 雷达图容器 -->
 
-    <div class="switch-container">
-        <div class="switch-box">
-            <label class="switch">
-                <input type="checkbox">
-                <span class="slider round"></span>
-            </label>
-            <span>系统通知:对系统漏洞消息了如指掌</span>
-        </div>
-        <div class="switch-box">
-
-            <label class="switch">
-                <input type="checkbox">
-                <span class="slider round"></span>
-            </label>
-            <span>增强防护：对每日的日志进行细致检查，会增加大量性能</span>
-        </div>
-        <div class="switch-box">
-
-            <label class="switch">
-                <input type="checkbox">
-                <span class="slider round"></span>
-            </label>
-            <span>域名拦截；对存在于黑名单的域名，进行拒接访问</span>
-        </div>
-        <div class="switch-box">
-
-            <label class="switch">
-                <input type="checkbox">
-                <span class="slider round"></span>
-            </label>
-            <span>智慧筛查：开启实时漏洞预警</span>
-        </div>
-    </div>
 
 
 </div>
 
+</div>
 
 <script src="./static/js/jquery.js"></script>
 <script src="./static/js/Security_policy.js"></script>

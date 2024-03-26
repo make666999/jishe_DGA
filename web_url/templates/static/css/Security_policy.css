@@ -1,12 +1,14 @@
+
+
 .info-boxes {
     display: flex;
     justify-content: center;
     margin-top: 20px;
-    margin-left: 350px;
+    margin-left: 0px;
     background: rgb(255, 255, 255); /* Translucent background for the container */
     padding: 10px;
     border-radius: 15px; /* Slightly rounded corners for the container */
-    width: 70%;
+    width: 90%;
 }
 
 .info-box {
@@ -63,8 +65,8 @@ label[for=range] {
 position: absolute;
 top: 25%;
 left: 80%;
-margin-left: -175px;
-margin-top: -32px;
+margin-left: 1px;
+margin-top: 1px;
 height: 49px;
 padding-top: 6px;
 width: 350px;
@@ -81,7 +83,7 @@ left: 69px;
 height: 9px;
 width: 278px;
 box-shadow: 0px 3px 10px -3px rgba(0, 0, 0, 0.51);
--webkit-transform: skew(62deg);
+
 }
 input[type=range] {
 -webkit-appearance: none;
@@ -95,7 +97,7 @@ margin-left: -20px;
 transform-style: preserve-3d;
 perspective: 300;
 transform-origin: 50% 50% 300px;
-perspective-origin: 50% -121%;
+perspective-origin: 1% 1%;
 transform: skew(62deg);
 }
 input[type=range]:focus{
@@ -236,9 +238,9 @@ color: rgb(58, 58, 58);
 }
 .output {
 position: absolute;
-bottom: 91%;
-left: 690px;
-margin-bottom: -100px;
+bottom: 1%;
+left: 1px;
+margin-bottom: 1px;
 text-align: center;
 width: 100%;
 font-size: 2em;
@@ -286,17 +288,18 @@ color: rgba(132, 206, 66, 1);
 
 .custom-info-boxes {
     display: flex;
+    background: rgb(255, 255, 255); /* Translucent background for the container */
+    border-radius: 15px; /* Slightly rounded corners for the container */
     flex-wrap: wrap;
     justify-content: space-around;
     align-items: center;
-    margin-top: 1%; /* 从顶部开始的偏移，原来是20px，现在调整为页面高度的20% */
     padding: 20px;
     gap: 20px;
-    max-width: 800px;
-    margin-left: auto;
+    max-width: 600px;
+    margin-left: 0;
     margin-right: auto;
     position: relative; /* 使得transform属性有效 */
-    transform: translate(-25%, -40%); /* 向左移动10%，向上移动20% */
+    transform: translate(0%, -5%); /* 向左移动10%，向上移动20% */
 }
 
 .custom-info-box {
@@ -341,84 +344,121 @@ color: rgba(132, 206, 66, 1);
 
 
 
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-    outline: none; /* Add this line if you want to remove focus outline */
-}
 
-.switch-container {
-     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: center;
-    margin-top: 1%; /* 从顶部开始的偏移，原来是20px，现在调整为页面高度的20% */
-    padding: 20px;
-    gap: 20px;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    position: relative; /* 使得transform属性有效 */
-    transform: translate(65%, -190%); /* 向左移动10%，向上移动20% */
-    flex-direction: column;
 
-}
 
-.switch-box {
+.feature-container {
     display: flex;
-    width: 500px;
-    height: 50px;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #f8f8f8;
+}
+
+.feature-item {
+    display: flex;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    padding-top: 20px;
     align-items: center;
-    background-color: #f2f2f2; /* 根据您的前端风格调整背景色 */
-    padding: 10px;
-    border-radius: 10px; /* 根据需要调整圆角 */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 添加轻微阴影以提升层次感 */
-    gap: 10px; /* 文字和开关之间的间距 */
+    width: 100%; /* 使两个项目并排，留出间隙 */
 }
 
-.switch .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: -7px;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: .4s;
-    border-radius: 34px; /* Match this value to your slider's height for a perfect circle */
-    outline: none; /* Remove any outline */
-
-    border: none; /* 移除边框 */
-    box-shadow: none; /* 移除阴影 */
+.feature-icon {
+    font-size: 24px; /* 根据实际图标大小调整 */
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px; /* 调整图标大小 */
+    height: 60px;
+    border-radius: 50%;
 }
 
-.switch .slider:before {
-    position: absolute;
-    content: "";
-    height: 26px; /* Adjust this for your slider's knob */
-    width: 26px; /* Adjust this for your slider's knob */
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: .4s;
-    border-radius: 50%; /* Ensures the slider is perfectly round */
+.blue {
+    background-color: #007bff;
+    color: white;
+}
 
+.purple {
+    background-color: #6f42c1;
+    color: white;
+}
+
+.feature-content h3 {
+    margin: 0;
+    color: #333333; /* 标题颜色 */
+    font-size: 1.2rem; /* 标题大小 */
+}
+
+.feature-content p {
+    margin: 4px 0 0; /* 稍微调整上间距 */
+    color: #666666; /* 描述文字颜色 */
+    font-size: 0.9rem; /* 描述文字大小 */
+}
+
+.feature-stats {
+    margin-left: auto; /* 将统计信息推向右边 */
+    text-align: right;
+}
+
+.stats-number {
+    display: block;
+    color: #333333; /* 数字颜色 */
+    font-size: 1.5rem; /* 数字大小 */
+}
+
+.stats-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #666666;
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
 }
 
 input:checked + .slider {
-    background-color: #2196F3;
+  background-color: #6200EA;
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3; /* You can remove this if unwanted */
+  box-shadow: 0 0 1px #6200EA;
 }
 
 input:checked + .slider:before {
-    transform: translateX(26px); /* The distance the slider moves. Adjust if necessary. */
-     box-shadow: none; /* 移除选中时的阴影 */
+  transform: translateX(26px);
 }
-
-
-
