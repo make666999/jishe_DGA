@@ -91,7 +91,7 @@ option = {
     },
     xAxis: [{
         type: 'category',
-        data: ['2019-01','2019-02','2019-03','2019-04','2019-05','2019-06'],
+        data: ['03-21','03-22','03-23','03-24','03-25','03-26'],
         axisLine: {
             lineStyle: {
                 color: "#999"
@@ -159,3 +159,19 @@ option = {
 
 // Use the 'lineChart' instance to set the option
 option && lineChart.setOption(option);
+
+
+function toggleFeature(element, dataUsageId) {
+    var container = element.closest('.feature-item');
+    var dataUsageText = document.getElementById(dataUsageId);
+
+    if (element.checked) {
+        container.style.backgroundColor = "#D1C4E9"; // Set to your active color
+        dataUsageText.textContent = "开启"; // Change to your active text
+    } else {
+        container.style.backgroundColor = "#f3f3f3"; // Set back to original color
+        dataUsageText.textContent = "关闭"; // Change back to original text for the first and "未激活" for the second
+    }
+}
+
+
