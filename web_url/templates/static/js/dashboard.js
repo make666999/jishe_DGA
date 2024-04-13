@@ -637,35 +637,46 @@ $(function () {
     var originalWidth = myChart.getWidth();
 
 // 图表的选项
-   option = {
-
-  tooltip: {
-    trigger: 'item'
+option = {
+  angleAxis: {
+    type: 'category',
+    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
   },
-  legend: {
-    orient: 'vertical',
-    left: 'left'
-  },
+  radiusAxis: {},
+  polar: {},
   series: [
     {
-      name: 'Access From',
-      type: 'pie',
-      radius: '50%',
-      data: [
-          {value: 21, name: 'DDOS'},
-                {value: 17, name: 'DOS'},
-                {value: 14, name: 'MITM'},
-
-      ],
+      type: 'bar',
+      data: [1, 2, 3, 4, 3, 5, 1],
+      coordinateSystem: 'polar',
+      name: 'A',
+      stack: 'a',
       emphasis: {
-        itemStyle: {
-          shadowBlur: 10,
-          shadowOffsetX: 0,
-          shadowColor: 'rgba(0, 0, 0, 0.5)'
-        }
+        focus: 'series'
+      }
+    },
+    {
+      type: 'bar',
+      data: [2, 4, 6, 1, 3, 2, 1],
+      coordinateSystem: 'polar',
+      name: 'B',
+      stack: 'a',
+      emphasis: {
+        focus: 'series'
+      }
+    },
+    {
+      type: 'bar',
+      data: [1, 2, 3, 4, 1, 2, 5],
+      coordinateSystem: 'polar',
+      name: 'C',
+      stack: 'a',
+      emphasis: {
+        focus: 'series'
       }
     }
-  ]
+  ],
+
 };
 
 // 设置图表选项
