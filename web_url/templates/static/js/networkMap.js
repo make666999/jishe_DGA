@@ -456,10 +456,12 @@ for (var i2 = 0; i2 < nodePairs.length; i2++) {
     }];
     charts.linesData.push(lines2);
 }
+
 option = {
     title: {
         text: '采集拓扑图'
     },
+
 //  backgroundColor: "#0e1735",
     xAxis: {
         show: false,

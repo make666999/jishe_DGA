@@ -12,9 +12,9 @@
 }
 
 .info-box {
-    background: rgba(183, 183, 183, 0.5); /* Darker, translucent background */
+    background-image: linear-gradient(to top, #f3e7e9 0%, #e3eeff 99%, #e3eeff 100%); /* Darker, translucent background */
     padding: 20px;
-    margin: 0 10px;
+    margin: 0 50px;
     text-align: center;
     border-radius: 15px; /* Adjust this value to get the desired roundness */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Soft shadow for depth */
@@ -23,7 +23,7 @@
 
 .info-box:hover {
     transform: translateY(-5px); /* Slight lift effect on hover */
-    background: rgba(95, 95, 95, 0.5); /* Lighten background on hover */
+    background-image: linear-gradient(to top, #c4c5c7 0%, #dcdddf 52%, #ebebeb 100%); /* Lighten background on hover */
 }
 
 .info-number {
@@ -303,7 +303,7 @@ color: rgba(132, 206, 66, 1);
 }
 
 .custom-info-box {
-    background: rgba(173, 173, 173, 0.5);
+    background-image: linear-gradient(to top, #bdc2e8 0%, #bdc2e8 1%, #e6dee9 100%);
     padding: 20px;
     margin: 10px;
     text-align: center;
@@ -311,7 +311,8 @@ color: rgba(132, 206, 66, 1);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     flex-basis: calc(50% - 40px);
     max-width: 360px;
-    height: 120px; /* 或根据内容进行调整 */
+    height: 130px; /* 或根据内容进行调整 */
+    width: 280px;
 }
 
 
@@ -322,7 +323,9 @@ color: rgba(132, 206, 66, 1);
 .info-box-title {
     color: #ffa600;
     font-size: 24px;
-    margin-bottom: 10px; /* 可以根据需要调整 */
+    display: flex;
+    text-align: center; /* 垂直居中 */
+    gap: 10px; /* 在子元素之间添加一些间隔 */
 }
 
 .info-box-content {
@@ -351,13 +354,14 @@ color: rgba(132, 206, 66, 1);
 
 .feature-item {
     display: flex;
-    background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     padding-top: 20px;
     align-items: center;
     width: 100%; /* 使两个项目并排，留出间隙 */
-    margin-bottom: 30px;
+    height: 111px;
+    margin-bottom: 20px;
+    background-image: linear-gradient(to top, #dad4ec 0%, #dad4ec 1%, #f3e7e9 100%);
 }
 
 .feature-icon {

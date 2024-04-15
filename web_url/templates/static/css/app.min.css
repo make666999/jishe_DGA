@@ -1451,6 +1451,10 @@ progress {
         flex: 0 0 auto
     }
 
+    .col-four{
+        width: 100%;
+        display: flex;
+    }
     .col-lg-4 {
         width: 33.33333%
     }
@@ -4258,6 +4262,21 @@ textarea.form-control-lg {
 
 .card-group > .card {
     margin-bottom: .75rem
+}
+.rating-container {
+    display: block;
+    width: 100%;
+    clear: both;
+}
+
+.data-section {
+    float: left;
+    height: 100%;
+}
+
+#customer-rating-left, #customer-rating-right {
+    float: right; /* 确保图表显示在右边 */
+    height: 100%;
 }
 
 @media (min-width: 576px) {
@@ -12118,7 +12137,9 @@ textarea.form-control-lg {
     font-size: .76563rem;
     border-radius: .2rem
 }
-
+.bg-skyblue{
+    background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%); !important
+}
 .bg-blue {
     background-color: rgba(13, 110, 253, .75) !important
 }
