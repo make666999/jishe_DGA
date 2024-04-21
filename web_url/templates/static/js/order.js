@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    var ws = new WebSocket(`ws://${serverIp}/latest_location_data`); // 替换为您的WebSocket服务地址
+    var ws = new WebSocket(`ws://${serverIp}/websocket_cluster_device_status`); // 替换为您的WebSocket服务地址
     ws.onmessage = function (event) {
         var data = JSON.parse(event.data);
         var tbody = document.querySelector("#orders tbody");

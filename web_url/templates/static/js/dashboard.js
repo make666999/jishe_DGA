@@ -398,7 +398,7 @@ $(function () {
 
 
     function salesChart() {
-        var ws = new WebSocket(`ws://${serverIp}/collection_stats`);
+        var ws = new WebSocket(`ws://${serverIp}/websocket_poll_cluster_statistics`);
 
 
         var chart; // 在函数外部声明图表变量
@@ -511,7 +511,7 @@ $(function () {
 
 
     function productsSold() {
-        var ws = new WebSocket(`ws://${serverIp}/week_day_data_total`);
+        var ws = new WebSocket(`ws://${serverIp}/websocket_weekly_data_total`);
 
 
         // 初始化图表
@@ -622,7 +622,7 @@ $(function () {
 // 更新数据列表
     // 建立WebSocket连接
 
-    var ws = new WebSocket(`ws://${serverIp}/latest_location_data`);
+    var ws = new WebSocket(`ws://${serverIp}/websocket_cluster_device_status`);
     ws.onmessage = function (event) {
         var data = JSON.parse(event.data);
         var deviceList = document.getElementById('device-list');
@@ -725,7 +725,7 @@ $(function () {
     });
 
 // 创建WebSocket连接
-    var ws = new WebSocket(`ws://${serverIp}/count_benign_nonbenign`);
+    var ws = new WebSocket(`ws://${serverIp}/websocket_dns_traffic_security_analysis`);
 
     ws.onmessage = function (event) {
         var data = JSON.parse(event.data);
@@ -829,7 +829,7 @@ $(function () {
     var topTypes = [];
 
 // WebSocket连接
-    var ws = new WebSocket(`ws://${serverIp}/top_remain_type_daily`);
+    var ws = new WebSocket(`ws://${serverIp}/websocket_daily_top_remain_type`);
 
 
     ws.onmessage = function (event) {
