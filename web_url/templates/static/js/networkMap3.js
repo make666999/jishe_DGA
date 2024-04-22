@@ -46,9 +46,6 @@ var nodes = [{
         name: '采集设备6',
         state: '1'
     },
-    {
-        name: '采集设备7',
-        state: '1'}
 
 ];
 
@@ -62,8 +59,10 @@ var y = 1;
 var dataMap = new Map();
 var aValue = [];
 for (var j = 0; j < nodes.length; j++) {
+
     if (j % 2 == 0) { //偶数
         aValue = [x, y];
+        x += 2;
     } else {
         aValue = [x, y - 2];
         x += 2;
@@ -72,7 +71,7 @@ for (var j = 0; j < nodes.length; j++) {
         name: nodes[j].name,
         value: aValue,
         symbolSize: 40,
-        // symbol: 'image://static/chart/image/' + nodes[j].img,
+        // symbol: 'image://images/' + nodes[j].img,
         symbol: 'image://static/image/chart/bd1.png',
         itemStyle: {
             normal: {
@@ -89,26 +88,35 @@ for (var j = 0; j < nodes.length; j++) {
 for (var k = 0; k < nodesM.length; k++) {
     var nodeM = {
         name: nodesM[k].name,
-        value: [ k * 6 - 1, y - 1], // 调整位置确保存储器位于服务器旁边
+        value: [ k * 6 , y - 1], // 调整位置确保存储器位于服务器旁边
         symbolSize: 100,
-        symbol: 'image://static/image/chart/' + nodesM[k].name+".png",
+        symbol: 'image://static/image/chart/'+ nodesM[k].name+".png",
     };
-    dataMap.set(nodesM[k].name, [ k * 6 - 1, y - 1]);
+    dataMap.set(nodesM[k].name, [ k * 6 , y - 1]);
     charts.nodes.push(nodeM);
 }
 
 //画线
 var labelName = '';
+
 for (var i = 0; i < nodes.length; i++) {
     //通过传输状态state 显示传输文字提示
     if (nodes[i].state === '1') {
         labelName = '数据传输中'
+
     } else {
         labelName = '暂停传输'
     }
+    if (i%2==0)
+    {
+        j=0;
+    }
+    else {
+        j=1;
+    }
     var link = {
         source: nodes[i].name,
-        target: nodesM[1].name,
+        target: nodesM[j].name,
         label: {
             normal: {
                 show: true,
@@ -134,7 +142,7 @@ for (var i = 0; i < nodes.length; i++) {
         var lines = [{
             coord: dataMap.get(nodes[i].name)
         }, {
-            coord: dataMap.get(nodesM[1].name)
+            coord: dataMap.get(nodesM[j].name)
         }];
         charts.linesData.push(lines)
     }
@@ -179,7 +187,7 @@ for (var i2 = 0; i2 < nodePairs.length; i2++) {
 }
 option = {
     title: {
-        text: '采集拓扑图'
+        text: '混合部署策略'
     },
 //  backgroundColor: "#0e1735",
     xAxis: {
@@ -240,18 +248,17 @@ option = {
             color: '#fff',
             curveness: .1 //尾迹线条曲直度
         },
-        data: charts.linesData,
-        z:1
+        data: charts.linesData
     }]
 
 };
 
 
 /*采集拓扑图 chart*/
-var dom = document.getElementById("chart_2");
+var dom = document.getElementById("chart_3");
 var myChartNM = echarts.init(dom, 'purple-passion');
 myChartNM.setOption(option);
-window.onresize = myChartNM.resize;
+// window.onresize = myChartNM.resize;
 
 //添加点击事件
 myChartNM.on('click', function (params) {

@@ -252,7 +252,8 @@ option = {
             color: '#fff',
             curveness: .1 //尾迹线条曲直度
         },
-        data: charts.linesData
+        data: charts.linesData,
+        z:1
     }]
 
 };
