@@ -51,9 +51,12 @@ def dns_callback(packet):
             return
 
 def Get_Domain_Save():
-    sniff(filter="port 53", prn=dns_callback, store=0,iface="以太网")
+
+
+    sniff(filter="port 53", prn=dns_callback, store=0,iface="以太网 4")
 
 
 def Get_Domain_Save_Main():
+
     executor = ThreadPoolExecutor(max_workers=10)
     executor.submit(Get_Domain_Save)
