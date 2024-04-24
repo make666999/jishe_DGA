@@ -139,9 +139,9 @@ def get_feature_charseq():
     #
     # filtered_result.to_csv("./Data-clean/data_all_2.csv",index=False)
 
-    df = pd.read_csv('./Data-clean/data_all.csv')
+    df = pd.read_csv('./clean_data/data_all.csv')
     df, class_map = encode_labels_in_df(df, "Label")
-    df.to_csv("./Data-clean/data_all_2.csv", index=False)
+    # df.to_csv("./Data-clean/data_all_2.csv", index=False)
 
     # count_characters_in_column: 统计字符出现次数
 
@@ -179,17 +179,39 @@ def get_feature_charseq():
     # #
     #
     #
-    # # 统计url列的每个数据长度
-    # url_lengths = df['url'].apply(len)
-    #
-    # filtered_lengths = url_lengths[url_lengths <= 60]
-    # plt.hist(filtered_lengths, bins=30, color='skyblue', edgecolor='black')
-    #
-    # plt.title('URL Length Distribution')
-    # plt.xlabel('Length')
-    # plt.ylabel('Count')
-    # plt.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
-    # plt.show()
+    # 统计url列的每个数据长度
+    url_lengths = df['url'].apply(len)
+
+    # 过滤出长度不超过60的URL
+    filtered_lengths = url_lengths[url_lengths <= 60]
+
+    # 创建直方图
+    fig, ax = plt.subplots()
+    counts, bins, patches = ax.hist(filtered_lengths, bins=30, color='skyblue', edgecolor='black')
+
+    # 添加数值标签
+
+    # 设置图表标题和坐标轴标签
+    ax.set_title('URL Length Distribution')
+    ax.set_xlabel('Length')
+    ax.set_ylabel('Count')
+
+    # 添加网格线
+    ax.grid(True, linestyle='--', linewidth=0.5, alpha=0.7)
+
+    # 使用科学计数法格式化y轴
+    ax.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
+    plt.savefig('./test.png')
+    plt.show()
+
+
+    # 计算不同长度范围的占比
+    length_ranges = [0, 20, 40, 60]
+    count_percentages = pd.cut(filtered_lengths, bins=length_ranges).value_counts(normalize=True) * 100
+
+    # 打印各个范围的百分比
+    for interval, percentage in count_percentages.items():
+        print(f"Length {interval}: {percentage:.2f}%")
 
 
 
