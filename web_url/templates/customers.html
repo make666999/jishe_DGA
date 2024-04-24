@@ -15,7 +15,6 @@
     <!-- Bootstrap Docs -->
     <link rel="stylesheet" href="static/css/bootstrap-docs.css" type="text/css">
 
-    
 
     <!-- Main style file -->
     <link rel="stylesheet" href="static/css/app.min.css" type="text/css">
@@ -291,14 +290,13 @@
 <!-- ./ search sidebar -->
 
 <!-- ./ sidebars -->
-
 <!-- menu -->
 <div class="menu">
     <div class="menu-header">
-        <a href="index.html" class="menu-header-logo">
+        <a href="" class="menu-header-logo">
             <img src="static/image/favicon.jpg" alt="logo">
         </a>
-        <a href="index.html" class="btn btn-sm menu-close-btn">
+        <a href="" class="btn btn-sm menu-close-btn">
             <i class="bi bi-x"></i>
         </a>
     </div>
@@ -339,38 +337,43 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="orders.html">
                     <span class="nav-link-icon">
                         <i class="bi bi-receipt"></i>
                     </span>
-                    <span>集群管理</span>
+                    <span>集群列表</span>
                 </a>
-
-                    <li>
-                        <a href="orders.html">设备列表</a>
-                    </li>
-                    <li>
-                        <a href="order-detail.html">设备详情</a>
-                    </li>
-            <li>
-                <a href="mode.html">部署模式</a>
-            </li>
-
             </li>
             <li>
-                <a class="active"  href="customers.html">
+                <a href="mode-total.html">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-paperclip"></i>
+                    </span>
+                    <span>部署模式</span>
+                </a>
+            </li>
+            <li>
+                <a class="active" href="#">
                     <span class="nav-link-icon">
                         <i class="bi bi-person-badge"></i>
                     </span>
                     <span>流量日志</span>
                 </a>
             </li>
-<li>
+            <li>
                 <a href="Security_policy.html">
                     <span class="nav-link-icon">
                         <i class="bi bi-shield-lock-fill"></i>
                     </span>
                     <span>安全策略</span>
+                </a>
+            </li>
+            <li>
+                <a href="order-detail.html">
+                   <span class="nav-link-icon">
+                       <i class="bi bi-search"></i>
+                   </span>
+                    <span>设备详情</span>
                 </a>
             </li>
         </ul>
@@ -383,564 +386,561 @@
 
     <!-- header -->
     <div class="header">
-    <div class="menu-toggle-btn"> <!-- Menu close button for mobile devices -->
-        <a href="#">
-            <i class="bi bi-list"></i>
+        <div class="menu-toggle-btn"> <!-- Menu close button for mobile devices -->
+            <a href="#">
+                <i class="bi bi-list"></i>
+            </a>
+        </div>
+        <!-- Logo -->
+        <a href="index.html" class="logo">
+            <img width="100" src="static/image/favicon.jpg" alt="logo">
         </a>
-    </div>
-    <!-- Logo -->
-    <a href="index.html" class="logo">
-        <img width="100" src="static/image/favicon.jpg" alt="logo">
-    </a>
-    <!-- ./ Logo -->
-    <div class="page-title">流量日志</div>
-    <div class="header-bar ms-auto">
-        <ul class="navbar-nav justify-content-end">
-            <li class="nav-item">
-                <a href="#" class="nav-link nav-link-notify" data-count="3" data-sidebar-target="#notifications">
-                    <i class="bi bi-bell icon-lg"></i>
-                </a>
-            </li>
-            <li class="nav-item dropdown">
-                <a href="#" class="nav-link nav-link-notify" data-count="3" data-bs-toggle="dropdown">
-                    <i class="bi bi-cart2 icon-lg"></i>
-                </a>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
-                    <h6 class="m-0 px-4 py-3 border-bottom">Shopping Cart</h6>
-                    <div class="dropdown-menu-body">
-                        <div class="list-group list-group-flush">
-                            <div class="list-group-item d-flex align-items-center">
-                                <a href="#" class="text-danger me-3" title="Remove">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                                <a href="#" class="me-3 flex-shrink-0 ">
-                                    <img src="static/picture/3.jpg" class="rounded" width="60" alt="...">
-                                </a>
-                                <div>
-                                    <h6>Digital clock</h6>
-                                    <div>1 x $1.190,90</div>
+        <!-- ./ Logo -->
+        <div class="page-title">流量日志</div>
+        <div class="header-bar ms-auto">
+            <ul class="navbar-nav justify-content-end">
+                <li class="nav-item">
+                    <a href="#" class="nav-link nav-link-notify" data-count="3" data-sidebar-target="#notifications">
+                        <i class="bi bi-bell icon-lg"></i>
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link nav-link-notify" data-count="3" data-bs-toggle="dropdown">
+                        <i class="bi bi-cart2 icon-lg"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
+                        <h6 class="m-0 px-4 py-3 border-bottom">购物车</h6>
+                        <div class="dropdown-menu-body">
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item d-flex align-items-center">
+                                    <a href="#" class="text-danger me-3" title="Remove">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                    <a href="#" class="me-3 flex-shrink-0 ">
+                                        <img src="static/picture/3.jpg" class="rounded" width="60" alt="...">
+                                    </a>
+                                    <div>
+                                        <h6>会员</h6>
+                                        <div>1 x 18/月</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="list-group list-group-flush">
-                            <div class="list-group-item d-flex align-items-center">
-                                <a href="#" class="text-danger me-3" title="Remove">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                                <a href="#" class="me-3 flex-shrink-0 ">
-                                    <img src="static/picture/4.jpg" class="rounded" width="60" alt="...">
-                                </a>
-                                <div>
-                                    <h6>Toy Car</h6>
-                                    <div>1 x $139.58</div>
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item d-flex align-items-center">
+                                    <a href="#" class="text-danger me-3" title="Remove">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                    <a href="#" class="me-3 flex-shrink-0 ">
+                                        <img src="static/picture/4.jpg" class="rounded" width="60" alt="...">
+                                    </a>
+                                    <div>
+                                        <h6>流量</h6>
+                                        <div>2 x 240</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="list-group list-group-flush">
-                            <div class="list-group-item d-flex align-items-center">
-                                <a href="#" class="text-danger me-3" title="Remove">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                                <a href="#" class="me-3 flex-shrink-0 ">
-                                    <img src="static/picture/5.jpg" class="rounded" width="60" alt="...">
-                                </a>
-                                <div>
-                                    <h6>Sunglasses</h6>
-                                    <div>2 x $50,90</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-group list-group-flush">
-                            <div class="list-group-item d-flex align-items-center">
-                                <a href="#" class="text-danger me-3" title="Remove">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                                <a href="#" class="me-3 flex-shrink-0 ">
-                                    <img src="static/picture/6.jpg" class="rounded" width="60" alt="...">
-                                </a>
-                                <div>
-                                    <h6>Cake</h6>
-                                    <div>1 x $10,50</div>
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item d-flex align-items-center">
+                                    <a href="#" class="text-danger me-3" title="Remove">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                    <a href="#" class="me-3 flex-shrink-0 ">
+                                        <img src="static/picture/5.jpg" class="rounded" width="60" alt="...">
+                                    </a>
+                                    <div>
+                                        <h6>域名设备</h6>
+                                        <div>1 x 500</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <h6 class="m-0 px-4 py-3 border-top small">Sub Total : <strong class="text-primary">$1.442,78</strong></h6>
-                </div>
-            </li>
-            <li class="nav-item ms-3">
+                </li>
+                <li class="nav-item ms-3">
                     <button class="btn btn-primary btn-icon">
-        <i class="bi bi-plus-circle"></i> Add Customers
-    </button>
-            </li>
-        </ul>
+                        <i class="bi bi-plus-circle"></i> Create New
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <!-- Header mobile buttons -->
+        <div class="header-mobile-buttons">
+            <a href="#" class="search-bar-btn">
+                <i class="bi bi-search"></i>
+            </a>
+            <a href="#" class="actions-btn">
+                <i class="bi bi-three-dots"></i>
+            </a>
+        </div>
+        <!-- ./ Header mobile buttons -->
     </div>
-    <!-- Header mobile buttons -->
-    <div class="header-mobile-buttons">
-        <a href="#" class="search-bar-btn">
-            <i class="bi bi-search"></i>
-        </a>
-        <a href="#" class="actions-btn">
-            <i class="bi bi-three-dots"></i>
-        </a>
-    </div>
-    <!-- ./ Header mobile buttons -->
-</div>
     <!-- ./ header -->
 
     <!-- content -->
     <div class="content ">
 
-    <div class="row g-4 mb-4">
-        <div class="col-md-8">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h6 class="card-title">New Customers</h6>
-                    <div id="new-customers"></div>
+        <div class="row g-4 mb-4">
+            <div class="col-md-8">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">New Customers</h6>
+                        <div id="new-customers"></div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card h-100">
-                <div class="card-body">
-                    <div class="d-flex mb-4">
-                        <h6 class="card-title mb-0">性能评级</h6>
-                    </div>
-                    <div class="text-center">
-                        <div class="display-6">3.0</div>
-                        <div class="d-flex justify-content-center gap-3 my-3">
-                            <i class="bi bi-star-fill icon-lg text-warning"></i>
-                            <i class="bi bi-star-fill icon-lg text-warning"></i>
-                            <i class="bi bi-star-fill icon-lg text-warning"></i>
-                            <i class="bi bi-star-fill icon-lg text-muted"></i>
-                            <i class="bi bi-star-fill icon-lg text-muted"></i>
-                            <span>(265)</span>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="d-flex mb-4">
+                            <h6 class="card-title mb-0">性能评级</h6>
                         </div>
-                    </div>
-                    <div class="text-muted d-flex align-items-center justify-content-center">
+                        <div class="text-center">
+                            <div class="display-6">3.0</div>
+                            <div class="d-flex justify-content-center gap-3 my-3">
+                                <i class="bi bi-star-fill icon-lg text-warning"></i>
+                                <i class="bi bi-star-fill icon-lg text-warning"></i>
+                                <i class="bi bi-star-fill icon-lg text-warning"></i>
+                                <i class="bi bi-star-fill icon-lg text-muted"></i>
+                                <i class="bi bi-star-fill icon-lg text-muted"></i>
+                                <span>(265)</span>
+                            </div>
+                        </div>
+                        <div class="text-muted d-flex align-items-center justify-content-center">
                         <span class="text-success me-3 d-block">
                             <i class="bi bi-arrow-up me-1 small"></i>+35
                         </span> Point from last month
-                    </div>
-                    <div class="row my-4">
-                        <div class="col-md-6 m-auto">
-                            <div id="customer-rating"></div>
                         </div>
-                    </div>
-                    <div class="text-center">
-                        <button class="btn btn-outline-primary btn-icon">
-                            <i class="bi bi-download"></i> Download Report
-                        </button>
+                        <div class="row my-4">
+                            <div class="col-md-6 m-auto">
+                                <div id="customer-rating"></div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button class="btn btn-outline-primary btn-icon">
+                                <i class="bi bi-download"></i> Download Report
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="card">
-        <div class="card-body">
-            <div class="d-md-flex">
-                <div class="d-md-flex gap-4 align-items-center">
-                    <form class="mb-3 mb-md-0">
-                        <div class="row g-3">
-                            <div class="col-md-3">
-                                <select class="form-select">
-                                    <option>Sort by</option>
-                                    <option value="desc">Desc</option>
-                                    <option value="asc">Asc</option>
-                                </select>
+        <div class="card">
+            <div class="card-body">
+                <div class="d-md-flex">
+                    <div class="d-md-flex gap-4 align-items-center">
+                        <form class="mb-3 mb-md-0">
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <select class="form-select">
+                                        <option>Sort by</option>
+                                        <option value="desc">Desc</option>
+                                        <option value="asc">Asc</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select class="form-select">
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="30">30</option>
+                                        <option value="40">40</option>
+                                        <option value="50">50</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Search">
+                                        <button class="btn btn-outline-light" type="button">
+                                            <i class="bi bi-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-3">
-                                <select class="form-select">
-                                    <option value="10">10</option>
-                                    <option value="20">20</option>
-                                    <option value="30">30</option>
-                                    <option value="40">40</option>
-                                    <option value="50">50</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Search">
-                                    <button class="btn btn-outline-light" type="button">
-                                        <i class="bi bi-search"></i>
-                                    </button>
+                        </form>
+                    </div>
+                    <div class="dropdown ms-auto">
+                        <a href="#" data-bs-toggle="dropdown" class="btn btn-primary dropdown-toggle"
+                           aria-haspopup="true" aria-expanded="false">Actions</a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a href="#" class="dropdown-item">Action</a>
+                            <a href="#" class="dropdown-item">Another action</a>
+                            <a href="#" class="dropdown-item">Something else here</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-custom table-lg mb-0" id="customers">
+                <thead>
+                <tr>
+                    <th>
+                        <input class="form-check-input select-all" type="checkbox" data-select-all-target="#customers"
+                               id="defaultCheck1">
+                    </th>
+                    <th>ID</th>
+                    <th>Host</th>
+                    <th>IP</th>
+                    <th>Domain</th>
+                    <th>Country</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <input class="form-check-input" type="checkbox">
+                    </td>
+                    <td>
+                        <a href="#">#1</a>
+                    </td>
+                    <td>
+                        GPU_SERVER
+                    </td>
+                    <td>23.193.54.167</td>
+                    <td>apond0@nytimes.com</td>
+                    <td>China</td>
+                    <td>2024/4/24</td>
+                    <td>
+                        <span class="badge bg-success">BENIGN</span>
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex">
+                            <div class="dropdown ms-auto">
+                                <a href="#" data-bs-toggle="dropdown" class="btn btn-floating" aria-haspopup="true"
+                                   aria-expanded="false">
+                                    <i class="bi bi-three-dots"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a href="#" class="dropdown-item">Show</a>
+                                    <a href="#" class="dropdown-item">Edit</a>
+                                    <a href="#" class="dropdown-item">Delete</a>
                                 </div>
                             </div>
                         </div>
-                    </form>
-                </div>
-                <div class="dropdown ms-auto">
-                    <a href="#" data-bs-toggle="dropdown" class="btn btn-primary dropdown-toggle" aria-haspopup="true" aria-expanded="false">Actions</a>
-                    <div class="dropdown-menu dropdown-menu-end">
-                        <a href="#" class="dropdown-item">Action</a>
-                        <a href="#" class="dropdown-item">Another action</a>
-                        <a href="#" class="dropdown-item">Something else here</a>
-                    </div>
-                </div>
-            </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="form-check-input" type="checkbox">
+                    </td>
+                    <td>
+                        <a href="#">#2</a>
+                    </td>
+                    <td>
+                        Elaine
+                    </td>
+                    <td>97.12.65.34</td>
+                    <td>bcicero1@wiley.com</td>
+                    <td>China</td>
+                    <td>2024/4/24</td>
+                    <td>
+                        <span class="badge bg-danger">UNBENIGN</span>
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex">
+                            <div class="dropdown ms-auto">
+                                <a href="#" data-bs-toggle="dropdown" class="btn btn-floating" aria-haspopup="true"
+                                   aria-expanded="false">
+                                    <i class="bi bi-three-dots"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a href="#" class="dropdown-item">Show</a>
+                                    <a href="#" class="dropdown-item">Edit</a>
+                                    <a href="#" class="dropdown-item">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="form-check-input" type="checkbox">
+                    </td>
+                    <td>
+                        <a href="#">#3</a>
+                    </td>
+                    <td>
+                        GPU_SERVER
+                    </td>
+                    <td>98.145.56.201</td>
+                    <td>thawksley2@senate.gov</td>
+                    <td>China</td>
+                    <td>2024/4/24</td>
+                    <td>
+                        <span class="badge bg-success">BENIGN</span>
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex">
+                            <div class="dropdown ms-auto">
+                                <a href="#" data-bs-toggle="dropdown" class="btn btn-floating" aria-haspopup="true"
+                                   aria-expanded="false">
+                                    <i class="bi bi-three-dots"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a href="#" class="dropdown-item">Show</a>
+                                    <a href="#" class="dropdown-item">Edit</a>
+                                    <a href="#" class="dropdown-item">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="form-check-input" type="checkbox">
+                    </td>
+                    <td>
+                        <a href="#">#4</a>
+                    </td>
+                    <td>
+                        GPU_SERVER
+                    </td>
+                    <td>134.32.156.134</td>
+                    <td>hversey3@illinois.edu</td>
+                    <td>China</td>
+                    <td>2024/4/24</td>
+                    <td>
+                        <span class="badge bg-success">BENIGN</span>
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex">
+                            <div class="dropdown ms-auto">
+                                <a href="#" data-bs-toggle="dropdown" class="btn btn-floating" aria-haspopup="true"
+                                   aria-expanded="false">
+                                    <i class="bi bi-three-dots"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a href="#" class="dropdown-item">Show</a>
+                                    <a href="#" class="dropdown-item">Edit</a>
+                                    <a href="#" class="dropdown-item">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="form-check-input" type="checkbox">
+                    </td>
+                    <td>
+                        <a href="#">#5</a>
+                    </td>
+                    <td>
+                        GPU_SERVER
+                    </td>
+                    <td>89.34.192.23</td>
+                    <td>rdampney4@reference.com</td>
+                    <td>Portugal</td>
+                    <td>2024/4/24</td>
+                    <td>
+                        <span class="badge bg-success">BENIGN</span>
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex">
+                            <div class="dropdown ms-auto">
+                                <a href="#" data-bs-toggle="dropdown" class="btn btn-floating" aria-haspopup="true"
+                                   aria-expanded="false">
+                                    <i class="bi bi-three-dots"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a href="#" class="dropdown-item">Show</a>
+                                    <a href="#" class="dropdown-item">Edit</a>
+                                    <a href="#" class="dropdown-item">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="form-check-input" type="checkbox">
+                    </td>
+                    <td>
+                        <a href="#">#6</a>
+                    </td>
+                    <td>
+                        GPU_SERVER
+                    </td>
+                    <td>145.34.44.123</td>
+                    <td>apond0@nytimes.com</td>
+                    <td>Brazil</td>
+                    <td>2024/4/24</td>
+                    <td>
+                        <span class="badge bg-success">BENIGN</span>
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex">
+                            <div class="dropdown ms-auto">
+                                <a href="#" data-bs-toggle="dropdown" class="btn btn-floating" aria-haspopup="true"
+                                   aria-expanded="false">
+                                    <i class="bi bi-three-dots"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a href="#" class="dropdown-item">Show</a>
+                                    <a href="#" class="dropdown-item">Edit</a>
+                                    <a href="#" class="dropdown-item">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="form-check-input" type="checkbox">
+                    </td>
+                    <td>
+                        <a href="#">#7</a>
+                    </td>
+                    <td>
+                        tabuaihua
+                    </td>
+                    <td>29.154.65.34</td>
+                    <td>bcicero1@wiley.com</td>
+                    <td>Indonesia</td>
+                    <td>2024/4/24</td>
+                    <td>
+                        <span class="badge bg-success">BENIGN</span>
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex">
+                            <div class="dropdown ms-auto">
+                                <a href="#" data-bs-toggle="dropdown" class="btn btn-floating" aria-haspopup="true"
+                                   aria-expanded="false">
+                                    <i class="bi bi-three-dots"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a href="#" class="dropdown-item">Show</a>
+                                    <a href="#" class="dropdown-item">Edit</a>
+                                    <a href="#" class="dropdown-item">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="form-check-input" type="checkbox">
+                    </td>
+                    <td>
+                        <a href="#">#8</a>
+                    </td>
+                    <td>
+                        Elaine
+                    </td>
+                    <td>102.45.23.187</td>
+                    <td>thawksley2@senate.gov</td>
+                    <td>China</td>
+                    <td>2024/4/24</td>
+                    <td>
+                        <span class="badge bg-success">BENIGN</span>
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex">
+                            <div class="dropdown ms-auto">
+                                <a href="#" data-bs-toggle="dropdown" class="btn btn-floating" aria-haspopup="true"
+                                   aria-expanded="false">
+                                    <i class="bi bi-three-dots"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a href="#" class="dropdown-item">Show</a>
+                                    <a href="#" class="dropdown-item">Edit</a>
+                                    <a href="#" class="dropdown-item">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="form-check-input" type="checkbox">
+                    </td>
+                    <td>
+                        <a href="#">#9</a>
+                    </td>
+                    <td>
+                        GPU_SERVER
+                    </td>
+                    <td>65.123.54.87</td>
+                    <td>hversey3@illinois.edu</td>
+                    <td>China</td>
+                    <td>2024/4/24</td>
+                    <td>
+                        <span class="badge bg-success">BENIGN</span>
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex">
+                            <div class="dropdown ms-auto">
+                                <a href="#" data-bs-toggle="dropdown" class="btn btn-floating" aria-haspopup="true"
+                                   aria-expanded="false">
+                                    <i class="bi bi-three-dots"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a href="#" class="dropdown-item">Show</a>
+                                    <a href="#" class="dropdown-item">Edit</a>
+                                    <a href="#" class="dropdown-item">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="form-check-input" type="checkbox">
+                    </td>
+                    <td>
+                        <a href="#">#10</a>
+                    </td>
+                    <td>
+                        tabuaihua
+                    </td>
+                    <td>34.12.124.76</td>
+                    <td>rdampney4@reference.com</td>
+                    <td>China</td>
+                    <td>2024/4/24</td>
+                    <td>
+                        <span class="badge bg-success">BENIGN</span>
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex">
+                            <div class="dropdown ms-auto">
+                                <a href="#" data-bs-toggle="dropdown" class="btn btn-floating" aria-haspopup="true"
+                                   aria-expanded="false">
+                                    <i class="bi bi-three-dots"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a href="#" class="dropdown-item">Show</a>
+                                    <a href="#" class="dropdown-item">Edit</a>
+                                    <a href="#" class="dropdown-item">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-    </div>
 
-    <div class="table-responsive">
-        <table class="table table-custom table-lg mb-0" id="customers">
-            <thead>
-            <tr>
-                <th>
-                    <input class="form-check-input select-all" type="checkbox" data-select-all-target="#customers" id="defaultCheck1">
-                </th>
-                <th>ID</th>
-                <th>Host</th>
-                <th>IP</th>
-                <th>Domain</th>
-                <th>Country</th>
-                <th>Time</th>
-                <th>Status</th>
-                <th class="text-end">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-                    <input class="form-check-input" type="checkbox">
-                </td>
-                <td>
-                    <a href="#">#1</a>
-                </td>
-                <td>
-                    GPU_SERVER
-                </td>
-                <td>23.193.54.167</td>
-                <td>apond0@nytimes.com</td>
-                <td>China</td>
-                <td>2024/3/26</td>
-                <td>
-                    <span class="badge bg-success">BENIGN</span>
-                </td>
-                <td class="text-end">
-                    <div class="d-flex">
-                        <div class="dropdown ms-auto">
-                            <a href="#" data-bs-toggle="dropdown" class="btn btn-floating" aria-haspopup="true" aria-expanded="false">
-                                <i class="bi bi-three-dots"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a href="#" class="dropdown-item">Show</a>
-                                <a href="#" class="dropdown-item">Edit</a>
-                                <a href="#" class="dropdown-item">Delete</a>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input class="form-check-input" type="checkbox">
-                </td>
-                <td>
-                    <a href="#">#2</a>
-                </td>
-                <td>
-                    Elaine
-                </td>
-                <td>97.12.65.34</td>
-                <td>bcicero1@wiley.com</td>
-                <td>China</td>
-                <td>2024/3/26</td>
-                <td>
-                    <span class="badge bg-danger">UNBENIGN</span>
-                </td>
-                <td class="text-end">
-                    <div class="d-flex">
-                        <div class="dropdown ms-auto">
-                            <a href="#" data-bs-toggle="dropdown" class="btn btn-floating" aria-haspopup="true" aria-expanded="false">
-                                <i class="bi bi-three-dots"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a href="#" class="dropdown-item">Show</a>
-                                <a href="#" class="dropdown-item">Edit</a>
-                                <a href="#" class="dropdown-item">Delete</a>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input class="form-check-input" type="checkbox">
-                </td>
-                <td>
-                    <a href="#">#3</a>
-                </td>
-                <td>
-                    GPU_SERVER
-                </td>
-                <td>98.145.56.201</td>
-                <td>thawksley2@senate.gov</td>
-                <td>China</td>
-                <td>2024/3/26</td>
-                <td>
-                    <span class="badge bg-success">BENIGN</span>
-                </td>
-                <td class="text-end">
-                    <div class="d-flex">
-                        <div class="dropdown ms-auto">
-                            <a href="#" data-bs-toggle="dropdown" class="btn btn-floating" aria-haspopup="true" aria-expanded="false">
-                                <i class="bi bi-three-dots"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a href="#" class="dropdown-item">Show</a>
-                                <a href="#" class="dropdown-item">Edit</a>
-                                <a href="#" class="dropdown-item">Delete</a>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input class="form-check-input" type="checkbox">
-                </td>
-                <td>
-                    <a href="#">#4</a>
-                </td>
-                <td>
-                    GPU_SERVER
-                </td>
-                <td>134.32.156.134</td>
-                <td>hversey3@illinois.edu</td>
-                <td>China</td>
-                <td>2024/3/26</td>
-                <td>
-                    <span class="badge bg-success">BENIGN</span>
-                </td>
-                <td class="text-end">
-                    <div class="d-flex">
-                        <div class="dropdown ms-auto">
-                            <a href="#" data-bs-toggle="dropdown" class="btn btn-floating" aria-haspopup="true" aria-expanded="false">
-                                <i class="bi bi-three-dots"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a href="#" class="dropdown-item">Show</a>
-                                <a href="#" class="dropdown-item">Edit</a>
-                                <a href="#" class="dropdown-item">Delete</a>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input class="form-check-input" type="checkbox">
-                </td>
-                <td>
-                    <a href="#">#5</a>
-                </td>
-                <td>
-                    GPU_SERVER
-                </td>
-                <td>89.34.192.23</td>
-                <td>rdampney4@reference.com</td>
-                <td>Portugal</td>
-                <td>2024/3/26</td>
-                <td>
-                    <span class="badge bg-success">BENIGN</span>
-                </td>
-                <td class="text-end">
-                    <div class="d-flex">
-                        <div class="dropdown ms-auto">
-                            <a href="#" data-bs-toggle="dropdown" class="btn btn-floating" aria-haspopup="true" aria-expanded="false">
-                                <i class="bi bi-three-dots"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a href="#" class="dropdown-item">Show</a>
-                                <a href="#" class="dropdown-item">Edit</a>
-                                <a href="#" class="dropdown-item">Delete</a>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input class="form-check-input" type="checkbox">
-                </td>
-                <td>
-                    <a href="#">#6</a>
-                </td>
-                <td>
-                    GPU_SERVER
-                </td>
-                <td>145.34.44.123</td>
-                <td>apond0@nytimes.com</td>
-                <td>Brazil</td>
-                <td>2024/3/26</td>
-                <td>
-                    <span class="badge bg-success">BENIGN</span>
-                </td>
-                <td class="text-end">
-                    <div class="d-flex">
-                        <div class="dropdown ms-auto">
-                            <a href="#" data-bs-toggle="dropdown" class="btn btn-floating" aria-haspopup="true" aria-expanded="false">
-                                <i class="bi bi-three-dots"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a href="#" class="dropdown-item">Show</a>
-                                <a href="#" class="dropdown-item">Edit</a>
-                                <a href="#" class="dropdown-item">Delete</a>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input class="form-check-input" type="checkbox">
-                </td>
-                <td>
-                    <a href="#">#7</a>
-                </td>
-                <td>
-                    tabuaihua
-                </td>
-                <td>29.154.65.34</td>
-                <td>bcicero1@wiley.com</td>
-                <td>Indonesia</td>
-                <td>2024/3/26</td>
-                <td>
-                    <span class="badge bg-success">BENIGN</span>
-                </td>
-                <td class="text-end">
-                    <div class="d-flex">
-                        <div class="dropdown ms-auto">
-                            <a href="#" data-bs-toggle="dropdown" class="btn btn-floating" aria-haspopup="true" aria-expanded="false">
-                                <i class="bi bi-three-dots"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a href="#" class="dropdown-item">Show</a>
-                                <a href="#" class="dropdown-item">Edit</a>
-                                <a href="#" class="dropdown-item">Delete</a>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input class="form-check-input" type="checkbox">
-                </td>
-                <td>
-                    <a href="#">#8</a>
-                </td>
-                <td>
-                    Elaine
-                </td>
-                <td>102.45.23.187</td>
-                <td>thawksley2@senate.gov</td>
-                <td>China</td>
-                <td>2024/3/26</td>
-                <td>
-                    <span class="badge bg-success">BENIGN</span>
-                </td>
-                <td class="text-end">
-                    <div class="d-flex">
-                        <div class="dropdown ms-auto">
-                            <a href="#" data-bs-toggle="dropdown" class="btn btn-floating" aria-haspopup="true" aria-expanded="false">
-                                <i class="bi bi-three-dots"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a href="#" class="dropdown-item">Show</a>
-                                <a href="#" class="dropdown-item">Edit</a>
-                                <a href="#" class="dropdown-item">Delete</a>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input class="form-check-input" type="checkbox">
-                </td>
-                <td>
-                    <a href="#">#9</a>
-                </td>
-                <td>
-                    GPU_SERVER
-                </td>
-                <td>65.123.54.87</td>
-                <td>hversey3@illinois.edu</td>
-                <td>China</td>
-                <td>2024/3/26</td>
-                <td>
-                    <span class="badge bg-success">BENIGN</span>
-                </td>
-                <td class="text-end">
-                    <div class="d-flex">
-                        <div class="dropdown ms-auto">
-                            <a href="#" data-bs-toggle="dropdown" class="btn btn-floating" aria-haspopup="true" aria-expanded="false">
-                                <i class="bi bi-three-dots"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a href="#" class="dropdown-item">Show</a>
-                                <a href="#" class="dropdown-item">Edit</a>
-                                <a href="#" class="dropdown-item">Delete</a>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input class="form-check-input" type="checkbox">
-                </td>
-                <td>
-                    <a href="#">#10</a>
-                </td>
-                <td>
-                    tabuaihua
-                </td>
-                <td>34.12.124.76</td>
-                <td>rdampney4@reference.com</td>
-                <td>China</td>
-                <td>2024/3/26</td>
-                <td>
-                    <span class="badge bg-success">BENIGN</span>
-                </td>
-                <td class="text-end">
-                    <div class="d-flex">
-                        <div class="dropdown ms-auto">
-                            <a href="#" data-bs-toggle="dropdown" class="btn btn-floating" aria-haspopup="true" aria-expanded="false">
-                                <i class="bi bi-three-dots"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a href="#" class="dropdown-item">Show</a>
-                                <a href="#" class="dropdown-item">Edit</a>
-                                <a href="#" class="dropdown-item">Delete</a>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <nav class="mt-4" aria-label="Page navigation example">
-        <ul class="pagination justify-content-center">
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
+        <nav class="mt-4" aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
 
     </div>
     <!-- ./ content -->
@@ -952,11 +952,11 @@
 <!-- Bundle scripts -->
 <script src="static/js/bundle.js"></script>
 
-    <!-- Apex chart -->
-    <script src="static/js/apexcharts.min.js"></script>
+<!-- Apex chart -->
+<script src="static/js/apexcharts.min.js"></script>
 
-    <!-- Examples -->
-    <script src="static/js/customers.js"></script>
+<!-- Examples -->
+<script src="static/js/customers.js"></script>
 
 <!-- Main Javascript file -->
 <script src="static/js/app.min.js"></script>

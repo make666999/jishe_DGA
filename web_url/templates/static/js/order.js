@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    var ws = new WebSocket(`ws://${serverIp}/latest_location_data`); // 替换为您的WebSocket服务地址
+    var ws = new WebSocket(`ws://${serverIp}/websocket_user_list_management`); // 替换为您的WebSocket服务地址
     ws.onmessage = function (event) {
         var data = JSON.parse(event.data);
         var tbody = document.querySelector("#orders tbody");
@@ -32,13 +32,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
             var cell5 = row.insertCell(5);
+              cell5.innerHTML = `<span class="badge bg-success">undefined</span>`; // "未知"或者您想显示的任何默认文本
             if (typeof item.latest_domain_type === "undefined" || item.latest_domain_type === null) {
                 // 如果latest_domain_type是undefined或null，设置徽章为绿色
                 cell5.innerHTML = `<span class="badge bg-success">undefined</span>`; // "未知"或者您想显示的任何默认文本
-            } else {
-                // 如果latest_domain_type有其他值，设置徽章为红色
-                cell5.innerHTML = `<span class="badge bg-danger">${item.latest_domain_type}</span>`;
             }
+            // else {
+            //     // 如果latest_domain_type有其他值，设置徽章为红色
+            //     cell5.innerHTML = `<span class="badge bg-danger">${item.latest_domain_type}</span>`;
+            // }
 
 
             var cell6 = row.insertCell(6);

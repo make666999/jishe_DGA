@@ -131,8 +131,8 @@ $(function () {
         }
     });
 
-    function totalSales() {
-        if ($('#total-sales').length) {
+    function total1() {
+        if ($('#total-1').length) {
             const options = {
                 series: [{
                     data: [25, 66, 41, 89, 63, 30, 50]
@@ -173,17 +173,17 @@ $(function () {
                 }
             };
 
-            new ApexCharts(document.querySelector("#total-sales"), options).render();
+            new ApexCharts(document.querySelector("#total-1"), options).render();
         }
     }
 
-    totalSales();
+    total1();
 
-    function totalOrders() {
-        if ($('#total-orders').length) {
+    function total2() {
+        if ($('#total-2').length) {
             const options = {
                 series: [{
-                    data: [25, 66, 41, 89, 63, 30, 50]
+                    data: [35, 46, 22, 56, 43, 39, 40]
                 }],
                 chart: {
                     type: 'line',
@@ -221,34 +221,34 @@ $(function () {
                 }
             };
 
-            new ApexCharts(document.querySelector("#total-orders"), options).render();
+            new ApexCharts(document.querySelector("#total-2"), options).render();
         }
     }
 
-    totalOrders();
+    total2();
 
-    function customerRating() {
-        if ($('#customer-rating').length) {
+    function total3() {
+        if ($('#total-3').length) {
             const options = {
                 series: [{
-                    name: 'Rate',
-                    data: [25, 66, 41, 89, 63, 25, 44, 12, 36]
+                    data: [55, 23, 78, 16, 60, 39, 54]
                 }],
                 chart: {
                     type: 'line',
-                    height: 50,
+                    width: 100,
+                    height: 35,
                     sparkline: {
                         enabled: true
                     }
                 },
+                theme: {
+                    mode: $('body').hasClass('dark') ? 'dark' : 'light',
+                },
+                colors: [colors.blue],
                 stroke: {
                     width: 4,
                     curve: 'smooth',
                 },
-                theme: {
-                    mode: $('body').hasClass('dark') ? 'dark' : 'light',
-                },
-                colors: [colors.success],
                 tooltip: {
                     fixed: {
                         enabled: false
@@ -259,7 +259,7 @@ $(function () {
                     y: {
                         title: {
                             formatter: function (seriesName) {
-                                return seriesName;
+                                return ''
                             }
                         }
                     },
@@ -269,14 +269,136 @@ $(function () {
                 }
             };
 
-            new ApexCharts(document.querySelector("#customer-rating"), options).render();
+            new ApexCharts(document.querySelector("#total-3"), options).render();
         }
     }
 
-    customerRating();
+    total3();
+
+        function total4() {
+        if ($('#total-4').length) {
+            const options = {
+                series: [{
+                    data: [59, 35, 47, 38, 45, 21, 56]
+                }],
+                chart: {
+                    type: 'line',
+                    width: 100,
+                    height: 35,
+                    sparkline: {
+                        enabled: true
+                    }
+                },
+                theme: {
+                    mode: $('body').hasClass('dark') ? 'dark' : 'light',
+                },
+                colors: [colors.green],
+                stroke: {
+                    width: 4,
+                    curve: 'smooth',
+                },
+                tooltip: {
+                    fixed: {
+                        enabled: false
+                    },
+                    x: {
+                        show: false
+                    },
+                    y: {
+                        title: {
+                            formatter: function (seriesName) {
+                                return ''
+                            }
+                        }
+                    },
+                    marker: {
+                        show: false
+                    }
+                }
+            };
+
+            new ApexCharts(document.querySelector("#total-4"), options).render();
+        }
+    }
+
+    total4();
+
+    function initializeCustomerRatings() {
+        // 为左侧图表定义选项
+        const optionsLeft = {
+            series: [{
+                name: 'Left Rate',
+                data: [25, 66, 41, 90, 12]  // 示例数据
+            }],
+            chart: {
+                type: 'line',
+                height: 40,
+                sparkline: {
+                    enabled: true
+                }
+            },
+            stroke: {
+                width: 3,
+                curve: 'smooth',
+            },
+            theme: {
+                mode: $('body').hasClass('dark') ? 'dark' : 'light',
+            },
+            colors: ['rgb(58,163,171)'],  // 自定义颜色
+            xaxis: {
+                categories: ['Jan', 'Feb', 'Mar'] // 简化的X轴标签
+            },
+            tooltip: {
+                enabled: false
+            }
+        };
+
+        // 为右侧图表定义选项
+        const optionsRight = {
+            series: [{
+                name: 'Right Rate',
+                data: [89, 63, 25, 34, 23]  // 示例数据
+            }],
+            chart: {
+                type: 'line',
+                height: 40,
+                sparkline: {
+                    enabled: true
+                }
+            },
+            stroke: {
+                width: 3,
+                curve: 'smooth',
+            },
+            theme: {
+                mode: $('body').hasClass('dark') ? 'dark' : 'light',
+            },
+            colors: ['rgb(13,36,94)'],  // 自定义颜色
+            xaxis: {
+                categories: ['Apr', 'May', 'Jun'] // 简化的X轴标签
+            },
+            tooltip: {
+                enabled: false
+            }
+        };
+
+        // 初始化左侧图表
+        if ($('#customer-rating-left').length) {
+            new ApexCharts(document.querySelector("#customer-rating-left"), optionsLeft).render();
+        }
+        // 初始化右侧图表
+        if ($('#customer-rating-right').length) {
+            new ApexCharts(document.querySelector("#customer-rating-right"), optionsRight).render();
+        }
+    }
+
+    $(document).ready(function () {
+        initializeCustomerRatings();
+    });
+
 
     function salesChart() {
-        var ws = new WebSocket(`ws://${serverIp}/collection_stats`);
+        var ws = new WebSocket(`ws://${serverIp}/websocket_poll_cluster_statistics`);
 
 
         var chart; // 在函数外部声明图表变量
@@ -389,7 +511,7 @@ $(function () {
 
 
     function productsSold() {
-        var ws = new WebSocket(`ws://${serverIp}/week_day_data_total`);
+        var ws = new WebSocket(`ws://${serverIp}/websocket_weekly_data_total`);
 
 
         // 初始化图表
@@ -500,7 +622,7 @@ $(function () {
 // 更新数据列表
     // 建立WebSocket连接
 
-    var ws = new WebSocket(`ws://${serverIp}/latest_location_data`);
+    var ws = new WebSocket(`ws://${serverIp}/websocket_cluster_device_status`);
     ws.onmessage = function (event) {
         var data = JSON.parse(event.data);
         var deviceList = document.getElementById('device-list');
@@ -566,7 +688,7 @@ $(function () {
                     borderRadius: 10
                 },
                 label: {
-                    show: false,
+                    show: true,
                     position: 'center'
                 },
                 emphasis: {
@@ -603,7 +725,7 @@ $(function () {
     });
 
 // 创建WebSocket连接
-    var ws = new WebSocket(`ws://${serverIp}/count_benign_nonbenign`);
+    var ws = new WebSocket(`ws://${serverIp}/websocket_dns_traffic_security_analysis`);
 
     ws.onmessage = function (event) {
         var data = JSON.parse(event.data);
@@ -637,47 +759,47 @@ $(function () {
     var originalWidth = myChart.getWidth();
 
 // 图表的选项
-option = {
-  angleAxis: {
-    type: 'category',
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-  },
-  radiusAxis: {},
-  polar: {},
-  series: [
-    {
-      type: 'bar',
-      data: [1, 2, 3, 4, 3, 5, 1],
-      coordinateSystem: 'polar',
-      name: 'A',
-      stack: 'a',
-      emphasis: {
-        focus: 'series'
-      }
-    },
-    {
-      type: 'bar',
-      data: [2, 4, 6, 1, 3, 2, 1],
-      coordinateSystem: 'polar',
-      name: 'B',
-      stack: 'a',
-      emphasis: {
-        focus: 'series'
-      }
-    },
-    {
-      type: 'bar',
-      data: [1, 2, 3, 4, 1, 2, 5],
-      coordinateSystem: 'polar',
-      name: 'C',
-      stack: 'a',
-      emphasis: {
-        focus: 'series'
-      }
-    }
-  ],
+    option = {
+        angleAxis: {
+            type: 'category',
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        radiusAxis: {},
+        polar: {},
+        series: [
+            {
+                type: 'bar',
+                data: [1, 2, 3, 4, 3, 5, 1],
+                coordinateSystem: 'polar',
+                name: 'A',
+                stack: 'a',
+                emphasis: {
+                    focus: 'series'
+                }
+            },
+            {
+                type: 'bar',
+                data: [2, 4, 6, 1, 3, 2, 1],
+                coordinateSystem: 'polar',
+                name: 'B',
+                stack: 'a',
+                emphasis: {
+                    focus: 'series'
+                }
+            },
+            {
+                type: 'bar',
+                data: [1, 2, 3, 4, 1, 2, 5],
+                coordinateSystem: 'polar',
+                name: 'C',
+                stack: 'a',
+                emphasis: {
+                    focus: 'series'
+                }
+            }
+        ],
 
-};
+    };
 
 // 设置图表选项
     myChart.setOption(option);
@@ -707,7 +829,7 @@ option = {
     var topTypes = [];
 
 // WebSocket连接
-    var ws = new WebSocket(`ws://${serverIp}/top_remain_type_daily`);
+    var ws = new WebSocket(`ws://${serverIp}/websocket_daily_top_remain_type`);
 
 
     ws.onmessage = function (event) {

@@ -22,21 +22,17 @@
     <!-- Main style file -->
     <link rel="stylesheet" href="static/css/app.min.css" type="text/css">
 
-    <link rel="shortcut icon" href="./static/image/favicon.ico" >
 
+    <script>
+        var serverIp = "{{ ipAddress }}";
+    </script>
 
-<script>
-    var serverIp = "{{ ipAddress }}";
-</script>
-    <!--?    fish-->
-    <link rel="stylesheet" href="static/css/fish.css">
     <!-- 引入 ECharts -->
 
     <script src="./static/js/echarts.min.js"></script>
     <script src="./static/js/echarts-gl.min.js"></script>
-	<script src="./static/js/world.js"></script>
-<script src="static/js/mychart_type_rate.js"></script>
-
+    <script src="./static/js/world.js"></script>
+    <script src="static/js/mychart_type_rate.js"></script>
 
 
 </head>
@@ -178,23 +174,20 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="orders.html">
                     <span class="nav-link-icon">
                         <i class="bi bi-receipt"></i>
                     </span>
-                    <span>集群管理</span>
+                    <span>集群列表</span>
                 </a>
-
-                    <li>
-                        <a href="orders.html">设备列表</a>
-                    </li>
-                    <li>
-                        <a href="order-detail.html">设备详情</a>
-                    </li>
-                    <li>
-                        <a href="mode.html">部署模式</a>
-                    </li>
-
+            </li>
+            <li>
+                <a href="mode-total.html">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-paperclip"></i>
+                    </span>
+                    <span>部署模式</span>
+                </a>
             </li>
             <li>
                 <a href="customers.html">
@@ -204,12 +197,20 @@
                     <span>流量日志</span>
                 </a>
             </li>
-<li>
+            <li>
                 <a href="Security_policy.html">
                     <span class="nav-link-icon">
                         <i class="bi bi-shield-lock-fill"></i>
                     </span>
                     <span>安全策略</span>
+                </a>
+            </li>
+            <li>
+                <a href="order-detail.html">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <span>设备详情</span>
                 </a>
             </li>
         </ul>
@@ -224,7 +225,7 @@
     <div class="header">
         <div class="menu-toggle-btn"> <!-- Menu close button for mobile devices -->
             <a href="#">
-                <i class="bi bi-list"></i> 
+                <i class="bi bi-list"></i>
             </a>
         </div>
         <!-- Logo -->
@@ -245,7 +246,7 @@
                         <i class="bi bi-cart2 icon-lg"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
-                        <h6 class="m-0 px-4 py-3 border-bottom">Shopping Cart</h6>
+                        <h6 class="m-0 px-4 py-3 border-bottom">购物车</h6>
                         <div class="dropdown-menu-body">
                             <div class="list-group list-group-flush">
                                 <div class="list-group-item d-flex align-items-center">
@@ -256,8 +257,8 @@
                                         <img src="static/picture/3.jpg" class="rounded" width="60" alt="...">
                                     </a>
                                     <div>
-                                        <h6>Digital clock</h6>
-                                        <div>1 x $1.190,90</div>
+                                        <h6>会员</h6>
+                                        <div>1 x 18/月</div>
                                     </div>
                                 </div>
                             </div>
@@ -270,8 +271,8 @@
                                         <img src="static/picture/4.jpg" class="rounded" width="60" alt="...">
                                     </a>
                                     <div>
-                                        <h6>Toy Car</h6>
-                                        <div>1 x $139.58</div>
+                                        <h6>流量</h6>
+                                        <div>2 x 240</div>
                                     </div>
                                 </div>
                             </div>
@@ -284,28 +285,12 @@
                                         <img src="static/picture/5.jpg" class="rounded" width="60" alt="...">
                                     </a>
                                     <div>
-                                        <h6>Sunglasses</h6>
-                                        <div>2 x $50,90</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="list-group list-group-flush">
-                                <div class="list-group-item d-flex align-items-center">
-                                    <a href="#" class="text-danger me-3" title="Remove">
-                                        <i class="bi bi-trash"></i>
-                                    </a>
-                                    <a href="#" class="me-3 flex-shrink-0 ">
-                                        <img src="static/picture/6.jpg" class="rounded" width="60" alt="...">
-                                    </a>
-                                    <div>
-                                        <h6>Cake</h6>
-                                        <div>1 x $10,50</div>
+                                        <h6>域名设备</h6>
+                                        <div>1 x 500</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <h6 class="m-0 px-4 py-3 border-top small">Sub Total : <strong
-                                class="text-primary">$1.442,78</strong></h6>
                     </div>
                 </li>
                 <li class="nav-item ms-3">
@@ -332,31 +317,123 @@
     <div class="content ">
 
         <div class="row row-cols-1 row-cols-md-3 g-4">
-<!--            异常与正常域名比例-->
-            <div class="col-lg-4 col-md-12">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h6 class="card-title">异常与正常域名比例&nbsp&nbsp&nbsp&nbsp&nbsp攻击类型分布</h6>
-
-                       <div id="domain_count" style="height: 50%; width:50%; float: left;"></div>
-                <div id="domain_count2" style="height: 50%; width:50%; float: right;"></div>
-
-
+            <!--?            四个线条组件-->
+            <div class="col-four">
+                <div style="width:25%;margin-right: 30px;">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex mb-3">
+                                <div class="display-7">
+                                    <i class="bi bi-bell"></i>
+                                </div>
+                            </div>
+                            <h4 class="mb-3">新增流量记录</h4>
+                            <div class="d-flex mb-3">
+                                <div class="display-7">7310</div>
+                                <div class="ms-auto" id="total-1"></div>
+                            </div>
+                            <div class="text-success">
+                                与昨日相比 1.4% <i class="small bi bi-arrow-up"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="width:25%;margin-right: 30px;">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex mb-3">
+                                <div class="display-7">
+                                    <i class="bi bi-credit-card-2-front"></i>
+                                </div>
+                            </div>
+                            <h4 class="mb-3">集群域名访问量</h4>
+                            <div class="d-flex mb-3">
+                                <div class="display-7">598</div>
+                                <div class="ms-auto" id="total-2"></div>
+                            </div>
+                            <div class="text-danger">
+                                与昨日相比 2.4% <i class="small bi bi-arrow-down"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="width:25%;margin-right: 30px;">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex mb-3">
+                                <div class="display-7">
+                                    <i class="bi bi-book"></i>
+                                </div>
+                            </div>
+                            <h4 class="mb-3">恶意域名记录</h4>
+                            <div class="d-flex mb-3">
+                                <div class="display-7">7</div>
+                                <div class="ms-auto" id="total-3"></div>
+                            </div>
+                            <div class="text-success">
+                                与昨日相比 1.1% <i class="small bi bi-arrow-up"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="width:25%;margin-right: 30px;">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex mb-3">
+                                <div class="display-7">
+                                    <i class="bi-basket"></i>
+                                </div>
+                            </div>
+                            <h4 class="mb-3">在线设备数量</h4>
+                            <div class="d-flex mb-3">
+                                <div class="display-7">3</div>
+                                <div class="ms-auto" id="total-4"></div>
+                            </div>
+                            <div class="text-danger">
+                                与昨日相比 1.7% <i class="small bi bi-arrow-down"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-           <!--集群状态-->
+
+            <!--?            <div class="rating-container" style="height:30px;">-->
+            <!--?                <div class="rating-container-left" style="width: 25%; float: left;">-->
+            <!--?                    <div class="data-section" style="width: 50%; float: left;">-->
+            <!--?                        <h6>今日访问量增加率</h6>-->
+            <!--?                        <h6 style="text-align: center">26%⬆</h6>-->
+            <!--?                    </div>-->
+            <!--?                    <div id="customer-rating-left" style="height: 45%; width: 50%; float: right;"></div>-->
+            <!--?                </div>-->
+            <!--?                <div class="rating-container-right" style="width: 25%; float: left;">-->
+            <!--?                    <div class="data-section" style="width: 50%; float: left;">-->
+            <!--?                        <h6>今日访问量减少率</h6>-->
+            <!--?                        <h6 style="text-align: center">10%⬇</h6>-->
+            <!--?                    </div>-->
+            <!--?                    <div id="customer-rating-right" style="height: 45%; width: 50%; float: right;"></div>-->
+            <!--?                </div>-->
+            <!--?            </div>-->
+            <!--            异常与正常域名比例-->
             <div class="col-lg-4 col-md-12">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h6 class="card-title">集群域名日增图和累计图</h6>
-<!--                        <div id="type_rate" style="height: 100%;width: 100%;"></div>--> <div id="customer-rating" style="height: 45%; width: 80%;"></div>
-                          <div id="domain_count3" style="height: 45%; width: 100%;"></div>
-
+                        <h6 class="card-title">集群恶意域名感知&nbsp&nbsp&nbsp&nbsp&nbsp攻击类型分布</h6>
+                        <div id="domain_count" style="height: 50%; width:50%; float: left;"></div>
+                        <div id="domain_count2" style="height: 50%; width:50%; float: right;"></div>
                     </div>
                 </div>
             </div>
-                <!--新消息通知-->
+            <!--集群状态-->
+            <div class="col-lg-4 col-md-12">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">集群域名日访问累计</h6>
+                        <div id="domain_count3" style="height: 45%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!--新消息通知-->
             <div class="col-lg-4 col-md-12">
                 <div class="card h-100">
                     <div class="card-body">
@@ -388,7 +465,8 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <h6>检测结果：您的域名检测结果已生成，请查看您提供的邮箱或登录我们的平台查看详细报告。</h6>
+                                <h5>
+                                    感谢您使用我们的域名检测服务！您的域名检测结果已经生成。请查看您提供的邮箱或登录我们的平台，以查看详细的报告。我们的报告将提供全面的信息，帮助您更好地了解您的域名情况，并为您未来的在线活动提供指导。如果您需要任何帮助或有任何疑问，请随时联系我们的客户服务团队。期待为您提供优质的服务体验！</h5>
                             </div>
                             <div>
                                 <div class="d-flex align-items-center mb-3">
@@ -412,7 +490,8 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <h6>恭喜！您查询的域名目前可供注册使用，请尽快完成注册以确保您拥有该域名。</h6>
+                                <h5>
+                                    非常高兴地通知您，您查询的域名目前可供注册使用！为确保您能够拥有该域名，请尽快完成注册流程。这是一个绝佳的机会，让您拥有一个与您业务或项目相关的独特在线身份。抓住这个机会，注册您心仪的域名，开启属于您自己的在线旅程！</h5>
                             </div>
                             <div>
                                 <div class="d-flex align-items-center mb-3">
@@ -436,26 +515,14 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <h6>
-                                    当您的域名即将到期时，我们会发送一封提醒您续订的通知邮件，以确保您不会失去您重要的域名。</h6>
-                            </div>
-                        </div>
-                        <div class="fish">
-                            <div class="bowl"></div>
-                            <div class="water">
-                                <div class="body">
-                                    <div class="eye"></div>
-                                    <div class="fin-center"></div>
-                                    <div class="fin top"></div>
-                                    <div class="fin bottom"></div>
-                                    <div class="tail"></div>
-                                </div>
+                                <h5>
+                                    当您的域名即将到期时，我们会通过电子邮件发送提醒您续订的通知，以确保您不会失去您重要的域名。我们明白域名对于您的业务至关重要，因此提前通知您续订的时间，让您有足够的准备时间。请您务必在到期前及时续订，以免造成不必要的中断和损失。</h5>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-<!--            实时流量监控-->
+            <!--            实时流量监控-->
             <div class="col-lg-7 col-md-12">
                 <div class="card widget h-100">
                     <div class="card-header d-flex">
@@ -480,7 +547,7 @@
                 </div>
             </div>
 
-<!--            地图-->
+            <!--            地图-->
             <div class="col-lg-5 col-md-12">
                 <div class="card widget h-100">
                     <div class="card-header d-flex">
@@ -500,29 +567,29 @@
                     </div>
                 </div>
             </div>
-<!--            域名种类统计（过去五天每天的类别数量）-->
+            <!--            域名种类统计（过去五天每天的类别数量）-->
             <div class="col-lg-4 col-md-12">
-    <div class="card h-100">
-        <div class="card-body">
-            <h6 class="card-title">域名种类统计（过去五天每天的类别数量）</h6>
-            <div id="domain_kinds" style="height: 300px;"></div>
-        </div>
-    </div>
-</div>
-        <!--每日数据流量七天-->
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">域名种类统计（过去五天每天的类别数量）</h6>
+                        <div id="domain_kinds" style="height: 300px;"></div>
+                    </div>
+                </div>
+            </div>
+            <!--每日数据流量七天-->
             <div class="col-lg-4 col-md-6">
                 <div class="card h-100 bg-purple">
                     <div class="card-body text-center">
                         <div class="text-white-50">
                             <div class="bi bi-box-seam display-6 mb-3"></div>
-                            <div class="display-8 mb-2">每日数据流量</div>
+                            <div class="display-8 mb-2">集群每日访问流量</div>
                             <h5>7 days</h5>
                         </div>
                         <div id="products-sold"></div>
                     </div>
                 </div>
             </div>
-<!--            设备列表-->
+            <!--            设备列表-->
             <div class="col-lg-4 col-md-6">
                 <div class="card widget h-100">
                     <div class="card-header d-flex justify-content-between align-items-center">
@@ -552,7 +619,7 @@
 <!-- Apex chart -->
 <script src="static/js/apexcharts.min.js"></script>
 
-    <script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
 <script src="static/js/slick.min.js"></script>
 <!-- Examples -->
 <script src="static/js/dashboard.js"></script>

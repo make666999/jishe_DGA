@@ -62,7 +62,7 @@ option = {
     },
     xAxis: [{
         type: 'category',
-        data: ['03-21','03-22','03-23','03-24','03-25','03-26'],
+        data: ['04-18','04-19','04-20','04-21','04-22','4-23'],
         axisLine: {
             lineStyle: {
                 color: "#999"
@@ -92,7 +92,7 @@ option = {
         }
     }],
     series: [{
-        name: '课时',
+        name: '数量',
         type: 'line',
         data: [23,60,20,36,23,85],
         lineStyle: {
@@ -103,14 +103,14 @@ option = {
 
                     colorStops: [{
                         offset: 0,
-                        color: '#A9F387' // 0% 处的颜色
+                        color: '#8e9ff5' // 0% 处的颜色
                     }, {
                         offset: 1,
-                        color: '#48D8BF' // 100% 处的颜色
+                        color: '#ad97e5' // 100% 处的颜色
                     }],
                     globalCoord: false // 缺省为 false
                 },
-                shadowColor: 'rgba(72,216,191, 0.3)',
+                shadowColor: 'rgba(79,79,145,0.79)',
                 shadowBlur: 10,
                 shadowOffsetY: 20
             }
@@ -121,7 +121,7 @@ option = {
                 borderWidth: 10,
                 /*shadowColor: 'rgba(72,216,191, 0.3)',
                 shadowBlur: 100,*/
-                borderColor: "#A9F387"
+                borderColor: "#c887f3"
             }
         },
         smooth: true

@@ -1,8 +1,7 @@
 .fish {
-  position: absolute;
-  left: 50%;
+  left: 0; /* 将鱼缸放置在页面左端 */
   bottom: 0; /* 将鱼缸放置在页面底部 */
-  transform: translateX(-50%);
+  transform: translateX(0); /* 保持水平居中 */
 }
 
 .bowl {
