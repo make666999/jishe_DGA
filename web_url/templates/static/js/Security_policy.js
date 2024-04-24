@@ -62,7 +62,7 @@ option = {
     },
     xAxis: [{
         type: 'category',
-        data: ['03-21','03-22','03-23','03-24','03-25','03-26'],
+        data: ['04-18','04-19','04-20','04-21','04-22','4-23'],
         axisLine: {
             lineStyle: {
                 color: "#999"
@@ -92,7 +92,7 @@ option = {
         }
     }],
     series: [{
-        name: '课时',
+        name: '数量',
         type: 'line',
         data: [23,60,20,36,23,85],
         lineStyle: {

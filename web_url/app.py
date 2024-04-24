@@ -58,7 +58,7 @@ async def websocket_websocket_cluster_device_status(websocket: WebSocket):
 
             # 发送数据
             await websocket.send_text(json.dumps(final_data))
-            await asyncio.sleep(100000)  # 暂停10秒，减少消息发送频率
+            await asyncio.sleep(1)  # 暂停10秒，减少消息发送频率
     except Exception as e:
         print(f"错误: {e}")
     finally:
