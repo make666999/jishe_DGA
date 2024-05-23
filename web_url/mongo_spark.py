@@ -16,8 +16,8 @@ from pyspark.sql import SparkSession
 my_spark = SparkSession \
     .builder \
     .appName("myApp") \
-    .config("spark.mongodb.read.connection.uri", "mongodb://886xt49626.goho.co:23904") \
-    .config("spark.mongodb.write.connection.uri", "mongodb://886xt49626.goho.co:23904") \
+    .config("spark.mongodb.read.connection.uri", "mongodb://127.0.0.1") \
+    .config("spark.mongodb.write.connection.uri", "mongodb://127.0.0.1") \
     .config("spark.jars.packages", "org.mongodb.spark:mongo-spark-connector_2.13:10.3.0") \
     .config("spark.executor.memory", "8g") \
     .config("spark.executor.cores", "4") \
@@ -38,23 +38,23 @@ new_db = client["Data_pro"]
 
 end_timestamp = int(time.time())
 # 计算过去七天的时间戳范围
-start_timestamp = 1000 * (end_timestamp - 7 * 24 * 60 * 60)
-end_timestamp = 1000 * end_timestamp
+start_timestamp = 1000 * (end_timestamp - 8 * 24 * 60 * 60)
+end_timestamp = 1000 * (end_timestamp - 1 * 24 * 60 * 60)
 
 
 
 # 定义一个同步函数用于读取集合数据并统计行数
 def read_and_count_collection(collection_name):
     statistics_dict = {}
-    for i in range(7):
+    for i in range(1,8):
         date = (datetime.now() - timedelta(days=i)).strftime("%Y-%m-%d")
         statistics_dict[date] = 0
     # 读取MongoDB数据
     df = my_spark.read \
         .format("mongodb") \
         .option("database", "DGA") \
-        .option("spark.mongodb.read.connection.uri", "mongodb://886xt49626.goho.co:23904") \
-        .option("spark.mongodb.write.connection.uri", "mongodb://886xt49626.goho.co:23904") \
+        .option("spark.mongodb.read.connection.uri", "mongodb://127.0.0.1") \
+        .option("spark.mongodb.write.connection.uri", "mongodb://127.0.0.1") \
         .option("collection", collection_name) \
         .load()
 
@@ -64,6 +64,7 @@ def read_and_count_collection(collection_name):
     df_filtered = df_filtered.withColumn("date", date_format(from_unixtime(col("Timestamp") / 1000), "yyyy-MM-dd"))
 
     date_counts = df_filtered.groupBy("date").count().collect()
+
 
     # 计算每个集合中 Loc_Address 列的最后一个值
     last_loc_addresses = df_filtered.orderBy("date").agg(last("Loc_Address", True)).collect()

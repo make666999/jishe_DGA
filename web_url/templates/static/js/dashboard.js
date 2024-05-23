@@ -1,19 +1,9 @@
-//地图显示
-var uploadedDataURL = "flight.json";
-var myChart2 = echarts.init(document.getElementById('main'));
+$(function () {
 
-myChart2.showLoading();
-$.getJSON(uploadedDataURL, function (data) {
-    myChart2.hideLoading();
+    var myChart2 = echarts.init(document.getElementById('main'));
+    myChart2.showLoading();
 
-    function getAirportCoord(idx) {
-        return [data.airports[idx][3], data.airports[idx][4]];
-    }
-
-    var routes = data.routes.map(function (airline) {
-        return [getAirportCoord(airline[1]), getAirportCoord(airline[2])];
-    });
-
+    // Initial configuration for the ECharts instance
     myChart2.setOption({
         geo3D: {
             map: 'world',
@@ -50,26 +40,43 @@ $.getJSON(uploadedDataURL, function (data) {
             },
             regionHeight: 0.5
         },
-        series: [
-            {
-                type: 'lines3D',
-                coordinateSystem: 'geo3D',
-                effect: {
-                    show: true,
-                    trailWidth: 1,
-                    trailOpacity: 0.5,
-                    trailLength: 0.2,
-                    constantSpeed: 5
-                },
-                blendMode: 'lighter',
-                lineStyle: {
-                    width: 0.2,
-                    opacity: 0.05
-                },
-                data: routes
-            }
-        ]
+        series: [{
+            type: 'lines3D',
+            coordinateSystem: 'geo3D',
+            effect: {
+                show: true,
+                trailWidth: 1.5, // 增加尾迹宽度
+                trailOpacity: 0.8, // 增加尾迹透明度
+                trailLength: 0.5, // 增加尾迹长度
+                constantSpeed: 8
+            },
+            blendMode: 'lighter',
+            lineStyle: {
+                width: 0.2,
+                opacity: 0.05
+            },
+            data: [] // Initially empty data
+        }]
     });
+
+    // Hide loading after the initial setup
+    myChart2.hideLoading();
+
+    // Setup WebSocket connection
+    var ws = new WebSocket(`ws://${serverIp}/city_map`);
+    ws.onmessage = function (event) {
+        var routes = JSON.parse(event.data); // Parse the JSON data received from the server
+        console.log(routes); // Log data for debugging
+
+        // Update the chart with new routes data
+        myChart2.setOption({
+            series: [{
+                data: routes // Set the received routes as data for the series
+            }]
+        });
+    };
+
+    // Toggle effects on keydown
     window.addEventListener('keydown', function () {
         myChart2.dispatchAction({
             type: 'lines3DToggleEffect',
@@ -622,7 +629,7 @@ $(function () {
 // 更新数据列表
     // 建立WebSocket连接
 
-    var ws = new WebSocket(`ws://${serverIp}/websocket_cluster_device_status`);
+    var ws = new WebSocket(`ws://${serverIp}/websocket_get_data_formatted`);
     ws.onmessage = function (event) {
         var data = JSON.parse(event.data);
         var deviceList = document.getElementById('device-list');
@@ -657,11 +664,11 @@ $(function () {
     var chartContainer = document.getElementById('domain_count');
 
 // 实例化图表
-    var myChart = echarts.init(chartContainer);
+    var index_1 = echarts.init(chartContainer);
 
 // 定义原始高度和宽度
-    var originalHeight = myChart.getHeight();
-    var originalWidth = myChart.getWidth();
+    var originalHeight = index_1.getHeight();
+    var originalWidth = index_1.getWidth();
 
 // 图表的选项
     var option = {
@@ -702,8 +709,8 @@ $(function () {
                     show: false
                 },
                 data: [
-                    {value: 0, name: 'repend'}, // 初始值设为0
-                    {value: 0, name: 'attact'}, // 初始值设为0
+                    {value: 5, name: 'repend'}, // 初始值设为0
+                    {value: 1, name: 'attact'}, // 初始值设为0
                 ],
                 color: ['#99CC99', '#FFCCCC'] // 自定义颜色
             }
@@ -711,17 +718,17 @@ $(function () {
     };
 
 // 设置图表选项
-    myChart.setOption(option);
+    index_1.setOption(option);
 
 // 缩小图表一倍
-    myChart.resize({
+    index_1.resize({
         height: originalHeight / 1.2,
         width: originalWidth / 1.2
     });
 
 // 监听窗口大小变化，重新渲染图表
     window.addEventListener('resize', function () {
-        myChart.resize();
+        index_1.resize();
     });
 
 // 创建WebSocket连接
@@ -735,12 +742,14 @@ $(function () {
             totalBenign += stat.benign_count;
             totalNonBenign += stat.non_benign_count;
         });
+        document.querySelector('.data_counts').textContent = data.day_counts;
+
         // 更新图表数据
-        myChart.setOption({
+        index_1.setOption({
             series: [{
                 data: [
-                    {value: totalBenign, name: 'BENIGN'},
-                    {value: totalNonBenign, name: 'NON-BENIGN'}
+                    {value: totalBenign, name: 'repend'},
+                    {value: totalNonBenign, name: 'attact'}
                 ]
             }]
         });
@@ -836,7 +845,7 @@ $(function () {
         // 解析从服务器接收到的数据
         var data = JSON.parse(event.data);
         var topTypesDaily = data.top_types_daily;
-
+        document.querySelector('.today_total_count').textContent = data.today_total_count;
         // 清空当前数据
         dates = [];
         values = [];

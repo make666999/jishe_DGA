@@ -6,10 +6,10 @@ from scapy.all import sniff
 from scapy.layers.dns import DNS
 from scapy.layers.inet import IP
 
-from Tools.database_tools import dababase_use
+from Tools.database_tools import database_use
 from Tools.model_use_tools import predict_domain
 
-db_log = dababase_use.mongo_link_log()
+db_log = database_use.mongo_link_log()
 model = predict_domain.Predict_Domain()
 
 
@@ -17,7 +17,7 @@ async def process_connection(domain, dst_ip, loc_ip, type, domain_ip=None):
     loop = asyncio.get_running_loop()
     domain = domain.decode("utf-8").strip(".")
     domain_type = await loop.run_in_executor(None, predict_domain.predict_domain, model, domain)
-    loc = await loop.run_in_executor(None, dababase_use.get_ip_loc, domain_ip)
+    loc = await loop.run_in_executor(None, database_use.get_ip_loc, domain_ip)
 
     data = {
         "DNS_Type": type,
@@ -52,7 +52,7 @@ async def dns_callback(packet):
 
 
 def sniff_dns():
-    sniff(filter="port 53", prn=lambda x: asyncio.run(dns_callback(x)), store=0, iface="以太网 4")
+    sniff(filter="port 53", prn=lambda x: asyncio.run(dns_callback(x)), store=0, iface="以太网")
 
 
 async def main():
@@ -60,6 +60,3 @@ async def main():
     loop = asyncio.get_running_loop()
     loop.set_default_executor(executor)
     await loop.run_in_executor(None, sniff_dns)
-
-
-

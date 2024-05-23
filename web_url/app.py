@@ -20,7 +20,8 @@ from starlette.responses import  FileResponse
 app = FastAPI()
 
 # 连接到MongoDB数据库
-mongo_client = MongoClient("mongodb://886xt49626.goho.co:23904")
+# mongo_client = MongoClient("mongodb://886xt49626.goho.co:23904")
+mongo_client = MongoClient("mongodb://127.0.0.1")
 db = mongo_client["DGA"]
 db2 = mongo_client["Data_pro"]
 
@@ -28,6 +29,8 @@ db2 = mongo_client["Data_pro"]
 # 模板配置
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="templates/static"), name="static")
+
+day_counts=0
 # 统计集合数量以及名字
 @app.websocket("/websocket_get_data_formatted")
 async def get_data_formatted(websocket: WebSocket):
@@ -50,54 +53,15 @@ async def get_data_formatted(websocket: WebSocket):
             }
             for item in result:
                 collection_name = item["Device_Name"]
-                latest_loc_address = item["last_loc_address"] if item["last_loc_address"] else "N/A"
+                latest_loc_address = item["last_loc_address"] if item["last_loc_address"] else "未上线"
                 formatted_data["collections_data"].append({
                     "collection_name": collection_name,
                     "latest_loc_address": latest_loc_address
                 })
-            print(formatted_data)
+
             await websocket.send_text(json.dumps(formatted_data))
-            await asyncio.sleep(1)  # 暂停10秒，减少消息发送频率
+            await asyncio.sleep(10)  # 暂停10秒，减少消息发送频率
 
-    except Exception as e:
-        print(f"错误: {e}")
-    finally:
-        await websocket.close()
-@app.websocket("/websocket_cluster_device_status")
-async def websocket_websocket_cluster_device_status(websocket: WebSocket):
-    await websocket.accept()
-    try:
-        while websocket.client_state == WebSocketState.CONNECTED:
-            # 初始化一个列表来存储每个集合的最新Loc_Address数据
-            websocket_cluster_device_status_list = []
-            # 获取所有集合的名称
-
-
-            collection_names = db.list_collection_names()
-            # 遍历所有集合
-            for collection_name in collection_names:
-                collection = db[collection_name]
-                # 查询每个集合中Loc_Address字段最新的数据
-                # 假设每个文档都有一个名为"Timestamp"的时间戳字段
-                latest_document = collection.find_one({}, sort=[('Timestamp', -1)])
-                # 构建包含集合名称和最新Loc_Address数据的字典
-                collection_data = {"collection_name": collection_name}
-                if latest_document and "Loc_Address" in latest_document:
-                    collection_data["latest_loc_address"] = latest_document["Loc_Address"]
-                else:
-                    collection_data["latest_loc_address"] = "No data or Loc_Address not found"
-                # 将字典添加到列表中
-                websocket_cluster_device_status_list.append(collection_data)
-
-            # 构建最终发送的数据结构，包含集合数量和集合数据列表
-            final_data = {
-                "total_collections": len(collection_names),
-                "collections_data": websocket_cluster_device_status_list
-            }
-
-            # 发送数据
-            await websocket.send_text(json.dumps(final_data))
-            await asyncio.sleep(1)  # 暂停10秒，减少消息发送频率
     except Exception as e:
         print(f"错误: {e}")
     finally:
@@ -244,6 +208,7 @@ async def websocket_dns_traffic_security_analysis(websocket: WebSocket):
     try:
         while websocket.client_state == WebSocketState.CONNECTED:
             stats_list = []
+            global day_counts  # 声明你要使用全局变量
             collection_names = db.list_collection_names()
             # 获取今天的日期范围
             now = datetime.now()
@@ -278,11 +243,15 @@ async def websocket_dns_traffic_security_analysis(websocket: WebSocket):
                     "non_benign_count": non_benign_count
                 })
 
+            day_counts = stats_list[0]["benign_count"] + stats_list[0]["non_benign_count"]
             # 准备最终的数据
             final_data = {
                 "total_collections": len(collection_names),
-                "stats": stats_list
+                "stats": stats_list,
+                "day_counts": day_counts
             }
+
+
 
             # 发送数据
             await websocket.send_text(json.dumps(final_data))
@@ -301,8 +270,9 @@ async def websocket_daily_top_remain_type(websocket: WebSocket):
         while websocket.client_state == WebSocketState.CONNECTED:
             top_types_daily = []
             collection_names = db.list_collection_names()
-            # 获取过去五天的日期
             now = datetime.now()
+            today_count = 0  # 初始化今日域名总量计数器
+
             for day_back in range(5):
                 specific_day = now - timedelta(days=day_back)
                 start_of_day = datetime(specific_day.year, specific_day.month, specific_day.day)
@@ -315,11 +285,11 @@ async def websocket_daily_top_remain_type(websocket: WebSocket):
 
                 for collection_name in collection_names:
                     collection = db[collection_name]
-                    # 使用聚合管道查找每个集合在特定一天内Remain_Type出现的频率
+                    # 使用聚合管道查找每个集合在特定一天内Remote_Domain出现的频率
                     pipeline = [
                         {"$match": {
                             "Timestamp": {"$gte": start_of_day_ms, "$lt": end_of_day_ms},
-                            "Remote_Domain": {"$ne": None}  # 排除Remain_Type为null的文档
+                            "Remote_Domain": {"$ne": None}  # 排除Remote_Domain为null的文档
                         }},
                         {"$group": {
                             "_id": "$Remote_Domain",
@@ -336,8 +306,10 @@ async def websocket_daily_top_remain_type(websocket: WebSocket):
                             total_counts[remain_type] += count
                         else:
                             total_counts[remain_type] = count
+                        if day_back == 0:  # 仅对今日数据进行总计
+                            today_count += count
 
-                # 找出出现频率最高的Remain_Type
+                # 找出出现频率最高的Remote_Domain
                 if total_counts:
                     top_remain_type = max(total_counts, key=total_counts.get)
                     daily_top_type['date'] = start_of_day.strftime('%m-%d')
@@ -352,7 +324,8 @@ async def websocket_daily_top_remain_type(websocket: WebSocket):
 
             # 准备最终的数据
             final_data = {
-                "top_types_daily": top_types_daily
+                "top_types_daily": top_types_daily,
+                "today_total_count": today_count  # 添加今日域名总量
             }
 
             # 发送数据
@@ -369,14 +342,33 @@ async def get_latest_data():
     latest_data = list(collection.find().sort("Timestamp", -1).limit(10))
     return latest_data
 
+
 async def get_city_data():
     collection = db["GPU-SERVER"]
-    query = {"moveLines": {"$ne": None}}
-    projection = {"_id": 0,"moveLines": 1}
-    city_data = collection.find(query,projection).sort("Timestamp", -1).limit(50)
-    city_datas = [document["moveLines"] for document in city_data]
-    city_data= {"moveLines":city_datas}
-    return city_data
+    # 使用聚合框架进行查询和去重
+    pipeline = [
+        {"$match": {"moveLines": {"$ne": None}, "moveLines.coords": {"$exists": True}}},  # 筛选包含 coords 的文档
+        {"$project": {"coords": "$moveLines.coords", "_id": 0}},  # 投影 coords 字段
+        {"$group": {"_id": "$coords"}},  # 按 coords 字段进行分组，实现去重
+        {"$limit": 50000}  # 限制最多返回 50000 个结果
+    ]
+    city_data = collection.aggregate(pipeline)
+
+    # 创建一个列表来存储每个唯一的 coords
+    unique_coords = set()
+
+    # 遍历聚合结果
+    for document in city_data:
+        coords = tuple(map(tuple, document["_id"]))  # 转换列表的列表为元组的元组
+        unique_coords.add(coords)
+
+    # 将集合转换回列表
+    all_coords = list(unique_coords)
+
+    # 打印 all_coords 确认数据
+    print(all_coords)
+
+    return all_coords
 
 
 
@@ -387,7 +379,7 @@ async def websocket_endpoint(websocket: WebSocket):
         while websocket.client_state == WebSocketState.CONNECTED:
             City_Data = await get_city_data()
             await websocket.send_text(dumps(City_Data))
-            await asyncio.sleep(1)
+            await asyncio.sleep(60)
     finally:
         # 关闭连接时的清理工作
         await websocket.close()

@@ -1,23 +1,14 @@
-
 import os
-from collections import Counter
 import numpy as np
-import pandas as pd
 import torch
-import torch.nn as nn
 import torch.nn.functional as F
-import math
 from Model.Train_Model.Train_Transformer_R_SKNET import Transformer
 name = "Transformer+R_SKNET"  ###准确率最高
 
 model_path = os.path.abspath(os.path.join("Model", "Model_File","Transformer+R_SKNET.pth"))
-png_path = f"./png/{name}.png"
-logpath = f"./log/{name}.csv"
 embedding_dim = 64  # 嵌入词向量的纬度
 L = 40
-loss_all = []
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-print(device)
 label2idx = {'BENIGN': 0, 'banjori': 1, 'bigviktor': 2, 'chinad': 3, 'conficker': 4, 'cryptolocker': 5,
              'dircrypt': 6, 'dyre': 7, 'emotet': 8, 'enviserv': 9, 'feodo': 10, 'fobber_v1': 11, 'fobber_v2': 12,
              'gameover': 13, 'locky': 14, 'matsnu': 15, 'murofet': 16, 'necurs': 17, 'nymaim': 18, 'pykspa_v1': 19,
