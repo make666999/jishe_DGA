@@ -16,16 +16,53 @@ from bson.json_util import dumps
 import asyncio
 from starlette.responses import  FileResponse
 
+
 app = FastAPI()
 
 # 连接到MongoDB数据库
 mongo_client = MongoClient("mongodb://886xt49626.goho.co:23904")
 db = mongo_client["DGA"]
+db2 = mongo_client["Data_pro"]
+
 
 # 模板配置
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="templates/static"), name="static")
 # 统计集合数量以及名字
+@app.websocket("/websocket_get_data_formatted")
+async def get_data_formatted(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            collection = db2["test"]
+            # 使用聚合管道查询Device_Name列和last_loc_address
+            pipeline = [
+                {"$project": {"Device_Name": 1, "last_loc_address": 1, "_id": 0}}
+            ]
+            cursor = collection.aggregate(pipeline)
+            # 将结果转换为列表形式
+            result = list(cursor)
+
+            # 格式化数据
+            formatted_data = {
+                "total_collections": len(result),
+                "collections_data": []
+            }
+            for item in result:
+                collection_name = item["Device_Name"]
+                latest_loc_address = item["last_loc_address"] if item["last_loc_address"] else "N/A"
+                formatted_data["collections_data"].append({
+                    "collection_name": collection_name,
+                    "latest_loc_address": latest_loc_address
+                })
+            print(formatted_data)
+            await websocket.send_text(json.dumps(formatted_data))
+            await asyncio.sleep(1)  # 暂停10秒，减少消息发送频率
+
+    except Exception as e:
+        print(f"错误: {e}")
+    finally:
+        await websocket.close()
 @app.websocket("/websocket_cluster_device_status")
 async def websocket_websocket_cluster_device_status(websocket: WebSocket):
     await websocket.accept()
@@ -34,6 +71,8 @@ async def websocket_websocket_cluster_device_status(websocket: WebSocket):
             # 初始化一个列表来存储每个集合的最新Loc_Address数据
             websocket_cluster_device_status_list = []
             # 获取所有集合的名称
+
+
             collection_names = db.list_collection_names()
             # 遍历所有集合
             for collection_name in collection_names:
@@ -363,7 +402,6 @@ async def receive_data(data: DataToReceive):
     global collection
     collection= db[data.Local]
     print(data.Local)
-
 
 
 @app.get("/")
