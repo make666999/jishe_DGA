@@ -5,7 +5,7 @@ from pyspark.sql.types import StructType, StructField, StringType, MapType, Long
 import time
 import datetime
 from datetime import datetime, timedelta
-from pyspark.sql.functions import first
+from pyspark.sql.functions import first, last
 import pandas as pd
 from motor.motor_asyncio import AsyncIOMotorClient
 from concurrent.futures import ThreadPoolExecutor
@@ -28,17 +28,19 @@ my_spark = SparkSession \
     .config("spark.sql.execution.arrow.pyspark.enabled", "true") \
     .config("spark.network.timeout", "600s") \
     .config("spark.executor.heartbeatInterval", "60s") \
-    .config("spark.sql.execution.arrow.pyspark.enabled", "false") \
+    .config("spark.sql.execution.arrow.pyspark.enabled", "false")\
     .getOrCreate()
 
 # 创建异步MongoDB客户端
 client = AsyncIOMotorClient("mongodb://886xt49626.goho.co:23904")
 db = client["DGA"]
+new_db = client["Data_pro"]
 
 end_timestamp = int(time.time())
 # 计算过去七天的时间戳范围
 start_timestamp = 1000 * (end_timestamp - 7 * 24 * 60 * 60)
 end_timestamp = 1000 * end_timestamp
+
 
 
 # 定义一个同步函数用于读取集合数据并统计行数
@@ -64,7 +66,7 @@ def read_and_count_collection(collection_name):
     date_counts = df_filtered.groupBy("date").count().collect()
 
     # 计算每个集合中 Loc_Address 列的最后一个值
-    last_loc_addresses = df_filtered.groupBy().agg(first("Loc_Address")).collect()
+    last_loc_addresses = df_filtered.orderBy("date").agg(last("Loc_Address", True)).collect()
     last_loc_address = last_loc_addresses[0][0] if last_loc_addresses else None
 
     # 将date_counts的值存入statistics_dict，并一一匹配
@@ -73,9 +75,9 @@ def read_and_count_collection(collection_name):
     data = {
         "Device_Name": collection_name,
         "Week_Statistics": statistics_dict,
-        "last_loc_address": last_loc_address
+        "last_loc_address":last_loc_address
     }
-
+    print(data)
     return data
 
 
@@ -85,6 +87,12 @@ async def async_read_and_count_collection(executor, collection_name):
     result = await loop.run_in_executor(executor, read_and_count_collection, collection_name)
     return result
 
+async def update_document(collection, result):
+    await collection.update_one(
+        {"Device_Name": result["Device_Name"]},
+        {"$set": result},
+        upsert=True
+    )
 
 async def send_week_data():
     try:
@@ -98,14 +106,12 @@ async def send_week_data():
             # 并行执行任务
             results = await asyncio.gather(*tasks)
 
-            new_db = client["Data_pro"]
             test_collection = new_db["test"]
-            await test_collection.delete_many({})  # 删除集合中的所有文档
-            await test_collection.insert_many(results)  # 插入新数据
 
-
-
-
+            # 创建异步任务列表，更新数据
+            update_tasks = [update_document(test_collection, result) for result in results]
+            # 并行执行更新操作
+            await asyncio.gather(*update_tasks)
     finally:
         # 关闭MongoDB客户端
         client.close()
