@@ -637,6 +637,7 @@ $(function () {
 
         deviceList.innerHTML = ''; // 清空现有的列表项
         deviceCount.textContent = data.total_collections; // 更新设备数量
+        document.querySelector('.on_online').textContent = data.on_online;
 
         // 遍历每个集合的数据
         data.collections_data.forEach(function (collection) {

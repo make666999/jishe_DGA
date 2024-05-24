@@ -21,7 +21,7 @@ app = FastAPI()
 
 # 连接到MongoDB数据库
 # mongo_client = MongoClient("mongodb://886xt49626.goho.co:23904")
-mongo_client = MongoClient("mongodb://127.0.0.1")
+mongo_client = MongoClient("mongodb://886xt49626.goho.co:23904")
 db = mongo_client["DGA"]
 db2 = mongo_client["Data_pro"]
 
@@ -49,16 +49,22 @@ async def get_data_formatted(websocket: WebSocket):
             # 格式化数据
             formatted_data = {
                 "total_collections": len(result),
-                "collections_data": []
+                "collections_data": [],
+                "on_online": 0
             }
+            on_online=0
             for item in result:
                 collection_name = item["Device_Name"]
                 latest_loc_address = item["last_loc_address"] if item["last_loc_address"] else "未上线"
+                if latest_loc_address != "未上线":
+                    on_online += 1
                 formatted_data["collections_data"].append({
                     "collection_name": collection_name,
-                    "latest_loc_address": latest_loc_address
-                })
+                    "latest_loc_address": latest_loc_address,
 
+                })
+            formatted_data["on_online"] = on_online
+            print(formatted_data)
             await websocket.send_text(json.dumps(formatted_data))
             await asyncio.sleep(10)  # 暂停10秒，减少消息发送频率
 
@@ -365,9 +371,6 @@ async def get_city_data():
     # 将集合转换回列表
     all_coords = list(unique_coords)
 
-    # 打印 all_coords 确认数据
-    print(all_coords)
-
     return all_coords
 
 
@@ -389,11 +392,16 @@ async def websocket_endpoint(websocket: WebSocket):
 
 @app.post("/api/send_data")
 async def receive_data(data: DataToReceive):
-    # 在这里处理从前端发送过来的数据
-    global db
-    global collection
-    collection= db[data.Local]
-    print(data.Local)
+    collection = db2["test"]
+    # 更新指定 Device_Name 的 model 字段
+    update_result =  collection.update_one(
+        {'Device_Name': data.Device_Name},  # 指定 Device_Name 的筛选条件
+        {'$set': {'model': data.new_model_value}}  # 设置新的 model 值
+    )
+    if update_result.modified_count > 0:
+        return {"message": f"Updated model for {data.Device_Name} in {data.Local}."}
+    else:
+        return {"message": "No documents were updated. Check the Device_Name or the model value."}
 
 
 @app.get("/")

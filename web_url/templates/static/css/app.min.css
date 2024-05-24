@@ -499,6 +499,11 @@ progress {
     font-weight: 400;
     line-height: 1.2
 }
+.on_online{
+    font-size: calc(1.325rem + .5vw);
+    font-weight: 400;
+    line-height: 1.2
+}
 .today_total_count{
      font-size: calc(1.325rem + .5vw);
     font-weight: 400;
