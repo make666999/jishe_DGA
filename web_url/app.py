@@ -344,6 +344,7 @@ async def websocket_daily_top_remain_type(websocket: WebSocket):
 
 
 async def get_latest_data():
+    collection = db["DGA"]
     # 获取最新的十条数据
     latest_data = list(collection.find().sort("Timestamp", -1).limit(10))
     return latest_data
@@ -356,7 +357,7 @@ async def get_city_data():
         {"$match": {"moveLines": {"$ne": None}, "moveLines.coords": {"$exists": True}}},  # 筛选包含 coords 的文档
         {"$project": {"coords": "$moveLines.coords", "_id": 0}},  # 投影 coords 字段
         {"$group": {"_id": "$coords"}},  # 按 coords 字段进行分组，实现去重
-        {"$limit": 50000}  # 限制最多返回 50000 个结果
+        {"$limit": 5000}  # 限制最多返回 50000 个结果
     ]
     city_data = collection.aggregate(pipeline)
 
@@ -373,8 +374,6 @@ async def get_city_data():
 
     return all_coords
 
-
-
 @app.websocket("/city_map")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
@@ -388,21 +387,49 @@ async def websocket_endpoint(websocket: WebSocket):
         await websocket.close()
 
 
+class DataToReceive(BaseModel):
+    code_types: str
+    new_model_value: str
+
 
 
 @app.post("/api/send_data")
 async def receive_data(data: DataToReceive):
+    print("Received data:", data)
     collection = db2["test"]
-    # 更新指定 Device_Name 的 model 字段
-    update_result =  collection.update_one(
-        {'Device_Name': data.Device_Name},  # 指定 Device_Name 的筛选条件
-        {'$set': {'model': data.new_model_value}}  # 设置新的 model 值
-    )
-    if update_result.modified_count > 0:
-        return {"message": f"Updated model for {data.Device_Name} in {data.Local}."}
+    first_doc = collection.find_one({}, projection={'model': 1})
+    print('原始数据：',first_doc)
+    original_model = 0
+    safer_model=['安全等级','漏洞预警','风险巡航','策略偏向']
+    if first_doc and 'model' in first_doc:
+        original_model = first_doc['model']
+    if data.code_types == 'model_code':
+            # 修改model值的前两位
+            modified_model = data.new_model_value + original_model[2:]
+            update_result = collection.update_many(
+                {},
+                {'$set': {'model': modified_model}}
+            )
+            print('修改之后：', modified_model)
+            if update_result.modified_count > 0:
+                return {"message": "Updated model successfully."}
+            else:
+                return {"message": "No documents were updated."}
+    elif data.code_types == '安全等级' or data.code_types == '漏洞预警' or data.code_types == '风险巡航' or data.code_types == '策略偏向':
+        safer_model_index=safer_model.index(data.code_types)
+        modified_model = original_model[:2+safer_model_index]+data.new_model_value + original_model[3+safer_model_index:]
+        update_result = collection.update_many(
+            {},
+            {'$set': {'model': modified_model}}
+        )
+        print('修改之后：', modified_model)
+        if update_result.modified_count > 0:
+            return {"message": "Updated model successfully."}
+        else:
+            return {"message": "No documents were updated."}
     else:
-        return {"message": "No documents were updated. Check the Device_Name or the model value."}
-
+        print('no model_code')
+        return {"message": "Code type is not model_code."}
 
 @app.get("/")
 async def read_root(request: Request):

@@ -52,7 +52,7 @@ async def dns_callback(packet):
 
 
 def sniff_dns():
-    sniff(filter="port 53", prn=lambda x: asyncio.run(dns_callback(x)), store=0, iface="以太网")
+    sniff(filter="port 53", prn=lambda x: asyncio.run(dns_callback(x)), store=0, iface="以太网 4")
 
 
 async def main():

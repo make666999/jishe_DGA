@@ -305,9 +305,9 @@
                                     <h4 class="mb-0">分布式部署</h4>
                                     <span>Distributed deployment</span>
                                     <label class="switch" for="switch1">
-                                        <input type="checkbox" id="switch1" class="toggle">
-                                        <span class="slider round"></span><h6
-                                            style="padding-left: 20px; color: #0b0b0b;"></h6>
+                                        <input type="checkbox" id="switch1" onclick="updateModel('model_code','00')" class="toggle">
+                                        <span class="slider round"></span>
+                                        <h6 style="padding-left: 20px; color: #0b0b0b;"></h6>
                                     </label>
                                 </div>
                             </div>
@@ -321,7 +321,7 @@
                                     <h4 class="mb-0">中心化部署</h4>
                                     <span>Centralized deployment</span>
                                     <label class="switch" for="switch2">
-                                        <input type="checkbox" id="switch2" class="toggle">
+                                        <input type="checkbox" id="switch2"  onclick="updateModel('model_code','01')" class="toggle">
                                         <span class="slider round"></span><h6
                                             style="padding-left: 20px; color: #0b0b0b;"></h6>
                                     </label>
@@ -337,7 +337,7 @@
                                     <h4 class="mb-0">混合部署</h4>
                                     <span>Hybrid deployments</span>
                                     <label class="switch" for="switch3">
-                                        <input type="checkbox" id="switch3" class="toggle">
+                                        <input type="checkbox" id="switch3"  onclick="updateModel('model_code','11')" class="toggle">
                                         <span class="slider round"></span><h6
                                             style="padding-left: 20px; color: #0b0b0b;"></h6>
                                     </label>
@@ -345,6 +345,25 @@
                             </div>
                         </div>
                     </div>
+                    <script>
+async function updateModel(code_type,deploymentType) {
+    const formData = {
+        code_types : code_type,
+        new_model_value: deploymentType
+    };
+
+    const response = await fetch('/api/send_data', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    });
+console.log(formData);
+    const data = await response.json();
+    alert(data.message);
+}
+</script>
                 </div>
                 <div class="card mb-4">
                     <div class="card-body">
