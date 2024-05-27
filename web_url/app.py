@@ -1,13 +1,16 @@
 
 import json
 import socket
+
+from starlette.websockets import WebSocketDisconnect
+
 import time
 import datetime
 from uvicorn import run
 from fastapi.websockets import WebSocketState
 from datetime import datetime, timedelta
 from fastapi import Request
-from pymongo import MongoClient
+from pymongo import MongoClient, DESCENDING
 from fastapi import FastAPI, WebSocket
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -69,7 +72,7 @@ async def get_data_formatted(websocket: WebSocket):
             await asyncio.sleep(10)  # 暂停10秒，减少消息发送频率
 
     except Exception as e:
-        print(f"错误: {e}")
+        print(f"错误统计集合数量以及名字: {e}")
     finally:
         await websocket.close()
 
@@ -139,7 +142,7 @@ async def websocket_websocket_weekly_data_total(websocket: WebSocket):
             await websocket.send_text(json.dumps(websocket_weekly_data_total))
             await asyncio.sleep(1)
     except Exception as e:
-        print(f"错误: {e}")
+        print(f"错误提供集群内DNS流量的周报告: {e}")
     finally:
         await websocket.close()
 
@@ -202,7 +205,7 @@ async def websocket_websocket_user_list_management(websocket: WebSocket):
             await websocket.send_text(json.dumps(final_data))
             await asyncio.sleep(5)  # 暂停5秒，减少消息发送频率
     except Exception as e:
-        print(f"错误: {e}")
+        print(f"错误管理集群设备列表和用户权限: {e}")
     finally:
         await websocket.close()
 
@@ -263,7 +266,7 @@ async def websocket_dns_traffic_security_analysis(websocket: WebSocket):
             await websocket.send_text(json.dumps(final_data))
             await asyncio.sleep(5)  # 暂停5秒，减少消息发送频率
     except Exception as e:
-        print(f"错误: {e}")
+        print(f"错误DNS流量数据安全状况统计分析: {e}")
     finally:
         await websocket.close()
 
@@ -338,16 +341,112 @@ async def websocket_daily_top_remain_type(websocket: WebSocket):
             await websocket.send_text(json.dumps(final_data))
             await asyncio.sleep(5)  # 暂停5秒，减少消息发送频率
     except Exception as e:
-        print(f"错误: {e}")
+        print(f"错误访问的排名: {e}")
     finally:
         await websocket.close()
 
+#customer.html.流量消息发送
+@app.websocket("/websocket_last_messages")
+async def websocket_last_messages(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            collection_names = sorted(db.list_collection_names())  # 排序集合名称
 
-async def get_latest_data():
-    collection = db["DGA"]
-    # 获取最新的十条数据
-    latest_data = list(collection.find().sort("Timestamp", -1).limit(10))
-    return latest_data
+            websocket_user_list_management_list = []
+
+            for collection_name in collection_names:
+                collection = db[collection_name]
+                # 按时间戳降序排序并限制数量为10
+                recent_documents = collection.find(
+                    {},
+                    projection={"Domain_Address": 1, "Remote_Domain": 1, "toName": 1, "Domain_Type": 1, "Timestamp": 1},
+                    sort=[('Timestamp', DESCENDING)],
+                    limit=27
+                )
+
+                recent_data = []
+                count = 0  # 设置计数器
+
+                for doc in recent_documents:
+                    try:
+                        timestamp_int = int(doc['Timestamp'])
+                        timestamp = datetime.fromtimestamp(timestamp_int / 1000)
+                        formatted_timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S')
+                    except ValueError:
+                        formatted_timestamp = "Invalid timestamp"
+                        continue  # 如果时间戳无效，跳过当前文档
+
+                    doc_data = {
+                        "collection_name": collection_name,
+                        "Domain_Address": doc.get("Domain_Address", "No data found"),
+                        "Remote_Domain": doc.get("Remote_Domain", "No data found"),
+                        "toName": doc.get("toName", "No data found"),
+                        "Domain_Type": doc.get("Domain_Type", "No data found"),
+                        "Timestamp": formatted_timestamp
+                    }
+                    recent_data.append(doc_data)
+                    count += 1  # 每处理一条数据，计数器加一
+                    if count >= 30:
+                        break  # 当计数器达到10时，停止处理该集合的数据
+
+                websocket_user_list_management_list.extend(recent_data)
+
+            # 将数据以 JSON 格式发送给客户端
+            await websocket.send_json(websocket_user_list_management_list)
+            await asyncio.sleep(1)  # 暂停5秒，减少消息发送频率
+    except WebSocketDisconnect:
+        print("WebSocket connection closed")
+    except Exception as e:
+        print(f"Error in managing cluster device list and user permissions: {e}")
+    finally:
+        await websocket.close()
+#customer.html.  total_nineth_counts
+@app.websocket("/total_nineth_counts")
+async def total_nineth_counts(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            collection = db2["test"]
+            recent_documents = collection.find(
+                {},
+                projection={"Week_Statistics": 1},
+                limit=9  # 保证我们最多处理9个文档
+            )
+
+            # 初始化数据结构
+            data = {
+                "time": [],
+                "data_counts": []
+            }
+
+            # 遍历文档
+            for doc in recent_documents:
+                week_statistics = doc.get("Week_Statistics", {})
+                # 从所有统计数据中提取最新的九个日期
+                sorted_dates = sorted(week_statistics.keys(), reverse=True)[:9]
+                for date in sorted_dates:
+                    count = week_statistics[date]
+                    if date not in data["time"]:
+                        data["time"].append(date)
+                        data["data_counts"].append(count)
+                    else:
+                        index = data["time"].index(date)
+                        data["data_counts"][index] += count
+
+            # 按日期顺序重新排序数据
+            combined = sorted(zip(data["time"], data["data_counts"]), key=lambda x: x[0])
+            data["time"], data["data_counts"] = zip(*combined) if combined else ([], [])
+
+            # 将数据以 JSON 格式发送给客户端
+            await websocket.send_json(data)
+            await asyncio.sleep(600)  # 暂停10分钟，减少消息发送频率
+    except WebSocketDisconnect:
+        print("WebSocket connection closed")
+    except Exception as e:
+        print(f"Error in managing cluster device list and user permissions: {e}")
+    finally:
+        await websocket.close()
 
 
 async def get_city_data():
