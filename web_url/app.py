@@ -68,7 +68,7 @@ async def get_data_formatted(websocket: WebSocket):
             await asyncio.sleep(10)  # 暂停10秒，减少消息发送频率
 
     except Exception as e:
-        print(f"错误统计集合数量以及名字: {e}")
+        print(f"统计集合数量以及名字已关闭: {e}")
     finally:
         await websocket.close()
 
@@ -95,7 +95,7 @@ async def websocket_endpoint(websocket: WebSocket):
             await websocket.send_text(json.dumps(websocket_poll_cluster_statistics))
             await asyncio.sleep(1)
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"处理集群统计数据的周期性轮询已关闭: {e}")
     finally:
         await websocket.close()
 
@@ -130,7 +130,7 @@ async def websocket_websocket_weekly_data_total(websocket: WebSocket):
             await websocket.send_text(json.dumps(websocket_weekly_data_total))
             await asyncio.sleep(1)
     except Exception as e:
-        print(f"错误提供集群内DNS流量的周报告: {e}")
+        print(f"提供集群内DNS流量的周报告已关闭: {e}")
     finally:
         await websocket.close()
 
@@ -190,7 +190,7 @@ async def websocket_websocket_user_list_management(websocket: WebSocket):
             await websocket.send_text(json.dumps(final_data))
             await asyncio.sleep(5)
     except Exception as e:
-        print(f"错误管理集群设备列表和用户权限: {e}")
+        print(f"管理集群设备列表和用户权限已关闭: {e}")
     finally:
         await websocket.close()
 
@@ -241,7 +241,7 @@ async def websocket_dns_traffic_security_analysis(websocket: WebSocket):
             await websocket.send_text(json.dumps(final_data))
             await asyncio.sleep(5)
     except Exception as e:
-        print(f"错误DNS流量数据安全状况统计分析: {e}")
+        print(f"DNS流量数据安全状况统计分析已关闭: {e}")
     finally:
         await websocket.close()
 
@@ -311,7 +311,7 @@ async def websocket_daily_top_remain_type(websocket: WebSocket):
             await websocket.send_text(json.dumps(final_data))
             await asyncio.sleep(5)
     except Exception as e:
-        print(f"错误访问的排名: {e}")
+        print(f"访问的排名已关闭: {e}")
     finally:
         await websocket.close()
 
