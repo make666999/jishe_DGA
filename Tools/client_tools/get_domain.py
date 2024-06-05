@@ -35,21 +35,23 @@ async def process_connection(domain, dst_ip, loc_ip, type, domain_ip=None):
 
 
 async def dns_callback(packet):
-    if packet.haslayer(DNS):
-        dns = packet[DNS]
-        tasks = []
-        for i in range(dns.ancount):
-            dnsrr = dns.an[i]
-            src_domain = dnsrr.rrname
-            if dnsrr.type == 1 or dnsrr.type == 28:
-                task = asyncio.create_task(
-                    process_connection(src_domain, packet[IP].dst, packet[IP].src, "response", dnsrr.rdata))
-                tasks.append(task)
-            else:
-                continue
-        if tasks:
-            await asyncio.gather(*tasks)
-
+    try:
+        if packet.haslayer(DNS):
+            dns = packet[DNS]
+            tasks = []
+            for i in range(dns.ancount):
+                dnsrr = dns.an[i]
+                src_domain = dnsrr.rrname
+                if dnsrr.type == 1 or dnsrr.type == 28:
+                    task = asyncio.create_task(
+                        process_connection(src_domain, packet[IP].dst, packet[IP].src, "response", dnsrr.rdata))
+                    tasks.append(task)
+                else:
+                    continue
+            if tasks:
+                await asyncio.gather(*tasks)
+    except:
+        print("error")
 
 def sniff_dns():
     sniff(filter="port 53", prn=lambda x: asyncio.run(dns_callback(x)), store=0, iface="以太网 4")
@@ -60,3 +62,4 @@ async def main():
     loop = asyncio.get_running_loop()
     loop.set_default_executor(executor)
     await loop.run_in_executor(None, sniff_dns)
+

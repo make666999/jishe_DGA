@@ -334,7 +334,7 @@
                             <div class="card-body d-flex align-items-center">
                                 <i class="bi bi-wallet2 display-7 me-3"></i>
                                 <div>
-                                    <h4 class="mb-0">混合部署</h4>
+                                    <h4 class="mb-0">混合式部署</h4>
                                     <span>Hybrid deployments</span>
                                     <label class="switch" for="switch3">
                                         <input type="checkbox" id="switch3"  onclick="updateModel('model_code','11')" class="toggle">
@@ -345,25 +345,7 @@
                             </div>
                         </div>
                     </div>
-                    <script>
-async function updateModel(code_type,deploymentType) {
-    const formData = {
-        code_types : code_type,
-        new_model_value: deploymentType
-    };
 
-    const response = await fetch('/api/send_data', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-    });
-console.log(formData);
-    const data = await response.json();
-    alert(data.message);
-}
-</script>
                 </div>
                 <div class="card mb-4">
                     <div class="card-body">
