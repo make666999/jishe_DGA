@@ -1,67 +1,45 @@
-│── main.py：系统运行总程序，异步调用get_domain函数
+# 项目文件结构
 
-│
-├── Model
+## main.py
+- 单一启动本机域名检测服务的主入口脚本
 
-│   ├── Data
+## Model
+包含所有与数据处理和模型训练相关的文件。
 
-│   │   ├── processing_2.py
+### Data
+- `processing_2.py`, `processing_class.py`: 数据处理脚本
+- `city_db/GeoLite2-City.mmdb`: GeoLite2城市数据库
+- `clean_data/data_all.csv`: 清洗后的数据
+- `Data-clean/dga-domain.txt`, `top-1m.csv`: 清洗数据
 
-│   │   ├── processing_class.py
+### Model_File
+- `Transformer+R_SKNET.pth`: 保存的模型文件
 
-│   │   ├── city_db
+### Train_Model
+- `Train_Transformer_R_SKNET.py`: 模型训练脚本
+- `log/Transformer+R_SKNET.csv`: 训练过程的日志
+- `png/Transformer+R_SKNET.png`: 训练过程生成的图像
 
-│   │   │   └── GeoLite2-City.mmdb
+## Tools
+各种工具脚本，用于支持域名检测服务。
 
-│   │   ├── clean_data
+### client_tools
+- `get_domain.py`: 用于捕获和处理DNS数据包的异步程序
+- `get_loc_ip.py`: 获取系统的网络连接信息
 
-│   │   │   └── data_all.csv
+### database_tools
+- `dababase_use.py`: 获取当前机器的IP地址信息，并存储到MongoDB数据库
 
-│   │   └── Data-clean
+### model_use_tools
+- `predict_domain.py`: 用于域名分类预测的模型加载和预测函数
 
-│   │       ├── dga-domain.txt
+## web_url
+提供用户界面的web部分。
 
-│   │       └── top-1m.csv
+### templates/static
+- 存放HTML模板和静态文件
 
-│   ├── Model_File
+### app.py
+- 运行Web用户界面的主脚本
 
-│   │   └── Transformer+R_SKNET.pth
 
-│   └── Train_Model
-
-│       ├── Train_Transformer_R_SKNET.py
-
-│       ├── log
-
-│       │   └── Transformer+R_SKNET.csv
-
-│       └── png
-
-│           └── Transformer+R_SKNET.png
-
-│
-├── Tools
-
-│   ├── client_tools
-
-│   │   ├── get_domain.py：用于捕获和处理 DNS 数据包的异步程序，分析 DNS 查询和响应，根据预测模型和地理位置信息对域名进行分类和记录
-
-│   │   └── get_loc_ip.py：获取系统的网络连接信息，筛选出其中的 IPv4 地址连接列表
-
-│   ├── database_tools
-
-│   │   └── dababase_use.py：获取当前机器的 IP 地址信息，并根据 IP 地址解析出其地理位置，将所得信息存储到 MongoDB 数据库
-
-│   └── model_use_tools
-
-│       └── predict_domain.py：用于域名分类预测的模型加载和预测函数
-
-│
-
-└── web_url
-
-    ├── app.py：运行系统ui界面
-    
-    └── templates
-    
-        └── static

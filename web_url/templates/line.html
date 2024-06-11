@@ -1,0 +1,91 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>DGA恶意域名分析平台</title>
+    <script type="text/javascript" src="/static/js/jquery.js"></script>
+    <script type="text/javascript" src="/static/js/echarts.min.js"></script>
+    <script type="text/javascript" src="/static/js/china.js"></script>
+    <script type="text/javascript" src="/static/js/map.js"></script>
+
+    <script type="text/javascript" src="/static/js/Bubble.js"></script>
+    <link rel="stylesheet" href="/static/css/style_line.css">
+</head>
+<body>
+<div class="head clearfix">
+    <h1 class="pulll_left">DGA恶意域名分析平台</h1>
+    <div class="menu menu2 pulll_left">
+        <ul>
+            <li><a href="/">域名检测</a></li>
+            <li><a href="/line">域名分析</a></li>
+            <li><a href="/bar">算法研究</a></li>
+        </ul>
+    </div>
+    <div class="time" id="showTime">2018/6/12 17:00:12</div>
+    <script>
+        var t = null;
+        t = setTimeout(time, 1000);
+
+        function time() {
+            clearTimeout(t);
+            dt = new Date();
+            var y = dt.getFullYear();
+            var mt = dt.getMonth() + 1;
+            var day = dt.getDate();
+            var h = dt.getHours();
+            var m = dt.getMinutes();
+            var s = dt.getSeconds();
+            document.getElementById("showTime").innerHTML = y + "/" + mt + "/" + day + " " + h + ":" + m + ":" + s;
+            t = setTimeout(time, 1000);
+        }
+    </script>
+</div>
+<div class="mainbox">
+    <li style="width: 100%">
+<div class="box">
+    <div class="tit">域名分析样本总览</div>
+    <div id="newchart" class="boxnav" style="height: 150px; display: flex;">
+        <!-- 新增的四个数据框div -->
+        <div id="table1" class="table" style="height: 150px;">数据1</div>
+        <div id="table2" class="table" style="height: 150px;">数据2</div>
+        <div id="table3" class="table" style="height: 150px;">数据3</div>
+        <div id="table4" class="table" style="height: 150px;">数据4</div>
+    </div>
+</div>
+
+</li>
+
+
+    <ul class="clearfix nav1">
+        <li style="width: 30%">
+            <div class="box">
+                <div class="tit">DGA域名长度分析</div>
+                <div id="echart1" class="boxnav" style="height: 200px;"></div>
+            </div>
+            <div class="box">
+                <div class="tit">顶级域名（TLD）分布</div>
+                <div id="echart2" class="boxnav" style="height: 250px;"></div>
+            </div>
+        </li>
+
+        <li style="width: 30%">
+            <div class="box">
+                <div class="tit">DGA域名国家分布</div>
+                <div id="echart4" class="boxnav" style="height: 200px;"></div>
+            </div>
+            <div class="box">
+                <div class="tit">DGA域名关系分析</div>
+                <div id="echart5" class="boxnav" style="height: 250px;"></div>
+            </div>
+        </li>
+        <li style="width: 40%">
+            <div class="box">
+                <div class="tit">字符出现次数统计</div>
+                <div id="echart3" class="boxnav mapc" style="height: 508px;"></div>
+            </div>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript" src="/static/js/js_line.js"></script>
+</body>
+</html>

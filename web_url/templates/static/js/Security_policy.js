@@ -143,19 +143,40 @@ function toggleFeature(element, dataUsageId) {
         dataUsageText.textContent = "关闭"; // 关闭文本
     }
 }
-
-// 当文档加载完毕
-document.addEventListener('DOMContentLoaded', () => {
-    const levels = {
+const levels = {
         '安全等级': ['低', '中', '高'],
         '漏洞预警': ['低', '中', '高'],
         '风险巡航': ['低', '中', '高'],
         '策略偏向': ['保守', '均衡', '积极']
     };
+// 当文档加载完毕
+
+async function sendSettingToBackend(code_type, deploymentType) {
+    deploymentType=deploymentType.toString()
+    const formData = {
+        code_types : code_type,
+        new_model_value: deploymentType
+    };
+
+    const response = await fetch('/api/send_data', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    });
+
+    const data = await response.json();
+    console.log(data);  // 弹出后端返回的消息
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.custom-info-box').forEach(box => {
         const title = box.querySelector('.info-box-title').textContent;
         const content = box.querySelector('.info-box-content');
+
         const decreaseButton = box.querySelector('.decrease');
         const increaseButton = box.querySelector('.increase');
 
@@ -176,29 +197,39 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const handleLevelChange = () => {
+
             const currentLevelIndex = levels[title].indexOf(content.textContent.trim());
+
             if (title === "安全等级") {
                 if (currentLevelIndex > 0) {
                     content.textContent = levels[title][currentLevelIndex - 1];
                     updateSwitches(); // 更新开关状态
+                    console.log(content.textContent);
+
+                    sendSettingToBackend(title, currentLevelIndex - 1);
                 }
             } else {
                 if (currentLevelIndex > 0) {
-                    content.textContent = levels[title][currentLevelIndex - 1];
+                     content.textContent = levels[title][currentLevelIndex - 1];
+                sendSettingToBackend(title, currentLevelIndex -1);
+
                 }
             }
         };
 
         const handleLevelIncrease = () => {
             const currentLevelIndex = levels[title].indexOf(content.textContent.trim());
+
             if (title === "安全等级") {
                 if (currentLevelIndex < levels[title].length - 1) {
                     content.textContent = levels[title][currentLevelIndex + 1];
                     updateSwitches(); // 更新开关状态
+                sendSettingToBackend(title, currentLevelIndex + 1); // 发送设置到后端，第一个参数是标题，第二个参数是当前级别索引加二
                 }
             } else {
                 if (currentLevelIndex < levels[title].length - 1) {
                     content.textContent = levels[title][currentLevelIndex + 1];
+                sendSettingToBackend(title, currentLevelIndex + 1); // 发送设置到后端，第一个参数是标题，第二个参数是当前级别索引加二
                 }
             }
         };

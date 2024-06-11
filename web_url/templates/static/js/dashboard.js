@@ -1,82 +1,3 @@
-//地图显示
-var uploadedDataURL = "flight.json";
-var myChart2 = echarts.init(document.getElementById('main'));
-
-myChart2.showLoading();
-$.getJSON(uploadedDataURL, function (data) {
-    myChart2.hideLoading();
-
-    function getAirportCoord(idx) {
-        return [data.airports[idx][3], data.airports[idx][4]];
-    }
-
-    var routes = data.routes.map(function (airline) {
-        return [getAirportCoord(airline[1]), getAirportCoord(airline[2])];
-    });
-
-    myChart2.setOption({
-        geo3D: {
-            map: 'world',
-            shading: 'realistic',
-            silent: true,
-            environment: '#333',
-            realisticMaterial: {
-                roughness: 0.8,
-                metalness: 0
-            },
-            postEffect: {
-                enable: true
-            },
-            groundPlane: {
-                show: false
-            },
-            light: {
-                main: {
-                    intensity: 1,
-                    alpha: 30
-                },
-                ambient: {
-                    intensity: 0
-                }
-            },
-            viewControl: {
-                distance: 70,
-                alpha: 89,
-                panMouseButton: 'left',
-                rotateMouseButton: 'right'
-            },
-            itemStyle: {
-                color: '#000'
-            },
-            regionHeight: 0.5
-        },
-        series: [
-            {
-                type: 'lines3D',
-                coordinateSystem: 'geo3D',
-                effect: {
-                    show: true,
-                    trailWidth: 1,
-                    trailOpacity: 0.5,
-                    trailLength: 0.2,
-                    constantSpeed: 5
-                },
-                blendMode: 'lighter',
-                lineStyle: {
-                    width: 0.2,
-                    opacity: 0.05
-                },
-                data: routes
-            }
-        ]
-    });
-    window.addEventListener('keydown', function () {
-        myChart2.dispatchAction({
-            type: 'lines3DToggleEffect',
-            seriesIndex: 0
-        });
-    });
-});
 
 $(function () {
 
@@ -397,83 +318,7 @@ $(function () {
     });
 
 
-    function salesChart() {
-        var ws = new WebSocket(`ws://${serverIp}/websocket_poll_cluster_statistics`);
 
-
-        var chart; // 在函数外部声明图表变量
-
-
-        // 初始化图表
-        const options = {
-            series: [],
-            chart: {
-                height: 350,
-                type: 'line',
-                zoom: {
-                    enabled: false
-                }
-            },
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                width: 4,
-                curve: 'smooth'
-            },
-            xaxis: {
-                categories: [],
-            },
-            tooltip: {
-                y: {
-                    formatter: function (val) {
-                        return val + " units";
-                    }
-                }
-            },
-            legend: {
-                show: true
-            }
-        };
-        chart = new ApexCharts(document.querySelector("#sales-chart"), options);
-        chart.render();
-
-        ws.onmessage = function (event) {
-            var data = JSON.parse(event.data);
-            updateChart(data);
-
-
-        };
-
-        function updateChart(data) {
-            var newSeries = [];
-            var categories = Object.keys(data[Object.keys(data)[0]]).sort(); // 假设所有设备都有相同的时间标签
-
-            Object.keys(data).slice(0, 5).forEach(function (device) { // 最多处理五个设备
-                var dataPoints = [];
-                categories.forEach(function (time) {
-                    dataPoints.push(data[device][time]);
-                });
-                newSeries.push({
-                    name: device,
-                    data: dataPoints
-                });
-            });
-
-            // 仅更新图表的数据系列，而不是整个图表
-            chart.updateSeries(newSeries);
-
-            // 仅在必要时更新分类轴（x轴）
-            chart.updateOptions({
-                xaxis: {
-                    categories: categories
-                }
-            }, false, false); // 第二个参数表示是否重绘动画，第三个参数表示是否更新所有配置项
-        }
-
-    }
-
-    salesChart();
 
 
     function salesChannels() {
@@ -511,8 +356,7 @@ $(function () {
 
 
     function productsSold() {
-        var ws = new WebSocket(`ws://${serverIp}/websocket_weekly_data_total`);
-
+        var ws = new WebSocket(`ws://${serverIp}/week_day_count`);
 
         // 初始化图表
         const options = {
@@ -622,7 +466,7 @@ $(function () {
 // 更新数据列表
     // 建立WebSocket连接
 
-    var ws = new WebSocket(`ws://${serverIp}/websocket_cluster_device_status`);
+    var ws = new WebSocket(`ws://${serverIp}/websocket_get_data_formatted`);
     ws.onmessage = function (event) {
         var data = JSON.parse(event.data);
         var deviceList = document.getElementById('device-list');
@@ -630,6 +474,7 @@ $(function () {
 
         deviceList.innerHTML = ''; // 清空现有的列表项
         deviceCount.textContent = data.total_collections; // 更新设备数量
+        document.querySelector('.on_online').textContent = data.on_online;
 
         // 遍历每个集合的数据
         data.collections_data.forEach(function (collection) {
@@ -657,11 +502,11 @@ $(function () {
     var chartContainer = document.getElementById('domain_count');
 
 // 实例化图表
-    var myChart = echarts.init(chartContainer);
+    var index_1 = echarts.init(chartContainer);
 
 // 定义原始高度和宽度
-    var originalHeight = myChart.getHeight();
-    var originalWidth = myChart.getWidth();
+    var originalHeight = index_1.getHeight();
+    var originalWidth = index_1.getWidth();
 
 // 图表的选项
     var option = {
@@ -702,8 +547,8 @@ $(function () {
                     show: false
                 },
                 data: [
-                    {value: 0, name: 'repend'}, // 初始值设为0
-                    {value: 0, name: 'attact'}, // 初始值设为0
+                    {value: 5, name: 'repend'}, // 初始值设为0
+                    {value: 1, name: 'attact'}, // 初始值设为0
                 ],
                 color: ['#99CC99', '#FFCCCC'] // 自定义颜色
             }
@@ -711,17 +556,17 @@ $(function () {
     };
 
 // 设置图表选项
-    myChart.setOption(option);
+    index_1.setOption(option);
 
 // 缩小图表一倍
-    myChart.resize({
+    index_1.resize({
         height: originalHeight / 1.2,
         width: originalWidth / 1.2
     });
 
 // 监听窗口大小变化，重新渲染图表
     window.addEventListener('resize', function () {
-        myChart.resize();
+        index_1.resize();
     });
 
 // 创建WebSocket连接
@@ -735,12 +580,14 @@ $(function () {
             totalBenign += stat.benign_count;
             totalNonBenign += stat.non_benign_count;
         });
+        document.querySelector('.data_counts').textContent = data.day_counts;
+
         // 更新图表数据
-        myChart.setOption({
+        index_1.setOption({
             series: [{
                 data: [
-                    {value: totalBenign, name: 'BENIGN'},
-                    {value: totalNonBenign, name: 'NON-BENIGN'}
+                    {value: totalBenign, name: 'repend'},
+                    {value: totalNonBenign, name: 'attact'}
                 ]
             }]
         });
@@ -836,7 +683,7 @@ $(function () {
         // 解析从服务器接收到的数据
         var data = JSON.parse(event.data);
         var topTypesDaily = data.top_types_daily;
-
+        document.querySelector('.today_total_count').textContent = data.today_total_count;
         // 清空当前数据
         dates = [];
         values = [];
