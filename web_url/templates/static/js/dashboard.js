@@ -1,89 +1,3 @@
-$(function () {
-
-    var myChart2 = echarts.init(document.getElementById('main'));
-    myChart2.showLoading();
-
-    // Initial configuration for the ECharts instance
-    myChart2.setOption({
-        geo3D: {
-            map: 'world',
-            shading: 'realistic',
-            silent: true,
-            environment: '#333',
-            realisticMaterial: {
-                roughness: 0.8,
-                metalness: 0
-            },
-            postEffect: {
-                enable: true
-            },
-            groundPlane: {
-                show: false
-            },
-            light: {
-                main: {
-                    intensity: 1,
-                    alpha: 30
-                },
-                ambient: {
-                    intensity: 0
-                }
-            },
-            viewControl: {
-                distance: 70,
-                alpha: 89,
-                panMouseButton: 'left',
-                rotateMouseButton: 'right'
-            },
-            itemStyle: {
-                color: '#000'
-            },
-            regionHeight: 0.5
-        },
-        series: [{
-            type: 'lines3D',
-            coordinateSystem: 'geo3D',
-            effect: {
-                show: true,
-                trailWidth: 1.5, // 增加尾迹宽度
-                trailOpacity: 0.8, // 增加尾迹透明度
-                trailLength: 0.5, // 增加尾迹长度
-                constantSpeed: 8
-            },
-            blendMode: 'lighter',
-            lineStyle: {
-                width: 0.2,
-                opacity: 0.05
-            },
-            data: [] // Initially empty data
-        }]
-    });
-
-    // Hide loading after the initial setup
-    myChart2.hideLoading();
-
-    // Setup WebSocket connection
-    var ws = new WebSocket(`ws://${serverIp}/city_map`);
-    ws.onmessage = function (event) {
-        var routes = JSON.parse(event.data); // Parse the JSON data received from the server
-        console.log(routes); // Log data for debugging
-
-        // Update the chart with new routes data
-        myChart2.setOption({
-            series: [{
-                data: routes // Set the received routes as data for the series
-            }]
-        });
-    };
-
-    // Toggle effects on keydown
-    window.addEventListener('keydown', function () {
-        myChart2.dispatchAction({
-            type: 'lines3DToggleEffect',
-            seriesIndex: 0
-        });
-    });
-});
 
 $(function () {
 
@@ -404,79 +318,7 @@ $(function () {
     });
 
 
-    function salesChart() {
-        var ws = new WebSocket(`ws://${serverIp}/websocket_poll_cluster_statistics`);
 
-        var chart; // 在函数外部声明图表变量
-
-        // 初始化图表
-        const options = {
-            series: [],
-            chart: {
-                height: 350,
-                type: 'line',
-                zoom: {
-                    enabled: false
-                }
-            },
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                width: 4,
-                curve: 'smooth'
-            },
-            xaxis: {
-                categories: [],
-            },
-            tooltip: {
-                y: {
-                    formatter: function (val) {
-                        return val + " units";
-                    }
-                }
-            },
-            legend: {
-                show: true
-            }
-        };
-        chart = new ApexCharts(document.querySelector("#sales-chart"), options);
-        chart.render();
-
-        ws.onmessage = function (event) {
-            var data = JSON.parse(event.data);
-            updateChart(data);
-        };
-
-        function updateChart(data) {
-            var newSeries = [];
-            var categories = Object.keys(data[Object.keys(data)[0]]).sort(); // 假设所有设备都有相同的时间标签
-
-            Object.keys(data).slice(0, 5).forEach(function (device) { // 最多处理五个设备
-                var dataPoints = [];
-                categories.forEach(function (time) {
-                    dataPoints.push(data[device][time]);
-                });
-                newSeries.push({
-                    name: device,
-                    data: dataPoints
-                });
-            });
-
-            // 仅更新图表的数据系列，而不是整个图表
-            chart.updateSeries(newSeries);
-
-            // 仅在必要时更新分类轴（x轴）
-            chart.updateOptions({
-                xaxis: {
-                    categories: categories
-                }
-            }, true, false); // 第二个参数表示是否重绘动画，第三个参数表示是否更新所有配置项
-        }
-
-    }
-
-    salesChart();
 
 
     function salesChannels() {
@@ -514,8 +356,7 @@ $(function () {
 
 
     function productsSold() {
-        var ws = new WebSocket(`ws://${serverIp}/websocket_weekly_data_total`);
-
+        var ws = new WebSocket(`ws://${serverIp}/week_day_count`);
 
         // 初始化图表
         const options = {

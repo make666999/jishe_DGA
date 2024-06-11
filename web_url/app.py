@@ -440,6 +440,47 @@ async def websocket_endpoint(websocket: WebSocket):
     finally:
         await websocket.close()
 
+@app.websocket("/week_day_count")
+async def week_day_count(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            today = datetime.utcnow().date()
+            dates = [(today - timedelta(days=i)).isoformat() for i in range(1, 8)]  # 从昨天开始计算7天
+
+            collection = db2["test"]
+            pipeline = [
+                {"$project": {
+                    "Week_Statistics": 1,
+                    "_id": 0
+                }},
+                {"$addFields": {
+                    "week_stats_array": {"$objectToArray": "$Week_Statistics"}
+                }},
+                {"$unwind": "$week_stats_array"},
+                {"$match": {
+                    "week_stats_array.k": {"$in": dates}
+                }},
+                {"$group": {
+                    "_id": "$week_stats_array.k",
+                    "count": {"$sum": "$week_stats_array.v"}
+                }}
+            ]
+            cursor = collection.aggregate(pipeline)
+            result = await cursor.to_list(length=None)
+
+            results_dict = {date: 0 for date in dates}  # 初始化字典
+            for item in result:
+                results_dict[item["_id"]] = item["count"]  # 更新存在的日期数据
+
+            await websocket.send_text(json.dumps(results_dict))
+            await asyncio.sleep(10)  # 暂停10秒
+
+    except Exception as e:
+        print(f"获取DNS地址失败: {e}")
+    finally:
+        await websocket.close()
+
 class DataToReceive(BaseModel):
     code_types: str
     new_model_value: str
