@@ -62,3 +62,4 @@ async def main():
     loop = asyncio.get_running_loop()
     loop.set_default_executor(executor)
     await loop.run_in_executor(None, sniff_dns)
+

@@ -407,9 +407,7 @@ $(function () {
     function salesChart() {
         var ws = new WebSocket(`ws://${serverIp}/websocket_poll_cluster_statistics`);
 
-
         var chart; // 在函数外部声明图表变量
-
 
         // 初始化图表
         const options = {
@@ -448,8 +446,6 @@ $(function () {
         ws.onmessage = function (event) {
             var data = JSON.parse(event.data);
             updateChart(data);
-
-
         };
 
         function updateChart(data) {
@@ -475,7 +471,7 @@ $(function () {
                 xaxis: {
                     categories: categories
                 }
-            }, false, false); // 第二个参数表示是否重绘动画，第三个参数表示是否更新所有配置项
+            }, true, false); // 第二个参数表示是否重绘动画，第三个参数表示是否更新所有配置项
         }
 
     }

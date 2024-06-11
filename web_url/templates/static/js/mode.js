@@ -20,11 +20,10 @@
         document.getElementById(chartId).style.display = 'block';
     }
 
-    async function sendData() {
+async function updateModel(code_type,deploymentType) {
     const formData = {
-        Local: document.getElementById('local').value,
-        Device_Name: document.getElementById('deviceName').value,
-        new_model_value: document.getElementById('modelValue').value
+        code_types : code_type,
+        new_model_value: deploymentType
     };
 
     const response = await fetch('/api/send_data', {
@@ -34,7 +33,8 @@
         },
         body: JSON.stringify(formData)
     });
-
+console.log(formData);
     const data = await response.json();
-    alert(data.message);
+    console.log(data.message);
+}
 
