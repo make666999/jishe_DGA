@@ -419,7 +419,6 @@ async def get_city_data():
         {"$group": {"_id": "$coords"}},
         {"$limit": 5000}
     ]
-    print("这是异步app")
     city_data = collection.aggregate(pipeline)
     unique_coords = set()
 
@@ -489,6 +488,11 @@ async def read_root(request: Request):
 @app.get("/index.html")
 async def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request, "ipAddress": ipAddress})
+
+
+@app.get("/big_view.html")
+async def read_root(request: Request):
+    return templates.TemplateResponse("big_view.html", {"request": request, "ipAddress": ipAddress})
 
 @app.get("/orders.html")
 async def read_root(request: Request):
