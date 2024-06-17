@@ -457,7 +457,8 @@ $(function () {
                     data: sortedDataSeries
                 }]
             });
-              document.getElementById('total-1').textContent = totalCount;
+
+               document.querySelector('.data_counts').textContent = totalCount;
         }
     }
 
