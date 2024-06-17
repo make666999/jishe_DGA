@@ -1,4 +1,5 @@
 import asyncio
+import json
 import time
 import datetime
 from datetime import datetime, timedelta
@@ -201,6 +202,9 @@ def read_and_count_collection(collection_name):
     }
 
     print(data_week_totle)
+    with open('data_total.json', 'w', encoding='utf-8') as f:
+
+        json.dump(data_week_totle, f, ensure_ascii=False, indent=4)
     return data_week_totle
 
 
