@@ -1,66 +1,67 @@
-var chartDom = document.getElementById('domain_count3');
-var myChart = echarts.init(chartDom);
-var option;
+var ws = new WebSocket(`ws://${serverIp}/Dns_Address_Type`);
 
-const data = [];
-for (let i = 0; i < 5; ++i) {
-  data.push(Math.round(Math.random() * 200));
-}
-option = {
-  xAxis: {
-    max: 'dataMax'
-  },
-  yAxis: {
-    type: 'category',
-    data: ['GPU_SERVER', 'Elaline', 'tabuaihua', 'D', 'E'],
-    inverse: true,
-    animationDuration: 300,
-    animationDurationUpdate: 300,
-    max: 2 // only the largest 3 bars will be displayed
-  },
-  series: [
-    {
-      realtimeSort: true,
-      name: '不同设备访问量',
-      type: 'bar',
-      data: data,
-      label: {
-        show: true,
-        position: 'right',
-        valueAnimation: true
-      }
-    }
-  ],
-  legend: {
-
-  },
-  animationDuration: 0,
-  animationDurationUpdate: 3000,
-  animationEasing: 'linear',
-  animationEasingUpdate: 'linear'
+ws.onmessage = function(event) {
+    updateChart(JSON.parse(event.data));
 };
-function run() {
-  for (var i = 0; i < data.length; ++i) {
-    if (Math.random() > 0.9) {
-      data[i] += Math.round(Math.random() * 2000);
-    } else {
-      data[i] += Math.round(Math.random() * 200);
-    }
-  }
-  myChart.setOption({
-    series: [
-      {
-        type: 'bar',
-        data
-      }
-    ]
-  });
-}
-setTimeout(function () {
-  run();
-}, 0);
-setInterval(function () {
-  run();
-}, 3000);
 
-option && myChart.setOption(option);
+ws.onerror = function() {
+    console.log("WebSocket error");
+};
+
+ws.onclose = function() {
+    console.log("WebSocket connection closed");
+};
+
+var myChart = echarts.init(document.getElementById('domain_count3'));
+
+var option = {
+    title: {
+        text: 'DNS地址类型数据',
+    },
+    xAxis: {
+        type: 'category',
+        data: [], // X轴的数据通过WebSocket动态获取
+    },
+    yAxis: {
+        type: 'value',
+    },
+    series: [{
+        type: 'bar',
+        data: [], // Y轴的数据通过WebSocket动态获取
+    }],
+    dataZoom: [{
+        type: 'inside' // 启用内置型数据缩放组件
+    }]
+};
+
+myChart.setOption(option);
+
+myChart.on('click', function (params) {
+    const zoomSize = 6;
+    const dataAxis = option.xAxis.data; // 确保dataAxis指向当前x轴的数据
+    const data = option.series[0].data; // 确保data指向当前系列的数据
+
+    // 计算开始和结束的索引
+    const startValue = Math.max(params.dataIndex - Math.floor(zoomSize / 2), 0);
+    const endValue = Math.min(params.dataIndex + Math.floor(zoomSize / 2), data.length - 1);
+
+    // 发送数据缩放的动作
+    myChart.dispatchAction({
+        type: 'dataZoom',
+        startValue: startValue,
+        endValue: endValue
+    });
+});
+function updateChart(data) {
+    let addresses = data.map(item => item.address);  // DNS地址
+    let counts = data.map(item => item.count);  // 对应的计数
+
+    myChart.setOption({
+        xAxis: {
+            data: addresses  // 更新x轴数据
+        },
+        series: [{
+            data: counts  // 更新y轴数据
+        }]
+    });
+}

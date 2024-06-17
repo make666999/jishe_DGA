@@ -15,14 +15,10 @@
     <link rel="stylesheet" href="static/css/bootstrap-icons.min.css" type="text/css">
     <!-- Bootstrap Docs -->
     <link rel="stylesheet" href="static/css/bootstrap-docs.css" type="text/css">
-
     <!-- Slick -->
     <link rel="stylesheet" href="static/css/slick.css" type="text/css">
-
     <!-- Main style file -->
     <link rel="stylesheet" href="static/css/app.min.css" type="text/css">
-
-
     <script>
         var serverIp = "{{ ipAddress }}";
     </script>
@@ -32,7 +28,7 @@
     <script src="./static/js/echarts.min.js"></script>
     <script src="./static/js/echarts-gl.min.js"></script>
     <script src="./static/js/world.js"></script>
-    <script src="static/js/mychart_type_rate.js"></script>
+
 
 
 </head>
@@ -329,8 +325,8 @@
                             </div>
                             <h4 class="mb-3">新增流量记录</h4>
                             <div class="d-flex mb-3">
-                                <div class="display-7">7310</div>
-                                <div class="ms-auto" id="total-1"></div>
+                                <div class ="data_counts"></div>
+               <div class="ms-auto" id="total-1"></div>
                             </div>
                             <div class="text-success">
                                 与昨日相比 1.4% <i class="small bi bi-arrow-up"></i>
@@ -348,7 +344,8 @@
                             </div>
                             <h4 class="mb-3">集群域名访问量</h4>
                             <div class="d-flex mb-3">
-                                <div class="display-7">598</div>
+
+                                <div class="today_total_count"></div>
                                 <div class="ms-auto" id="total-2"></div>
                             </div>
                             <div class="text-danger">
@@ -386,7 +383,7 @@
                             </div>
                             <h4 class="mb-3">在线设备数量</h4>
                             <div class="d-flex mb-3">
-                                <div class="display-7">3</div>
+                                <div class="on_online"></div>
                                 <div class="ms-auto" id="total-4"></div>
                             </div>
                             <div class="text-danger">
@@ -417,9 +414,9 @@
             <div class="col-lg-4 col-md-12">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h6 class="card-title">集群恶意域名感知&nbsp&nbsp&nbsp&nbsp&nbsp攻击类型分布</h6>
-                        <div id="domain_count" style="height: 50%; width:50%; float: left;"></div>
-                        <div id="domain_count2" style="height: 50%; width:50%; float: right;"></div>
+                        <h6 class="card-title">攻击类型分布</h6>
+
+                        <div id="domain_count2" style="height: 100%; width:100%; float: right;"></div>
                     </div>
                 </div>
             </div>
@@ -427,7 +424,7 @@
             <div class="col-lg-4 col-md-12">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h6 class="card-title">集群域名日访问累计</h6>
+                        <h6 class="card-title">域名种类统计</h6>
                         <div id="domain_count3" style="height: 45%;"></div>
                     </div>
                 </div>
@@ -522,51 +519,8 @@
                     </div>
                 </div>
             </div>
-            <!--            实时流量监控-->
-            <div class="col-lg-7 col-md-12">
-                <div class="card widget h-100">
-                    <div class="card-header d-flex">
-                        <h6 class="card-title">
-                            实时流量监控
-                            <a class="bi bi-question-circle ms-1 small" data-bs-toggle="tooltip"
-                               title="Multi-device data volume"></a>
-                        </h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-md-flex align-items-center mb-3">
-                            <div class="d-flex align-items-center">
-                                <div class="display-7 me-3">
-                                    <i class="bi bi-bag-check me-2 text-success">多设备数据量变化</i>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="sales-chart"></div>
-                        <div class="d-flex justify-content-center gap-4 align-items-center ms-auto mt-3 mt-lg-0">
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!--            地图-->
-            <div class="col-lg-5 col-md-12">
-                <div class="card widget h-100">
-                    <div class="card-header d-flex">
 
-                        <!--?  世界地图-->
-                        <h6 class="card-title">
-                            流量路径
-                            <a class="bi bi-question-circle ms-1 small" data-bs-toggle="tooltip"
-                               title="Data traffic path"></a>
-                        </h6>
-
-                    </div>
-                    <div class="card-body">
-                        <!-- 地图容器 -->
-                        <div id="main" style="height:480px; border-radius: 20px;"></div>
-
-                    </div>
-                </div>
-            </div>
             <!--            域名种类统计（过去五天每天的类别数量）-->
             <div class="col-lg-4 col-md-12">
                 <div class="card h-100">
@@ -607,6 +561,14 @@
                     </div>
                 </div>
             </div>
+             <div class="col-lg-4 col-md-12">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">世界地图</h6>
+                        <div id="map" style="height: 1000%"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <!-- ./ content -->
@@ -626,7 +588,9 @@
 
 <!-- Main Javascript file -->
 <script src="static/js/app.min.js"></script>
-
+    <script type="text/javascript" src="./static/js/world.js"></script>
+    <script type="text/javascript" src="./static/js/china.js"></script>
+    <script type="text/javascript" src="./static/js/map.js"></script>
 <!--?charts-->
 
 

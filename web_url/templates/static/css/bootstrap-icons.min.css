@@ -5143,6 +5143,8 @@
 .bi-upc::before {
     content: "\f602"
 }
+.bi-pc-display-horizontal::before { content: "\f6a5"; }
+.bi-pc-display::before { content: "\f6a6"; }
 
 .bi-upload::before {
     content: "\f603"

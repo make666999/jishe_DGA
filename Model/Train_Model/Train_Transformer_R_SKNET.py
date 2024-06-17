@@ -19,6 +19,15 @@ from torchinfo import summary
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 warnings.filterwarnings("ignore", category=MatplotlibDeprecationWarning)
+def loss_value_plot(losses):
+    # 画出loss变化趋势图
+    plt.plot([i for i in range(1, epochs + 1)], losses, label='Training Loss')
+    plt.xlabel('Iterations')
+    plt.ylabel('Loss')
+    plt.title('Training Loss Over Iterations')
+    plt.legend()
+    plt.savefig(png_path)
+    plt.show()
 
 
 def count_characters_in_column(df, column_name):
@@ -151,51 +160,6 @@ class PositionalEncoding(nn.Module):
         x = x + self.pe[:, :x.size(1)].requires_grad_(False)
 
         return self.dropout(x)
-
-
-'''class PSPModule(nn.Module):
-    def __init__(self, features, out_features=1024, sizes=(1, 2, 3, 6)):
-        super().__init__()
-        self.stages = []
-        self.stages = nn.ModuleList([self._make_stage(features, size) for size in sizes])
-        self.bottleneck = nn.Conv2d(features * (len(sizes) + 1), out_features, kernel_size=1)
-        self.relu = nn.ReLU()
-
-    def _make_stage(self, features, size):
-        prior = nn.AdaptiveAvgPool2d(output_size=(size, size))
-        conv = nn.Conv2d(features, features, kernel_size=1, bias=False)
-        return nn.Sequential(prior, conv)
-
-    def forward(self, feats):
-        h, w = feats.size(2), feats.size(3)
-        priors = [F.upsample(input=stage(feats), size=(h, w), mode='bilinear') for stage in self.stages] + [feats]
-        bottle = self.bottleneck(torch.cat(priors, 1))
-        return self.relu(bottle)'''
-
-
-class PSPModule(nn.Module):
-    # def __init__(self, features, out_features=1024, sizes=(1, 2, 3, 6)):
-    #     super().__init__()
-    #
-    #     self.avg = nn.ModuleList([nn.AvgPool1d(size) for size in sizes])
-    #     self.max = nn.ModuleList([nn.MaxPool1d(size) for size in sizes])
-    #
-    #     self.mlp = nn.Sequential(
-    #         # nn.Linear(channel, channel // reduction, bias=False)
-    #         nn.Conv2d(features, features // 2, 1, bias=False),
-    #         # inplace=True直接替换，节省内存
-    #         nn.ReLU(inplace=True),
-    #         # nn.Linear(channel // reduction, channel,bias=False)
-    #         nn.Conv2d(features // 2, features, 1, bias=False)
-    #     )
-    #     self.bottleneck = nn.Conv2d(features * (len(sizes) + 1), out_features, kernel_size=1)
-    #     self.relu = nn.ReLU()
-    #
-    # def forward(self, feats):
-    #     bottle = self.bottleneck(torch.cat(priors, 1))
-    #     return self.relu(bottle)
-
-    pass
 
 
 class CBAMLayer(nn.Module):
@@ -768,21 +732,14 @@ class Transformer(nn.Module):
         self.SKNET = ResNet(SKUnit, [2, 2, 2, 2])
 
         self.embedding = nn.Embedding(vocab_size, embedding_dim)
-        # self.conv_3_1 = nn.Conv1d(embedding_dim, conv_channels, 3)
-        # self.conv_3_2 = nn.Conv1d(conv_channels, 128, 3, padding=1)
-        # self.conv_3_3 = nn.Conv1d(conv_channels, 128, 3, padding=1)
-        #
-        # self.conv_5_1 = nn.Conv1d(embedding_dim, conv_channels, 5)
-        # self.conv_5_2 = nn.Conv1d(conv_channels, 128, 5, padding=2)
-        # self.conv_5_3 = nn.Conv1d(conv_channels, 128, 5, padding=2)
+
         # 位置编码层
         self.positional_encoding = PositionalEncoding(embedding_dim, dropout, max_len)
         # 编码层
         # feedforward_dim表示全连接层隐藏层维度
         self.encoder_layer = nn.TransformerEncoderLayer(embedding_dim, num_head, feedforward_dim, dropout,
                                                         batch_first=True)
-        # self.lstm_1 = BiLSTM_Attention(input_size=64, hidden_size=conv_channels, num_class=num_class)
-        # self.lstm_2 = BiLSTM_Attention(input_size=36, hidden_size=conv_channels, num_class=num_class).to(device)
+
         self.transformer = nn.TransformerEncoder(self.encoder_layer, num_layers)
         self.dropout = nn.Dropout(0.5)
 
@@ -791,25 +748,14 @@ class Transformer(nn.Module):
             nn.ReLU(),
             nn.AdaptiveAvgPool1d(1),
             nn.Flatten(),
-
         )
 
     def forward(self, x):
-        # torch.Size([256, 40])
-        # 输入的序列[批次,序列长度],需要对输入序列进行交换因为transoformer的输入是[序列长度,批次,嵌入向量大小]
-        # y=x[0].tolist()
-        # new_list = [index2char.get(i, 'unknown') for i in y]
-        # my_string = ''.join(new_list)
-        # print(my_string)
+
         x = x.transpose(0, 1)
         # 将输入的数据进行词嵌入，得到数据的维度为[序列长度,批次,嵌入向量]
-
+        x = x.contiguous()
         x = self.embedding(x)
-
-        # y = x.permute(1, 2, 0)
-        # df = pd.DataFrame(y[0].tolist())
-        # sns.heatmap(df, cmap='viridis')
-        # plt.show()
 
         # 加入位置编码
         x = self.positional_encoding(x)
@@ -819,21 +765,10 @@ class Transformer(nn.Module):
 
         x = x.permute(1, 2, 0)  # torch.Size([256, 64, 40])
 
-        # df = pd.DataFrame(x[0].tolist())
-        # sns.heatmap(df, cmap='viridis')
-        # plt.show()
-        # x_lstm= x.permute(0,2,1)
-        #
-        # x_lstm=self.lstm_1(x_lstm)
-        # x_lstm = x_lstm.permute(0, 2, 1)
 
         x_3 = self.SKNET(x)
 
         fpn_out_3 = self.fpn_3(x_3)  # torch.Size([256, 128, 38])
-
-        # # x5_2_attlstm=self.lstm_1(x5_2) #torch.Size([256, 128, 256])
-
-        # x = torch.cat(fpn_out_3, dim=2)
 
         x = self.dropout(fpn_out_3)  # torch.Size([256, 128, 76])
 
@@ -996,15 +931,6 @@ def train(model, optimizer, loss_meter, epochs, path):
     return losses
 
 
-def loss_value_plot(losses):
-    # 画出loss变化趋势图
-    plt.plot([i for i in range(1, epochs + 1)], losses, label='Training Loss')
-    plt.xlabel('Iterations')
-    plt.ylabel('Loss')
-    plt.title('Training Loss Over Iterations')
-    plt.legend()
-    plt.savefig(png_path)
-    plt.show()
 
 
 if __name__ == '__main__':
