@@ -28,7 +28,7 @@
     <script src="./static/js/echarts.min.js"></script>
     <script src="./static/js/echarts-gl.min.js"></script>
     <script src="./static/js/world.js"></script>
-    <script src="static/js/mychart_type_rate.js"></script>
+
 
 
 </head>
@@ -325,7 +325,6 @@
                             </div>
                             <h4 class="mb-3">新增流量记录</h4>
                             <div class="d-flex mb-3">
-
                                 <div class ="data_counts"></div>
                <div class="ms-auto" id="total-1"></div>
                             </div>
@@ -415,9 +414,9 @@
             <div class="col-lg-4 col-md-12">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h6 class="card-title">集群恶意域名感知&nbsp&nbsp&nbsp&nbsp&nbsp攻击类型分布</h6>
-                        <div id="domain_count" style="height: 50%; width:50%; float: left;"></div>
-                        <div id="domain_count2" style="height: 50%; width:50%; float: right;"></div>
+                        <h6 class="card-title">攻击类型分布</h6>
+
+                        <div id="domain_count2" style="height: 100%; width:100%; float: right;"></div>
                     </div>
                 </div>
             </div>
@@ -425,7 +424,7 @@
             <div class="col-lg-4 col-md-12">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h6 class="card-title">集群域名日访问累计</h6>
+                        <h6 class="card-title">域名种类统计</h6>
                         <div id="domain_count3" style="height: 45%;"></div>
                     </div>
                 </div>
@@ -562,6 +561,14 @@
                     </div>
                 </div>
             </div>
+             <div class="col-lg-4 col-md-12">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">世界地图</h6>
+                        <div id="map" style="height: 1000%"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <!-- ./ content -->
@@ -581,7 +588,9 @@
 
 <!-- Main Javascript file -->
 <script src="static/js/app.min.js"></script>
-
+    <script type="text/javascript" src="./static/js/world.js"></script>
+    <script type="text/javascript" src="./static/js/china.js"></script>
+    <script type="text/javascript" src="./static/js/map.js"></script>
 <!--?charts-->
 
 

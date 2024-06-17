@@ -300,64 +300,76 @@ ws.onmessage = function (event) {
 
     }
     function salesChart() {
-    var ws = new WebSocket(`ws://${serverIp}/websocket_poll_cluster_statistics`);
-    var myChart = echarts.init(document.getElementById('sales-chart'));
+        var ws = new WebSocket(`ws://${serverIp}/websocket_poll_cluster_statistics`);
 
-    var option = {
-        tooltip: {
-            trigger: 'axis',
-            formatter: function (params) {
-                var res = params[0].name;
-                params.forEach(function (item) {
-                    res += '<br/>' + item.seriesName + ' : ' + item.value + ' units';
-                });
-                return res;
-            }
-        },
-        xAxis: {
-            type: 'category',
-            data: []
-        },
-        yAxis: {
-            type: 'value',
-            axisLabel: {
-                formatter: '{value} units'
-            }
-        },
-        series: []
-    };
+        var chart; // 在函数外部声明图表变量
 
-    myChart.setOption(option);
-
-    ws.onmessage = function (event) {
-        var data = JSON.parse(event.data);
-        updateChart(data);
-    };
-
-    function updateChart(data) {
-        var newSeries = [];
-        var categories = Object.keys(data[Object.keys(data)[0]]).sort(); // 假设所有设备都有相同的时间标签
-
-        Object.keys(data).slice(0, 5).forEach(function (device) { // 最多处理五个设备
-            var dataPoints = [];
-            categories.forEach(function (time) {
-                dataPoints.push(data[device][time]);
-            });
-            newSeries.push({
-                name: device,
+        // 初始化图表
+        const options = {
+            series: [],
+            chart: {
+                height: 350,
                 type: 'line',
-                smooth: true,
-                data: dataPoints
-            });
-        });
-
-        myChart.setOption({
-            xAxis: {
-                data: categories
+                zoom: {
+                    enabled: false
+                }
             },
-            series: newSeries
-        });
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                width: 4,
+                curve: 'smooth'
+            },
+            xaxis: {
+                categories: [],
+            },
+            tooltip: {
+                y: {
+                    formatter: function (val) {
+                        return val + " units";
+                    }
+                }
+            },
+            legend: {
+                show: true
+            }
+        };
+        chart = new ApexCharts(document.querySelector("#sales-chart"), options);
+        chart.render();
+
+        ws.onmessage = function (event) {
+            var data = JSON.parse(event.data);
+            updateChart(data);
+        };
+
+        function updateChart(data) {
+            var newSeries = [];
+            var categories = Object.keys(data[Object.keys(data)[0]]).sort(); // 假设所有设备都有相同的时间标签
+
+            Object.keys(data).slice(0, 5).forEach(function (device) { // 最多处理五个设备
+                var dataPoints = [];
+                categories.forEach(function (time) {
+                    dataPoints.push(data[device][time]);
+                });
+                newSeries.push({
+                    name: device,
+                    data: dataPoints
+                });
+            });
+
+            // 仅更新图表的数据系列，而不是整个图表
+            chart.updateSeries(newSeries);
+
+            // 仅在必要时更新分类轴（x轴）
+            chart.updateOptions({
+                xaxis: {
+                    categories: categories
+                }
+            }, true, false); // 第二个参数表示是否重绘动画，第三个参数表示是否更新所有配置项
+        }
+
     }
-}
+
 
      })
