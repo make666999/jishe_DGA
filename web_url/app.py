@@ -315,6 +315,7 @@ async def websocket_daily_top_remain_type(websocket: WebSocket):
     finally:
         await websocket.close()
 
+
 # customer.html.流量消息发送
 @app.websocket("/websocket_last_messages")
 async def websocket_last_messages(websocket: WebSocket):
@@ -521,6 +522,245 @@ async def receive_data(data: DataToReceive):
     else:
         print('no model_code')
         return {"message": "Code type is not model_code."}
+
+
+# 后台可视化数据展示
+
+@app.websocket("/week_day_count")
+async def week_day_count(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            today = datetime.utcnow().date()
+            dates = [(today - timedelta(days=i)).isoformat() for i in range(1, 8)]  # 从昨天开始计算7天
+
+            collection = db2["test"]
+            pipeline = [
+                {"$project": {
+                    "Week_Statistics": 1,
+                    "_id": 0
+                }},
+                {"$addFields": {
+                    "week_stats_array": {"$objectToArray": "$Week_Statistics"}
+                }},
+                {"$unwind": "$week_stats_array"},
+                {"$match": {
+                    "week_stats_array.k": {"$in": dates}
+                }},
+                {"$group": {
+                    "_id": "$week_stats_array.k",
+                    "count": {"$sum": "$week_stats_array.v"}
+                }}
+            ]
+            cursor = collection.aggregate(pipeline)
+            result = await cursor.to_list(length=None)
+
+            results_dict = {date: 0 for date in dates}  # 初始化字典
+            for item in result:
+                results_dict[item["_id"]] = item["count"]  # 更新存在的日期数据
+
+            await websocket.send_text(json.dumps(results_dict))
+            await asyncio.sleep(10)  # 暂停10秒
+
+    except Exception as e:
+        print(f"获取DNS地址失败: {e}")
+    finally:
+        await websocket.close()
+
+@app.websocket("/week_day_count_type")  # 每周访问的域名不同类型
+async def week_day_count_type(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            collection = db2["test"]
+            pipeline = [
+                {"$project": {
+                    "Week_Domain_all": 1,
+                    "_id": 0
+                }},
+                {"$addFields": {
+                    "week_stats_array": {"$objectToArray": "$Week_Domain_all"}
+                }},
+                {"$unwind": "$week_stats_array"},
+                {"$group": {
+                    "_id": "$week_stats_array.k",
+                    "count": {"$sum": "$week_stats_array.v"}
+                }},
+                {"$sort": {"_id": 1}}  # 按日期排序
+            ]
+            cursor = collection.aggregate(pipeline)
+            result = await cursor.to_list(length=None)
+
+            # 将结果转换为字典形式
+            results_dict = {item["_id"]: item["count"] for item in result}
+
+            await websocket.send_text(json.dumps(results_dict))
+            await asyncio.sleep(10)  # 暂停10秒
+
+    except Exception as e:
+        print(f"week_day_count_type断开连接: {e}")
+    finally:
+        await websocket.close()
+
+
+@app.websocket("/Count_Map_Data")
+async def Count_Map_Data(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            collection = db2["test"]
+            pipeline = [
+                {"$unwind": "$map_data"},  # 展开map_data数组
+                {"$group": {
+                    "_id": {"name": "$map_data.name", "coords": "$map_data.coords"},
+                    "count": {"$sum": "$map_data.count"}
+                }},
+                {"$sort": {"_id.name": 1}}  # 根据名字排序
+            ]
+            cursor = collection.aggregate(pipeline)
+            result = await cursor.to_list(length=None)
+
+            # 结果整理成指定格式的列表
+            results_list = [{
+                "name": item["_id"]["name"],
+                "value": item["_id"]["coords"] + [item["count"]]
+            } for item in result]
+
+            await websocket.send_text(json.dumps(results_list))
+            await asyncio.sleep(10)  # 每10秒更新一次
+
+    except Exception as e:
+        print(f"week_day_count_type断开连接: {e}")
+    finally:
+        await websocket.close()
+
+
+@app.websocket("/Dns_Address_Type")
+async def Dns_Address_Type(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            collection = db2["test"]
+            pipeline = [
+                {"$project": {
+                    "dns_address_type": 1,
+                    "_id": 0
+                }},
+                {"$addFields": {
+                    "dns_array": {"$objectToArray": "$dns_address_type"}
+                }},
+                {"$unwind": "$dns_array"},
+                {"$group": {
+                    "_id": "$dns_array.k",
+                    "count": {"$sum": "$dns_array.v"}
+                }},
+                {"$sort": {"count": -1}},  # 根据访问计数降序排序
+                # {"$limit": 7}  # 限制结果到最高的七个
+            ]
+            cursor = collection.aggregate(pipeline)
+            result = await cursor.to_list(length=None)
+
+            # 结果整理成列表，每个元素包含DNS地址和对应的计数
+            results_list = [{
+                "address": item["_id"],
+                "count": item["count"]
+            } for item in result]
+
+            await websocket.send_text(json.dumps(results_list))
+            await asyncio.sleep(10)  # 每10秒更新一次
+
+    except Exception as e:
+        print(f"Dns_Address_Type断开连接: {e}")
+    finally:
+        await websocket.close()
+
+@app.websocket("/dga_type_analyze")
+async def dga_type_analyze(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            collection = db2["test"]  # 假设数据存储在名为 'test' 的集合中
+            # 直接读取 DGA_type_analyze 字段
+            cursor = collection.find({}, {"DGA_type_analyze": 1, "_id": 0})
+            result = await cursor.to_list(length=None)
+
+            # 整理结果，将其转换为前端需要的格式
+            results_list = []
+            for item in result:
+                for dga in item.get("DGA_type_analyze", []):
+                    results_list.append({
+                        "Domain_Type": dga["Domain_Type"],
+                        "Count": dga["Count"]
+                    })
+
+            # 发送整理后的数据
+            await websocket.send_text(json.dumps(results_list))
+            await asyncio.sleep(10)  # 每10秒更新一次
+
+    except Exception as e:
+        print(f"DGA_type_analyze断开连接: {e}")
+    finally:
+        await websocket.close()
+
+
+@app.websocket("/analyze_traffic_by_route_with_coords")
+async def analyze_traffic_by_route_with_coords(websocket: WebSocket):
+    await websocket.accept()
+    while True:
+        try:
+            collection = db2["test"]
+            # 异步从MongoDB中读取数据
+            cursor = collection.find({}, {'analyze_traffic_by_route_with_coords': 1, '_id': 0})
+            results = []
+            async for document in cursor:  # 使用异步迭代处理数据
+                traffic_data = document.get('analyze_traffic_by_route_with_coords', [])
+                for entry in traffic_data:
+                    if entry['route'][0] and entry['route'][1]:  # 确保路线信息不为空
+                        results.append({
+                            "from": entry['route'][0],
+                            "to": entry['route'][1],
+                            "count": entry['Count']
+                        })
+
+            await websocket.send_text(json.dumps(results))
+            await asyncio.sleep(10)  # 每10秒发送一次数据
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            await websocket.close()
+            break
+
+@app.websocket("/MidDnsPointData")
+async def mid_dns_point_data(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            collection = db2["test"]
+            pipeline = [
+                {"$unwind": "$mid_dns_point"},  # 展开mid_dns_point数组
+                {"$group": {
+                    "_id": {
+                        "name": "$mid_dns_point.name",
+                        "coords": "$mid_dns_point.coords"
+                    },
+                    "count": {"$sum": "$mid_dns_point.count"}
+                }},
+                {"$sort": {"count": -1}}  # 根据计数降序排序
+            ]
+            cursor = collection.aggregate(pipeline)
+            result = await cursor.to_list(length=None)
+
+            # 结果整理成元组列表，每个元素为(name, coords, count)
+            results_list = [(item["_id"]["name"], item["_id"]["coords"], item["count"]) for item in result]
+
+            # 发送数据时将列表转换为JSON字符串
+            await websocket.send_text(json.dumps(results_list))
+            await asyncio.sleep(10)  # 每10秒更新一次
+
+    except Exception as e:
+        print(f"MidDnsPointData断开连接: {e}")
+    finally:
+        await websocket.close()
 
 @app.get("/")
 async def read_root(request: Request):

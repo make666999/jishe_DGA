@@ -1,64 +1,67 @@
-var chartDom = document.getElementById('domain_count3');
-var myChart = echarts.init(chartDom);
-var option;
+var ws = new WebSocket(`ws://${serverIp}/Dns_Address_Type`);
 
-// 初始化数据，用于存储每个设备的访问量
-const data = [0, 0, 0]; // 初始化为0
-option = {
-  xAxis: {
-    max: 'dataMax'
-  },
-  yAxis: {
-    type: 'category',
-    data: [], // 初始化为空数组，后续会更新为设备名称
-    inverse: true,
-    animationDuration: 300,
-    animationDurationUpdate: 300,
-    max: 2 // only the largest 3 bars will be displayed
-  },
-  series: [
-    {
-      realtimeSort: true,
-      name: '不同设备访问量',
-      type: 'bar',
-      data: data, // 使用上面初始化的数据
-      label: {
-        show: true,
-        position: 'right',
-        valueAnimation: true
-      }
-    }
-  ],
-  legend: {
-
-  },
-  animationDuration: 0,
-  animationDurationUpdate: 3000,
-  animationEasing: 'linear',
-  animationEasingUpdate: 'linear'
+ws.onmessage = function(event) {
+    updateChart(JSON.parse(event.data));
 };
 
-// 更新图表数据的函数
-function updateChartData(data) {
-  myChart.setOption({
-    yAxis: {
-      data: data.map(item => item.collection_name) // 更新纵轴的设备名称
+ws.onerror = function() {
+    console.log("WebSocket error");
+};
+
+ws.onclose = function() {
+    console.log("WebSocket connection closed");
+};
+
+var myChart = echarts.init(document.getElementById('domain_count3'));
+
+var option = {
+    title: {
+        text: 'DNS地址类型数据',
     },
-    series: [
-      {
+    xAxis: {
+        type: 'category',
+        data: [], // X轴的数据通过WebSocket动态获取
+    },
+    yAxis: {
+        type: 'value',
+    },
+    series: [{
         type: 'bar',
-        data: data.map(item => item.daily_count) // 更新柱状图的数据
-      }
-    ]
-  });
-}
+        data: [], // Y轴的数据通过WebSocket动态获取
+    }],
+    dataZoom: [{
+        type: 'inside' // 启用内置型数据缩放组件
+    }]
+};
 
-// 初始渲染图表
-option && myChart.setOption(option);
+myChart.setOption(option);
 
-// 创建 WebSocket 连接
-var ws = new WebSocket(`ws://${serverIp}/websocket_user_list_management`);
-ws.onmessage = function (event) {
-    var responseData = JSON.parse(event.data);
-    updateChartData(responseData.collections_data); // 当收到 WebSocket 消息时更新图表数据
+myChart.on('click', function (params) {
+    const zoomSize = 6;
+    const dataAxis = option.xAxis.data; // 确保dataAxis指向当前x轴的数据
+    const data = option.series[0].data; // 确保data指向当前系列的数据
+
+    // 计算开始和结束的索引
+    const startValue = Math.max(params.dataIndex - Math.floor(zoomSize / 2), 0);
+    const endValue = Math.min(params.dataIndex + Math.floor(zoomSize / 2), data.length - 1);
+
+    // 发送数据缩放的动作
+    myChart.dispatchAction({
+        type: 'dataZoom',
+        startValue: startValue,
+        endValue: endValue
+    });
+});
+function updateChart(data) {
+    let addresses = data.map(item => item.address);  // DNS地址
+    let counts = data.map(item => item.count);  // 对应的计数
+
+    myChart.setOption({
+        xAxis: {
+            data: addresses  // 更新x轴数据
+        },
+        series: [{
+            data: counts  // 更新y轴数据
+        }]
+    });
 }
