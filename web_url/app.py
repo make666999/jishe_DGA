@@ -688,10 +688,11 @@ async def dga_type_analyze(websocket: WebSocket):
             results_list = []
             for item in result:
                 for dga in item.get("DGA_type_analyze", []):
-                    results_list.append({
-                        "Domain_Type": dga["Domain_Type"],
-                        "Count": dga["Count"]
-                    })
+                    if(dga["Domain_Type"]!="BENIGN"):
+                        results_list.append({
+                            "Domain_Type": dga["Domain_Type"],
+                            "Count": dga["Count"]
+                        })
 
             # 发送整理后的数据
             await websocket.send_text(json.dumps(results_list))
