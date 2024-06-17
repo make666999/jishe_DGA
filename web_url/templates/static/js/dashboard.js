@@ -537,7 +537,7 @@ var option = {
 
 myChart2.setOption(option);
 
- var ws = new WebSocket(`ws://192.168.78.98:8000/dga_type_analyze`);
+ var ws = new WebSocket(`ws://${serverIp}/dga_type_analyze`);
 
 ws.onmessage = function (event) {
     var newData = JSON.parse(event.data);
