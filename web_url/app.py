@@ -680,7 +680,7 @@ async def dga_type_analyze(websocket: WebSocket):
     try:
         while websocket.client_state == WebSocketState.CONNECTED:
             collection = db2["test"]  # 假设数据存储在名为 'test' 的集合中
-            # 直接读取 DGA_type_analyze 字段
+
             cursor = collection.find({}, {"DGA_type_analyze": 1, "_id": 0})
             result = await cursor.to_list(length=None)
 
