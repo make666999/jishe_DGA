@@ -53,6 +53,7 @@ function updateChart(data) {
     let addresses = data.map(item => item.address);  // DNS地址
     let counts = data.map(item => item.count);  // 对应的计数
 
+     let total = counts.reduce((acc, count) => acc + count, 0);
     myChart.setOption({
         xAxis: {
             data: addresses  // 更新x轴数据
@@ -61,4 +62,6 @@ function updateChart(data) {
             data: counts  // 更新y轴数据
         }]
     });
+
+           document.querySelector('.today_total_count').textContent = total;
 }
