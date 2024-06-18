@@ -16500,3 +16500,23 @@ blockquote * {
     background: #00aff0;
     color: #fff
 }
+
+/* 世界地图 */
+.world-map {
+    width: 70%;
+}
+
+/* 新消息通知 */
+.news-information {
+    width: 29%;
+}
+
+/* DNS地址类型数据 */
+.dns-data {
+    width: 70%;
+}
+
+/*设备列表*/
+.equipment {
+    width: 29%;
+}

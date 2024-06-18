@@ -15,9 +15,6 @@ ws.onclose = function() {
 var myChart = echarts.init(document.getElementById('domain_count3'));
 
 var option = {
-    title: {
-        text: 'DNS地址类型数据',
-    },
     xAxis: {
         type: 'category',
         data: [], // X轴的数据通过WebSocket动态获取

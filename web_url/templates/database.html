@@ -15,10 +15,14 @@
     <link rel="stylesheet" href="static/css/bootstrap-icons.min.css" type="text/css">
     <!-- Bootstrap Docs -->
     <link rel="stylesheet" href="static/css/bootstrap-docs.css" type="text/css">
+
     <!-- Slick -->
     <link rel="stylesheet" href="static/css/slick.css" type="text/css">
+
     <!-- Main style file -->
     <link rel="stylesheet" href="static/css/app.min.css" type="text/css">
+
+
     <script>
         var serverIp = "{{ ipAddress }}";
     </script>
@@ -28,101 +32,11 @@
     <script src="./static/js/echarts.min.js"></script>
     <script src="./static/js/echarts-gl.min.js"></script>
     <script src="./static/js/world.js"></script>
+    <script src="static/js/mychart_type_rate.js"></script>
 
 
 </head>
 <body>
-
-<!-- ./ preloader -->
-
-<!-- sidebars -->
-
-<!-- notifications sidebar -->
-<div class="sidebar" id="notifications">
-    <div class="sidebar-header d-block align-items-end">
-        <div class="align-items-center d-flex justify-content-between py-4">
-            Notifications
-            <button data-sidebar-close="">
-                <i class="bi bi-arrow-right"></i>
-            </button>
-        </div>
-    </div>
-    <div class="sidebar-content">
-        <div class="tab-content">
-            <div class="tab-pane active" id="activities">
-                <div class="tab-pane-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="px-0 list-group-item">
-                            <a href="#" class="d-flex">
-                                <div class="flex-shrink-0">
-                                    <figure class="avatar avatar-info me-3">
-                                        <img src="static/picture/robot.jpg" class="rounded-circle" alt="image">
-                                    </figure>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <p class="mb-0 fw-bold d-flex justify-content-between">
-                                        域名检测助手
-                                    </p>
-                                    <span class="text-muted small">
-                                        <i class="bi bi-clock me-1"></i> 2023-11-28 16:08
-                                    </span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="px-0 list-group-item">
-                            <a href="#" class="d-flex">
-                                <div class="flex-shrink-0">
-                                    <figure class="avatar avatar-warning me-3">
-                                        <img src="static/picture/banshou.png" class="rounded-circle" alt="image">
-                                    </figure>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <p class="mb-0 fw-bold d-flex justify-content-between">
-                                        系统通知
-                                    </p>
-                                    <span class="text-muted small">
-                                        <i class="bi bi-clock me-1"></i> 2024-2-12 12:08
-                                    </span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="px-0 list-group-item">
-                            <a href="#" class="d-flex">
-                                <div class="flex-shrink-0">
-                                    <figure class="avatar avatar-secondary me-3">
-                                        <img src="static/picture/cash.png" class="rounded-circle" alt="image">
-                                    </figure>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <p class="mb-0 d-flex justify-content-between">
-                                        账号与用户
-                                    </p>
-                                    <span class="text-muted small">
-                                        <i class="bi bi-clock me-1"></i> 2024-3-20 09:23
-                                    </span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="tab-pane-footer">
-                    <a href="#" class="btn btn-success">
-                        <i class="bi bi-check2 me-2"></i> Make All Read
-                    </a>
-                    <a href="#" class="btn btn-danger ms-2">
-                        <i class="bi bi-trash me-2"></i> Delete all
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-<!-- ./ notifications sidebar -->
-
-<!-- ./ sidebars -->
-
-<!-- menu -->
 <div class="menu">
     <div class="menu-header">
         <a href="" class="menu-header-logo">
@@ -198,14 +112,6 @@
                         <i class="bi bi-shield-lock-fill"></i>
                     </span>
                     <span>安全策略</span>
-                </a>
-            </li>
-            <li>
-                <a href="order-detail.html">
-                    <span class="nav-link-icon">
-                        <i class="bi bi-search"></i>
-                    </span>
-                    <span>设备详情</span>
                 </a>
             </li>
             <li>
@@ -332,7 +238,7 @@
                             </div>
                             <h4 class="mb-3">新增流量记录</h4>
                             <div class="d-flex mb-3">
-                                <div class="data_counts"></div>
+                                <div class="display-7">7310</div>
                                 <div class="ms-auto" id="total-1"></div>
                             </div>
                             <div class="text-success">
@@ -351,8 +257,7 @@
                             </div>
                             <h4 class="mb-3">集群域名访问量</h4>
                             <div class="d-flex mb-3">
-
-                                <div class="today_total_count"></div>
+                                <div class="display-7">598</div>
                                 <div class="ms-auto" id="total-2"></div>
                             </div>
                             <div class="text-danger">
@@ -390,7 +295,7 @@
                             </div>
                             <h4 class="mb-3">在线设备数量</h4>
                             <div class="d-flex mb-3">
-                                <div class="on_online"></div>
+                                <div class="display-7">3</div>
                                 <div class="ms-auto" id="total-4"></div>
                             </div>
                             <div class="text-danger">
@@ -418,19 +323,27 @@
             <!--?                </div>-->
             <!--?            </div>-->
             <!--            异常与正常域名比例-->
-
-            <!--世界地图-->
-            <div class="world-map">
+            <div class="col-lg-4 col-md-12">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h6 class="card-title">世界地图</h6>
-                        <div id="map" style="height: 150%"></div>
+                        <h6 class="card-title">集群恶意域名感知&nbsp&nbsp&nbsp&nbsp&nbsp攻击类型分布</h6>
+                        <div id="domain_count" style="height: 50%; width:50%; float: left;"></div>
+                        <div id="domain_count2" style="height: 50%; width:50%; float: right;"></div>
+                    </div>
+                </div>
+            </div>
+            <!--集群状态-->
+            <div class="col-lg-4 col-md-12">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">集群域名日访问累计</h6>
+                        <div id="domain_count3" style="height: 45%;"></div>
                     </div>
                 </div>
             </div>
 
             <!--新消息通知-->
-            <div class="news-information">
+            <div class="col-lg-4 col-md-12">
                 <div class="card h-100">
                     <div class="card-body">
                         <div class="d-flex align-items-center mb-4">
@@ -518,10 +431,75 @@
                     </div>
                 </div>
             </div>
+            <!--            实时流量监控-->
+            <div class="col-lg-7 col-md-12">
+                <div class="card widget h-100">
+                    <div class="card-header d-flex">
+                        <h6 class="card-title">
+                            实时流量监控
+                            <a class="bi bi-question-circle ms-1 small" data-bs-toggle="tooltip"
+                               title="Multi-device data volume"></a>
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-md-flex align-items-center mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="display-7 me-3">
+                                    <i class="bi bi-bag-check me-2 text-success">多设备数据量变化</i>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="sales-chart"></div>
+                        <div class="d-flex justify-content-center gap-4 align-items-center ms-auto mt-3 mt-lg-0">
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <!--            地图-->
+            <div class="col-lg-5 col-md-12">
+                <div class="card widget h-100">
+                    <div class="card-header d-flex">
 
+                        <!--?  世界地图-->
+                        <h6 class="card-title">
+                            流量路径
+                            <a class="bi bi-question-circle ms-1 small" data-bs-toggle="tooltip"
+                               title="Data traffic path"></a>
+                        </h6>
+
+                    </div>
+                    <div class="card-body">
+                        <!-- 地图容器 -->
+                        <div id="main" style="height:480px; border-radius: 20px;"></div>
+
+                    </div>
+                </div>
+            </div>
+            <!--            域名种类统计（过去五天每天的类别数量）-->
+            <div class="col-lg-4 col-md-12">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">域名种类统计（过去五天每天的类别数量）</h6>
+                        <div id="domain_kinds" style="height: 300px;"></div>
+                    </div>
+                </div>
+            </div>
+            <!--每日数据流量七天-->
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 bg-purple">
+                    <div class="card-body text-center">
+                        <div class="text-white-50">
+                            <div class="bi bi-box-seam display-6 mb-3"></div>
+                            <div class="display-8 mb-2">集群每日访问流量</div>
+                            <h5>7 days</h5>
+                        </div>
+                        <div id="products-sold"></div>
+                    </div>
+                </div>
+            </div>
             <!--            设备列表-->
-            <div class="equipment">
+            <div class="col-lg-4 col-md-6">
                 <div class="card widget h-100">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title">
@@ -538,75 +516,10 @@
                     </div>
                 </div>
             </div>
-
-            <!--DNS地址类型数据-->
-            <div class="dns-data">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h6 class="card-title">DNS地址类型数据</h6>
-                        <div id="domain_count3" style="width:100%;height: 350px"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!--            域名种类统计（过去五天每天的类别数量）-->
-            <div class="col-lg-4 col-md-12">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h6 class="card-title">域名种类统计（过去五天每天的类别数量）</h6>
-                        <div id="domain_kinds" style="height: 100%;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!--每日数据流量七天-->
-            <div class="col-lg-4 col-md-6">
-                <div class="card h-100 bg-purple">
-                    <div class="card-body text-center">
-                        <div class="text-white-50">
-                            <div class="bi bi-box-seam display-6 mb-3"></div>
-                            <div class="display-8 mb-2">集群每日访问流量</div>
-                            <h5>7 days</h5>
-                        </div>
-                        <div id="products-sold"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!--攻击类型分布（超多彩色）-->
-            <div class="col-lg-4 col-md-6">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h6 class="card-title">攻击类型分布</h6>
-                        <div id="domain_count2" style="height: 100%; width:100%; float: right;"></div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </div>
     <!-- ./ content -->
 </div>
 <!-- ./ layout-wrapper -->
-
-<!-- Bundle scripts -->
-<script src="static/js/bundle.js"></script>
-<script src="static/js/index1-3.js"></script>
-<!-- Apex chart -->
-<script src="static/js/apexcharts.min.js"></script>
-
-<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
-<script src="static/js/slick.min.js"></script>
-<!-- Examples -->
-<script src="static/js/dashboard.js"></script>
-
-<!-- Main Javascript file -->
-<script src="static/js/app.min.js"></script>
-<script type="text/javascript" src="./static/js/world.js"></script>
-<script type="text/javascript" src="./static/js/china.js"></script>
-<script type="text/javascript" src="./static/js/map.js"></script>
-<!--?charts-->
-
-
 </body>
 </html>
