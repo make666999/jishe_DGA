@@ -3,52 +3,149 @@
 <head>
     <meta charset="utf-8">
 
-    <title>DGA恶意域名分析</title>
+    <title> 实时监控 | DGA域名检测系统 </title>
     <script type="text/javascript" src="static/js/jquery.js"></script>
     <script type="text/javascript" src="static/js/echarts.min.js"></script>
     <link rel="stylesheet" href="static/css/app.min.css" type="text/css">
-    <script type="text/javascript" src="static/js/Australia.js"></script>
-    <script type="text/javascript" src="static/js/fastapi.js"></script>
     <script src="./static/js/echarts-gl.min.js"></script>
     <script src="./static/js/world.js"></script>
-    <script src="static/js/dashboard.js"></script>
     <link rel="stylesheet" href="static/css/bootstrap-icons.min.css" type="text/css">
     <script src="static/js/apexcharts.min.js"></script>
     <link rel="stylesheet" href="static/css/style.css">
-
+    <script type="text/javascript" src="static/js/fastapi.js"></script>
+    <script src="static/js/dashboard.js"></script>
 </head>
 <body style="border-color: #f5f4fe;">
-<div class="head clearfix">
-<div class="menu_header">
-    <a href="" class="menu-header-logo">
-        <img src="static/image/favicon.jpg" alt="logo">
-    </a>
-    <h1 style="margin: auto">DGA恶意域名分析平台</h1>
-     <div class="time" id="showTime">2018/6/12 17:00:12</div>
+
+<!-- menu -->
+<div class="menu">
+    <div class="menu-header">
+        <a href="" class="menu-header-logo">
+            <img src="static/image/favicon.jpg" alt="logo">
+        </a>
+        <a href="" class="btn btn-sm menu-close-btn">
+            <i class="bi bi-x"></i>
+        </a>
+    </div>
+    <div class="menu-body">
+        <div class="dropdown">
+            <a href="#" class="d-flex align-items-center" data-bs-toggle="dropdown">
+                <div class="avatar me-3">
+                    <img src="static/picture/man_avatar3.jpg" class="rounded-circle" alt="image">
+                </div>
+                <div>
+                    <div class="fw-bold">user</div>
+                    <small class="text-muted">ip:xxxxxx</small>
+                </div>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end">
+                <a href="#" class="dropdown-item d-flex align-items-center">
+                    <i class="bi bi-person dropdown-item-icon"></i> Profile
+                </a>
+                <a href="#" class="dropdown-item d-flex align-items-center">
+                    <i class="bi bi-envelope dropdown-item-icon"></i> Inbox
+                </a>
+                <a href="#" class="dropdown-item d-flex align-items-center" data-sidebar-target="#settings">
+                    <i class="bi bi-gear dropdown-item-icon"></i> Settings
+                </a>
+                <a href="login.html" class="dropdown-item d-flex align-items-center text-danger" target="_blank">
+                    <i class="bi bi-box-arrow-right dropdown-item-icon"></i> Logout
+                </a>
+            </div>
+        </div>
+        <ul>
+            <li class="menu-divider">导航栏</li>
+            <li>
+                <a class="active" href="">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-lock"></i>
+                    </span>
+                    <span>实时监控</span>
+                </a>
+            </li>
+            <li>
+                <a href="index.html">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-bar-chart"></i>
+                    </span>
+                    <span>数据分析</span>
+                </a>
+            </li>
+            <li>
+                <a href="orders.html">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-receipt"></i>
+                    </span>
+                    <span>集群列表</span>
+                </a>
+            </li>
+            <li>
+                <a href="mode-total.html">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-paperclip"></i>
+                    </span>
+                    <span>部署模式</span>
+                </a>
+            </li>
+            <li>
+                <a href="customers.html">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-person-badge"></i>
+                    </span>
+                    <span>流量日志</span>
+                </a>
+            </li>
+            <li>
+                <a href="Security_policy.html">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-shield-lock-fill"></i>
+                    </span>
+                    <span>安全策略</span>
+                </a>
+            </li>
+            <li>
+                <a href="order-detail.html">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <span>设备详情</span>
+                </a>
+            </li>
+        </ul>
+    </div>
 </div>
+<!-- ./  menu -->
+<div class="layout-wrapper">
+
+    <div class="head clearfix">
+        <div class="menu_header">
+            <div class="page-title" style="display: block; margin-left: auto; margin-right: auto; margin-top: auto">实时监控</div>
+            <div class="time" id="showTime">2018/6/12 17:00:12</div>
+        </div>
 
 
-    <script>
-             var serverIp = "{{ ipAddress }}";
-        var t = null;
-        t = setTimeout(time, 1000);//開始运行
-        function time() {
-            clearTimeout(t);//清除定时器
-            dt = new Date();
-            var y = dt.getFullYear();
-            var mt = dt.getMonth() + 1;
-            var day = dt.getDate();
-            var h = dt.getHours();//获取时
-            var m = dt.getMinutes();//获取分
-            var s = dt.getSeconds();//获取秒
-            document.getElementById("showTime").innerHTML = y + "/" + mt + "/" + day + " " + h + ":" + m + ":" + s + "";
-            t = setTimeout(time, 1000); //设定定时器，循环运行
-        }
-    </script>
-</div>
-<div class="mainbox">
-    <div class="" style="padding: 20px 0;">
-        <div class="col-four">
+        <script>
+            var serverIp = "{{ ipAddress }}";
+            var t = null;
+            SS
+            t = setTimeout(time, 1000);//開始运行
+            function time() {
+                clearTimeout(t);//清除定时器
+                dt = new Date();
+                var y = dt.getFullYear();
+                var mt = dt.getMonth() + 1;
+                var day = dt.getDate();
+                var h = dt.getHours();//获取时
+                var m = dt.getMinutes();//获取分
+                var s = dt.getSeconds();//获取秒
+                document.getElementById("showTime").innerHTML = y + "/" + mt + "/" + day + " " + h + ":" + m + ":" + s + "";
+                t = setTimeout(time, 1000); //设定定时器，循环运行
+            }
+        </script>
+    </div>
+    <div class="mainbox">
+        <div class="" style="padding: 20px 0;">
+            <div class="col-four">
                 <div style="width:25%;margin-right: 30px;">
                     <div class="card h-100">
                         <div class="card-body">
@@ -59,8 +156,8 @@
                             </div>
                             <h4 class="mb-3">新增流量记录</h4>
                             <div class="d-flex mb-3">
-                                <div class ="data_counts"></div>
-               <div class="ms-auto" id="total-1"></div>
+                                <div class="data_counts"></div>
+                                <div class="ms-auto" id="total-1"></div>
                             </div>
                             <div class="text-success">
                                 与昨日相比 1.4% <i class="small bi bi-arrow-up"></i>
@@ -127,124 +224,77 @@
                     </div>
                 </div>
             </div>
-    </div>
-    <ul class="clearfix nav1">
-        <li style="width: 22%">
-            <div class="card" >
-                <div class="tit">恶意域名统计</div>
-                <div class="boxnav" style="height: 200px;" >
-                      <div class="" style="height: 200px" id="domain_count"></div>
-                </div>
-            </div>
-            <div class="card" style="margin-top: 20px">
-                <div class="tit">主流检测方案准确率分析</div>
-                <div class="boxnav" style="height: 250px;">
-                    <div class="" style="height: 250px" id="domain_count3"></div>
-                </div>
-            </div>
-        </li>
-        <li style="width: 56%">
-
-            <div class="">
-                <div class="boxnav mapc" style="height: 550px; position: relative">
-                    <div class="mapnav">
-                        <ul>
-                            <li>
-                                <div><span>东部地区占比</span>
-                                    <p>55%</p></div>
-                            </li>
-                            <li>
-                                <div><span>南部地区占比</span>
-                                    <p>50%</p></div>
-                            </li>
-                            <li>
-                                <div><span>西部活跃DGA</span>
-                                    <p>180</p></div>
-                            </li>
-                            <li>
-                                <div><span>北部发现家族</span>
-                                    <p>8</p></div>
-                            </li>
-                            <li>
-                                <div><span>国内总监测量</span>
-                                    <p>50000</p></div>
-                            </li>
-                        </ul>
-
+        </div>
+        <ul class="clearfix nav1">
+            <li style="width: 22%">
+                <div class="card">
+                    <div class="tit">恶意域名统计</div>
+                    <div class="boxnav" style="height: 200px;">
+                        <div class="" style="height: 100px" id="domain_count"></div>
                     </div>
-
-                    <div class="mapnav2">
-                        <div class="box">
-                            <div class="tit">DGA操作效率统计</div>
-                            <div class="boxnav" style="height: 130px;" id="sysx">
-                                <!-- 这里可以加入相关的图表或其他视觉元素 -->
-                            </div>
-                            <div class="leidanav leidanav3" style="margin-bottom: 15px;">
-                                <ul class="clearfix">
-                                    <li><span>每日检测请求数</span>
-                                        <p>456</p></li>
-                                    <li><span>检测处理时间（毫秒）</span>
-                                        <p>300</p></li>
-                                    <li><span>自动拦截次数</span>
-                                        <p>134</p></li>
-                                    <li><span>人工审核次数</span>
-                                        <p>22</p></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="map" id="map" ></div>
-
-                    <script>
-                        $(".mapbtn a").hover(function () {
-                            var ind = $(this).index()
-                            $(".mapnav ul").eq(ind).show().siblings().hide()
-                        })
-                    </script>
                 </div>
-            </div>
+                <div class="card" style="margin-top: 20px">
+                    <div class="tit">主流检测方案准确率分析</div>
+                    <div class="boxnav" style="height: 250px;">
+                        <div class="" style="height: 250px" id="domain_count3"></div>
+                    </div>
+                </div>
+            </li>
+            <li style="width: 56%">
 
-        </li>
-        <li style="width: 22%">
+                <div class="">
+                    <div class="boxnav mapc" style="height: 550px; position: relative">
+
+                        <div class="map" id="map"></div>
+
+                        <script>
+                            $(".mapbtn a").hover(function () {
+                                var ind = $(this).index()
+                                $(".mapnav ul").eq(ind).show().siblings().hide()
+                            })
+                        </script>
+                    </div>
+                </div>
+
+            </li>
+            <li style="width: 22%">
 
                 <div class="card ">
-                         <div class="tit">设备列表（共<span id="device-count">0</span>台设备）</div>
+                    <div class="tit">设备列表（共<span id="device-count">0</span>台设备）</div>
                     <div class="card-body" style="width: 90%; height: 90%;padding: 0.3rem">
-                        <div class="list-group list-group-flush"  id="device-list">
+                        <div class="list-group list-group-flush" id="device-list">
                         </div>
                     </div>
                 </div>
-            <div class="card"  style="margin-top: 20px">
-                <div class="tit">DGA检测热门话题榜</div>
-                <div class="boxnav" id="echart4" style="height: 250px;">
+                <div class="card" style="margin-top: 20px">
+                    <div class="tit">世界各地区域名检测量</div>
+                    <div class="boxnav" id="echart4" style="height: 250px;">
 
-            </div>
-            </div>
-
-        </li>
-    </ul>
-    <div style="width: 100%">
-                <div class="card widget h-100">
-                    <div class="card-header d-flex">
                     </div>
-                    <div class="card-body">
-                        <div class="d-md-flex align-items-center mb-3">
-                            <div class="d-flex align-items-center">
-                                <div class="display-7 me-3">
-                                    <i class="bi bi-bag-check me-2 text-success">多设备数据量变化</i>
-                                </div>
+                </div>
+
+            </li>
+        </ul>
+        <div style="width: 100%">
+            <div class="card widget h-100">
+                <div class="card-header d-flex">
+                </div>
+                <div class="card-body">
+                    <div class="d-md-flex align-items-center mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="display-7 me-3">
+                                <i class="bi bi-bag-check me-2 text-success">多设备数据量变化</i>
                             </div>
                         </div>
-                        <div id="sales-chart"></div>
-                        </div>
                     </div>
+                    <div id="sales-chart"></div>
                 </div>
             </div>
-
-
-
+        </div>
+    </div>
+</div>
 
 </div>
+
 </body>
 </html>

@@ -1,4 +1,3 @@
-
 $(function () {
 
     var protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -196,7 +195,7 @@ $(function () {
 
     total3();
 
-        function total4() {
+    function total4() {
         if ($('#total-4').length) {
             const options = {
                 series: [{
@@ -318,9 +317,6 @@ $(function () {
     });
 
 
-
-
-
     function salesChannels() {
         if ($('#sales-channels').length) {
             const options = {
@@ -426,7 +422,7 @@ $(function () {
         function updateChart(data) {
             var categories = []; // 用于存储日期
             var originalDataSeries = []; // 用于存储原始的销售数据
-             var totalCount = 0; // 用于计算总数
+            var totalCount = 0; // 用于计算总数
 
             // 假设数据格式为 { '2024-03-10': 10, '2024-03-11': 15, ... }
             for (const [date, count] of Object.entries(data)) {
@@ -434,7 +430,7 @@ $(function () {
                 const shortDate = date.substring(5); // 移除前4个字符和分隔符
                 categories.push(shortDate);
                 originalDataSeries.push({date: shortDate, count: count});
-                 totalCount += count; // 累加总数
+                totalCount += count; // 累加总数
             }
 
             // 对日期和数据进行升序排序
@@ -458,7 +454,7 @@ $(function () {
                 }]
             });
 
-               document.querySelector('.data_counts').textContent = totalCount;
+            document.querySelector('.data_counts').textContent = totalCount;
         }
     }
 
@@ -500,195 +496,229 @@ $(function () {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////第一个大框的第一个
 
+// 检测时速
+    var chartspeed = document.getElementById('domain_speed');
+    var myChart = echarts.init(chartspeed, null, {renderer: 'canvas', width: 'auto', height: 'auto'});
+    window.onresize = function () {
+        myChart.resize();
+    };
+    var option = {
+        tooltip: {
+            formatter: '{a} <br/>{b} : {c}%'
+        },
+        series: [
+            {
+                name: 'Pressure',
+                type: 'gauge',
+                center: ['50%', '60%'], // 中心位置，默认为['50%', '50%']
+                radius: '100%', // 半径，设置为'90%'可以使仪表盘更大
+                progress: {
+                    show: true
+                },
+                detail: {
+                    valueAnimation: true,
+                    formatter: '{value}',
+                    offsetCenter: [0, '40%'] // 调整显示分数的位置
+                },
+                data: [
+                    {
+                        value: 50,
+                        name: 'SCORE'
+                    }
+                ]
+            }
+        ]
+    };
+    myChart.setOption(option);
+
 
 // 第一个框，第二个图表
 
-var chartDom = document.getElementById('domain_count2');
-var myChart2 = echarts.init(chartDom);
+    var chartDom = document.getElementById('domain_count2');
+    var myChart2 = echarts.init(chartDom);
 
-var option = {
-    tooltip: {
-        trigger: 'item',
-        formatter: '{a} <br/>{b} : {c} ({d}%)'
-    },
-    legend: {
-        type: 'scroll',
-        orient: 'vertical',
-        right: 10,
-        top: 20,
-        bottom: 20
-    },
-    series: [
-        {
-            name: '域名类型',
-            type: 'pie',
-            radius: '55%',
-            center: ['40%', '50%'],
-            data: [],  // 初始数据为空
-            emphasis: {
-                itemStyle: {
-                    shadowBlur: 10,
-                    shadowOffsetX: 0,
-                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+    var option = {
+        tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        legend: {
+            type: 'scroll',
+            orient: 'vertical',
+            right: 10,
+            top: 20,
+            bottom: 20
+        },
+        series: [
+            {
+                name: '域名类型',
+                type: 'pie',
+                radius: '80%',
+                center: ['40%', '50%'],
+                data: [],  // 初始数据为空
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
                 }
             }
-        }
-    ]
-};
+        ]
+    };
 
-myChart2.setOption(option);
+    myChart2.setOption(option);
 
- var ws = new WebSocket(`ws://${serverIp}/dga_type_analyze`);
+    var ws = new WebSocket(`ws://${serverIp}/dga_type_analyze`);
 
-ws.onmessage = function (event) {
-    var newData = JSON.parse(event.data);
-    updateChart(newData);
-};
+    ws.onmessage = function (event) {
+        var newData = JSON.parse(event.data);
+        updateChart(newData);
+    };
 
-function updateChart(data) {
-    var processedData = processData(data);
-    myChart2.setOption({
-        series: [{
-            data: processedData
-        }]
-    });
-}
+    function updateChart(data) {
+        var processedData = processData(data);
+        myChart2.setOption({
+            series: [{
+                data: processedData
+            }]
+        });
+    }
 
-function processData(rawData) {
-    let aggregatedData = {};
+    function processData(rawData) {
+        let aggregatedData = {};
 
-    rawData.forEach(item => {
-        if (aggregatedData[item.Domain_Type]) {
-            aggregatedData[item.Domain_Type] += item.Count;
-        } else {
-            aggregatedData[item.Domain_Type] = item.Count;
-        }
-    });
+        rawData.forEach(item => {
+            if (aggregatedData[item.Domain_Type]) {
+                aggregatedData[item.Domain_Type] += item.Count;
+            } else {
+                aggregatedData[item.Domain_Type] = item.Count;
+            }
+        });
 
-    return Object.keys(aggregatedData).map(key => ({
-        name: key,
-        value: aggregatedData[key]
-    }));
-}
-
+        return Object.keys(aggregatedData).map(key => ({
+            name: key,
+            value: aggregatedData[key]
+        }));
+    }
 
 // 第一个框的第三个图
 
 
-var chartContainer = document.getElementById('domain_kinds');
-var myChart = echarts.init(chartContainer);
+    var chartContainer = document.getElementById('domain_kinds');
+    var myChart = echarts.init(chartContainer);
 
 // 初始化空数据
-var dates = [];
-var values = [];
-var topTypes = [];
+    var dates = [];
+    var values = [];
+    var topTypes = [];
 
 // WebSocket连接
-var ws = new WebSocket(`ws://${serverIp}/week_day_count_type`);
+    var ws = new WebSocket(`ws://${serverIp}/week_day_count_type`);
 
-ws.onmessage = function (event) {
-    var data = JSON.parse(event.data);
+    ws.onmessage = function (event) {
+        var data = JSON.parse(event.data);
 
-    // 假设数据结构是 { "2024-06-01": 100, "2024-06-02": 120 }
-    dates = Object.keys(data);
-    values = Object.values(data);
-    topTypes = values.map(value => ({
-        value: value,
-        symbolSize: 50 // 根据值调整大小
-    }));
+        // 假设数据结构是 { "2024-06-01": 100, "2024-06-02": 120 }
+        dates = Object.keys(data);
+        values = Object.values(data);
+        topTypes = values.map(value => ({
+            value: value,
+            symbolSize: 50 // 根据值调整大小
+        }));
 
-    // 更新图表
-    myChart.setOption({
-        xAxis: {
-            data: dates
+        // 更新图表
+        myChart.setOption({
+            xAxis: {
+                data: dates
+            },
+            series: [
+                {
+                    name: 'Top Domain Type Count',
+                    data: values
+                },
+                {
+                    name: 'Top Domain Type',
+                    data: topTypes
+                }
+            ]
+        });
+    };
+
+// 图表的初始选项
+    var option = {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'none'
+            },
+            formatter: function (params) {
+                return params[0].name + ': ' + params[0].value;
+            }
         },
+        toolbox: {
+            show: true,
+            right: 10, // 调整水平偏移量
+            top: 10, // 调整垂直偏移量
+            feature: {
+                mark: {show: true},
+                dataView: {show: true, readOnly: false},
+                restore: {show: true},
+                saveAsImage: {show: true}
+            }
+        },
+        xAxis: {
+            data: dates, // 初始日期数据为空
+            axisTick: {show: false},
+            axisLine: {show: false},
+            axisLabel: {
+                color: '#e54035'
+            }
+        },
+        yAxis: {
+            splitLine: {show: false},
+            axisTick: {show: false},
+            axisLine: {show: false},
+            axisLabel: {show: false}
+        },
+        color: ['#e54035'],
         series: [
             {
                 name: 'Top Domain Type Count',
-                data: values
+                type: 'pictorialBar',
+                barCategoryGap: '-130%',
+                symbol: 'path://M0,10 L10,10 C5.5,10 5.5,5 5,0 C4.5,5 4.5,10 0,10 z',
+                itemStyle: {
+                    opacity: 0.5
+                },
+                emphasis: {
+                    itemStyle: {
+                        opacity: 1
+                    }
+                },
+                data: values, // 初始值数据为空
+                z: 10
             },
             {
                 name: 'Top Domain Type',
-                data: topTypes
+                type: 'pictorialBar',
+                barGap: '-100%',
+                symbolPosition: 'end',
+                symbolSize: 50,
+                symbolOffset: [0, '-120%'],
+                data: topTypes // 初始类型数据为空
             }
         ]
-    });
-};
-
-// 图表的初始选项
-var option = {
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'none'
-        },
-        formatter: function (params) {
-            return params[0].name + ': ' + params[0].value;
-        }
-    },
-    toolbox: {
-        show: true,
-        right: 10, // 调整水平偏移量
-        top: 10, // 调整垂直偏移量
-        feature: {
-            mark: {show: true},
-            dataView: {show: true, readOnly: false},
-            restore: {show: true},
-            saveAsImage: {show: true}
-        }
-    },
-    xAxis: {
-        data: dates, // 初始日期数据为空
-        axisTick: {show: false},
-        axisLine: {show: false},
-        axisLabel: {
-            color: '#e54035'
-        }
-    },
-    yAxis: {
-        splitLine: {show: false},
-        axisTick: {show: false},
-        axisLine: {show: false},
-        axisLabel: {show: false}
-    },
-    color: ['#e54035'],
-    series: [
-        {
-            name: 'Top Domain Type Count',
-            type: 'pictorialBar',
-            barCategoryGap: '-130%',
-            symbol: 'path://M0,10 L10,10 C5.5,10 5.5,5 5,0 C4.5,5 4.5,10 0,10 z',
-            itemStyle: {
-                opacity: 0.5
-            },
-            emphasis: {
-                itemStyle: {
-                    opacity: 1
-                }
-            },
-            data: values, // 初始值数据为空
-            z: 10
-        },
-        {
-            name: 'Top Domain Type',
-            type: 'pictorialBar',
-            barGap: '-100%',
-            symbolPosition: 'end',
-            symbolSize: 50,
-            symbolOffset: [0, '-120%'],
-            data: topTypes // 初始类型数据为空
-        }
-    ]
-};
+    };
 
 // 设置图表选项
-myChart.setOption(option);
+    myChart.setOption(option);
+
 
 // 监听窗口大小变化，调整图表大小
-window.addEventListener("resize", function () {
-    myChart.resize();
-});
-
+    window.addEventListener("resize", function () {
+        myChart.resize();
+    });
 
 
     if ($('.summary-cards').length) {
@@ -704,6 +734,7 @@ window.addEventListener("resize", function () {
     }
 
 });
+
 
 // 基于准备好的dom，初始化echarts实例
 

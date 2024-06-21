@@ -29,7 +29,6 @@ db2 = mongo_client["Data_pro"]
 # 模板配置
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="templates/static"), name="static")
-
 day_counts = 0
 
 # 统计集合数量以及名字
@@ -765,7 +764,7 @@ async def mid_dns_point_data(websocket: WebSocket):
 
 @app.get("/")
 async def read_root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request, "ipAddress": ipAddress})
+    return templates.TemplateResponse("big_view.html", {"request": request, "ipAddress": ipAddress})
 
 @app.get("/index.html")
 async def read_root(request: Request):

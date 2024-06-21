@@ -88,7 +88,7 @@ i{font-style: normal;}
 .table1 td{ border-bottom: 1px dotted#407abd;font-size: 12px; padding:6px 0;text-align: center; color: rgba(255,255,255,.6)}
 .table1 tr:last-child td{border: none;}
 .mapc{background: url(../images/bg3.png) no-repeat center center; background-size: 100% 100%}
-.map{position: relative; height: 100%; border: 1px solid rgba(0, 0, 0, .125);
+.map{position: relative; height: 100%; border: 1px solid rgb(255, 255, 255);
     border-radius: 1rem}
 .map img{}
 .mapnav{position: absolute;z-index: 10;}
