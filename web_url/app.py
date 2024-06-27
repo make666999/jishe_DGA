@@ -92,7 +92,7 @@ async def websocket_endpoint(websocket: WebSocket):
                     start_time_str = datetime.fromtimestamp(start_timestamp / 1000).strftime("%H:%M")
                     websocket_poll_cluster_statistics.setdefault(collection_name, {})[start_time_str] = count
             await websocket.send_text(json.dumps(websocket_poll_cluster_statistics))
-            await asyncio.sleep(1)
+            await asyncio.sleep(10)
     except Exception as e:
         print(f"处理集群统计数据的周期性轮询已关闭: {e}")
     finally:
@@ -102,38 +102,7 @@ class DataToReceive(BaseModel):
     Local: str
     Timestamp: int
 
-# 提供集群内DNS流量的周报告
-@app.websocket("/websocket_weekly_data_total")
-async def websocket_websocket_weekly_data_total(websocket: WebSocket):
-    await websocket.accept()
-    try:
-        while websocket.client_state == WebSocketState.CONNECTED:
-            websocket_weekly_data_total = {}
-            current_timestamp = int(time.time() * 1000)
-            for i in range(7):  # 从今天往前推7天
-                start_timestamp = current_timestamp - (i + 1) * 86400000  # 一天的毫秒数
-                start_date = time.strftime("%Y-%m-%d", time.localtime(start_timestamp / 1000))
-                websocket_weekly_data_total[start_date] = 0  # 初始化每天的总数为0
-
-            for collection_name in await db.list_collection_names():
-                collection = db[collection_name]
-                for i in range(7):  # 从今天往前推7天
-                    start_timestamp = current_timestamp - (i + 1) * 86400000
-                    end_of_day_timestamp = current_timestamp - i * 86400000
-                    count = await collection.count_documents({
-                        "Timestamp": {"$gte": start_timestamp, "$lt": end_of_day_timestamp}
-                    })
-                    start_date = time.strftime("%Y-%m-%d", time.localtime(start_timestamp / 1000))
-                    websocket_weekly_data_total[start_date] += count  # 累加每天的数据量
-
-            await websocket.send_text(json.dumps(websocket_weekly_data_total))
-            await asyncio.sleep(1)
-    except Exception as e:
-        print(f"提供集群内DNS流量的周报告已关闭: {e}")
-    finally:
-        await websocket.close()
-
-# 管理集群设备列表和用户权限
+# 管理集群设备列表和用户权限  ///优化
 @app.websocket("/websocket_user_list_management")
 async def websocket_websocket_user_list_management(websocket: WebSocket):
     await websocket.accept()
@@ -193,7 +162,7 @@ async def websocket_websocket_user_list_management(websocket: WebSocket):
     finally:
         await websocket.close()
 
-# DNS流量数据安全状况统计分析
+# DNS流量数据安全状况统计分析   优化
 @app.websocket("/websocket_dns_traffic_security_analysis")
 async def websocket_dns_traffic_security_analysis(websocket: WebSocket):
     await websocket.accept()
@@ -244,7 +213,7 @@ async def websocket_dns_traffic_security_analysis(websocket: WebSocket):
     finally:
         await websocket.close()
 
-# 提供集群内域名访问的排名--实时
+# 提供集群内域名访问的排名--实时/////优化
 @app.websocket("/websocket_daily_top_remain_type")
 async def websocket_daily_top_remain_type(websocket: WebSocket):
     await websocket.accept()
@@ -361,7 +330,7 @@ async def websocket_last_messages(websocket: WebSocket):
                 websocket_user_list_management_list.extend(recent_data)
 
             await websocket.send_json(websocket_user_list_management_list)
-            await asyncio.sleep(1)
+            await asyncio.sleep(5)
     except WebSocketDisconnect:
         print("WebSocket connection closed")
     except Exception as e:
@@ -654,7 +623,6 @@ async def Dns_Address_Type(websocket: WebSocket):
                     "count": {"$sum": "$dns_array.v"}
                 }},
                 {"$sort": {"count": -1}},  # 根据访问计数降序排序
-                # {"$limit": 7}  # 限制结果到最高的七个
             ]
             cursor = collection.aggregate(pipeline)
             result = await cursor.to_list(length=None)
@@ -761,6 +729,23 @@ async def mid_dns_point_data(websocket: WebSocket):
         print(f"MidDnsPointData断开连接: {e}")
     finally:
         await websocket.close()
+
+
+@app.websocket("/lisen")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while True:
+            data = await websocket.receive_text()
+            print("Received data via WebSocket:", data)
+    except WebSocketDisconnect as e:
+        # 检查是否为正常的关闭
+        if e.code == 1000:
+            print("WebSocket was closed normally.")
+        else:
+            print(f"WebSocket disconnected with exception code: {e.code}")
+    finally:
+        print("WebSocket connection handling ended")
 
 @app.get("/")
 async def read_root(request: Request):

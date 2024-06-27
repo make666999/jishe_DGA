@@ -42,4 +42,9 @@
 ### app.py
 - 运行Web用户界面的主脚本
 
+### kafka
+-   `zkServer.cmd`
+-  `.\bin\windows\kafka-server-start.bat .\config\server.properties`
+-  `faust -A hello_world worker -l info`
+
 
