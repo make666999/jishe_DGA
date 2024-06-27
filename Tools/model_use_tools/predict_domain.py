@@ -5,7 +5,7 @@ import torch.nn.functional as F
 from Model.Train_Model.Train_Transformer_R_SKNET import Transformer
 name = "Transformer+R_SKNET"  ###准确率最高
 
-model_path = os.path.abspath(os.path.join("Model", "Model_File","Transformer+R_SKNET.pth"))
+model_path = os.path.abspath(os.path.join("Model", "Model_File","TransFlexNet.pth"))
 embedding_dim = 64  # 嵌入词向量的纬度
 L = 40
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')

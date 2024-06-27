@@ -935,7 +935,7 @@ def train(model, optimizer, loss_meter, epochs, path):
 
 if __name__ == '__main__':
     datalist=[]
-    average=None #weighted
+    average="weighted" #weighted
     name = "Transformer+R_SKNET"  ###准确率最高
     model_path = f"../Model_File/{name}.pth"
     png_path = f"./png/{name}.png"
