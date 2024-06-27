@@ -46,6 +46,10 @@
 
 ### app.py
 - 运行Web用户界面的主脚本
+### mongo_spark.py
+- spark与mongodb联动数据分析任务
+
+
 
 ## kafka
 -   `zkServer.cmd` 启动zkServer
