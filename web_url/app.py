@@ -71,32 +71,51 @@ async def get_data_formatted(websocket: WebSocket):
     finally:
         await websocket.close()
 
-# 处理集群统计数据的周期性轮询
+#处理集群统计数据的周期性轮询
 @app.websocket("/websocket_poll_cluster_statistics")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     try:
         while websocket.client_state == WebSocketState.CONNECTED:
-            websocket_poll_cluster_statistics = {}
-            for collection_name in await db.list_collection_names():
-                collection = db[collection_name]
-                current_timestamp = int(time.time() * 1000)  # 当前时间戳转换为毫秒
-                for i in range(10):  # 统计最近10分钟的数据量
-                    start_timestamp = current_timestamp - (i + 1) * 60000
-                    end_timestamp = current_timestamp - i * 60000
-                    count = await collection.count_documents({
-                        "Timestamp": {"$gte": start_timestamp, "$lt": end_timestamp}
-                    })
-
-                    # 注意：datetime.fromtimestamp() 需要秒为单位，所以这里要将毫秒转换回秒
-                    start_time_str = datetime.fromtimestamp(start_timestamp / 1000).strftime("%H:%M")
-                    websocket_poll_cluster_statistics.setdefault(collection_name, {})[start_time_str] = count
+            websocket_poll_cluster_statistics = await gather_statistics()
             await websocket.send_text(json.dumps(websocket_poll_cluster_statistics))
             await asyncio.sleep(10)
     except Exception as e:
         print(f"处理集群统计数据的周期性轮询已关闭: {e}")
     finally:
         await websocket.close()
+
+async def gather_statistics():
+    current_timestamp = int(time.time() * 1000)  # 当前时间戳转换为毫秒
+    tasks = []
+    collection_names = await db.list_collection_names()
+
+    for collection_name in collection_names:
+        collection = db[collection_name]
+        for i in range(10):
+            start_timestamp = current_timestamp - (i + 1) * 60000
+            end_timestamp = current_timestamp - i * 60000
+            task = count_documents(collection, start_timestamp, end_timestamp)
+            tasks.append(task)
+
+    results = await asyncio.gather(*tasks)
+    statistics = {}
+
+    for result in results:
+        collection_name, start_time_str, count = result
+        statistics.setdefault(collection_name, {})[start_time_str] = count
+
+    return statistics
+
+async def count_documents(collection, start_timestamp, end_timestamp):
+    count = await collection.count_documents({
+        "Timestamp": {"$gte": start_timestamp, "$lt": end_timestamp}
+    })
+    start_time_str = datetime.fromtimestamp(start_timestamp / 1000).strftime("%H:%M")
+    return (collection.name, start_time_str, count)
+
+
+
 
 class DataToReceive(BaseModel):
     Local: str
@@ -775,6 +794,7 @@ async def read_root(request: Request):
 @app.get("/mode-total.html")
 async def read_root(request: Request):
     return templates.TemplateResponse("mode-total.html", {"request": request, "ipAddress": ipAddress})
+
 
 @app.get("/Security_policy.html")
 async def read_root(request: Request):
