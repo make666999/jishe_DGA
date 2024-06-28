@@ -8,9 +8,12 @@ from scapy.layers.inet import IP, UDP
 
 
 def random_domain(tld="com", length=10):
-    """生成随机域名"""
-    letters = string.ascii_lowercase
+    today = datetime.now().strftime("%Y%m%d%H%M")
+    random.seed(today)
+
+    letters = string.ascii_lowercase + string.digits
     domain = ''.join(random.choice(letters) for i in range(length))
+
     return f"{domain}.{tld}"
 
 def send_fake_dns_response(src_ip, dst_ip, src_port, dst_port, qname, rdata):

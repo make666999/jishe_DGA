@@ -1,7 +1,7 @@
 import asyncio
 import time
 from concurrent.futures import ThreadPoolExecutor
-
+from Tools.client_tools.iptables import block_ip
 from scapy.all import sniff
 from scapy.layers.dns import DNS
 from scapy.layers.inet import IP
@@ -18,7 +18,9 @@ async def process_connection(domain, dst_ip, loc_ip, type, domain_ip=None):
     domain = domain.decode("utf-8").strip(".")
     domain_type = await loop.run_in_executor(None, predict_domain.predict_domain, model, domain)
     loc = await loop.run_in_executor(None, database_use.get_ip_loc, domain_ip)
-
+    if domain_type != "BENIGN":
+        await block_ip(domain_ip, domain)
+        print(f"[!] 域名 {domain} ({domain_ip}) 已被阻止，原因: 检测结果为 {domain_type}")
     data = {
         "DNS_Type": type,
         "Loc_Address": dst_ip,
@@ -50,8 +52,8 @@ async def dns_callback(packet):
                     continue
             if tasks:
                 await asyncio.gather(*tasks)
-    except:
-        print("error")
+    except Exception as e:
+        print("发生错误：", str(e))
 
 def sniff_dns():
     sniff(filter="port 53", prn=lambda x: asyncio.run(dns_callback(x)), store=0, iface="以太网")
