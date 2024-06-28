@@ -2,7 +2,7 @@ import asyncio
 import time
 import faust
 import json
-
+from Tools.client_tools.iptables import block_ip
 from kafka import KafkaProducer
 
 from Tools.database_tools import database_use
@@ -17,7 +17,9 @@ async def process_connection(domain, dst_ip, loc_ip, type, domain_ip=None):
     domain = domain.strip(".")  # 直接处理字符串
     domain_type = await loop.run_in_executor(None, predict_domain.predict_domain, model, domain)
     loc = await loop.run_in_executor(None, database_use.get_ip_loc, domain_ip)
-
+    if domain_type != "BENIGN":
+        await block_ip(domain_ip, domain)
+        print(f"[!] 域名 {domain} ({domain_ip}) 已被阻止，原因: 检测结果为 {domain_type}")
     data = {
         "DNS_Type": type,
         "Loc_Address": dst_ip,
