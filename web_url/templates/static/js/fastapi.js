@@ -78,14 +78,24 @@ $(function () {
 
     // 创建WebSocket连接
     var ws = new WebSocket(`ws://${serverIp}/websocket_dns_traffic_security_analysis`);
+     var baseTime = new Date().getTime(); // 初始基准时间
+    var timeInterval = 5000; // 每个点增加1000毫秒
 
     ws.onmessage = function (event) {
+
+
         var data = JSON.parse(event.data);
         var totalBenign = [];
         var totalNonBenign = [];
         var dates = [];
-        data.stats.forEach(function (stat) {
-            dates.push(stat.date);
+data.stats.forEach(function (stat, index) {
+            var timeStamp = new Date(baseTime + index * timeInterval); // 为每个数据点生成时间戳
+            var hours = timeStamp.getHours().toString().padStart(2, '0');
+            var minutes = timeStamp.getMinutes().toString().padStart(2, '0');
+            var seconds = timeStamp.getSeconds().toString().padStart(2, '0');
+
+            var timeString = `${hours}:${minutes}:${seconds}`;
+            dates.push(timeString);
             totalBenign.push(stat.benign_count);
             totalNonBenign.push(stat.non_benign_count);
         });
@@ -106,7 +116,7 @@ $(function () {
                     data: totalNonBenign
                 }
             ]
-        });
+        }); baseTime += data.stats.length * timeInterval; // 更新基准时间
     };
 
 };
@@ -402,108 +412,62 @@ $(function () {
     }
 
     function acc() {
-        var myChart = echarts.init(document.getElementById('echart4'));
+    var myChart = echarts.init(document.getElementById('echart4'));
+    var socket = new WebSocket(`ws://${serverIp}/top_five_dns_points`);
 
+    socket.onmessage = function (event) {
+        var data = JSON.parse(event.data);
         var option = {
-            color: ["#4D94F1"],
+            color: ["#FF4500", "#1E90FF", "#32CD32", "#FFD700", "#FF69B4"],
             grid: {
-                left: "10%",
-                right: "10%",
-                top: "2%",
-                bottom: "10%",
+                left: "3%",
+                right: "4%",
+                bottom: "3%",
                 containLabel: true,
             },
-            xAxis: [
-                {
-                    type: "category",
-                    data: ["东部", "南部", "中部", "西部", "北部"],
-                    // data: echelonchart.xAxis,
-                    boundaryGap: true,
-                    axisLine: {
-                        show: true,
-                    },
-                    axisLabel: {
-                        interval: 0,
-                        margin: 16,
-                        color: "#666666",
-                        fontSize: 12,
-                    },
-                    axisTick: {
-                        show: false,
-                    },
+            xAxis: [{
+                type: "category",
+                data: data.xAxis,
+                boundaryGap: true,
+                axisLine: {
+                    show: true,
                 },
-            ],
-            yAxis: [
-                {
-                    type: "value",
+                axisLabel: {
+                    interval: 0,
+                    margin: 16,
+                    color: "#666666",
+                    fontSize: 12,
+                },
+                axisTick: {
                     show: false,
                 },
-            ],
-            series: [
-                {
-                    name: "地区",
-                    type: "bar",
-                    barWidth: "50%",
-                    // data: echelonchart.yAxis,
-                    data: [
-                        // 配置单独的孩子所在的那一项的具体样式
-                        {
-                            value: 55,
-                            label: {
-                                show: true,
-                                position: "top",
-                                color: "#FF6900",
-                                formatter({value}) {
-                                    return `${value}条`;
-                                },
-                            },
-                            itemStyle: {
-                                color: "#FF6900",
-                                borderWidth: 2,
-                                borderType: "solid",
-                                borderColor: "#FF6900",
-                            },
+            }],
+            yAxis: [{
+                type: "value",
+                show: false,
+            }],
+            series: [{
+                name: "地区",
+                type: "bar",
+                barWidth: "50%",
+                data: data.yAxis.map(value => ({
+                    value: value,
+                    label: {
+                        show: true,
+                        position: "top",
+                        color: "#FF6900",
+                        formatter({value}) {
+                            return `${value}条`;
                         },
-                        {
-                            value: 50,
-                            label: {
-                                show: true,
-                                position: "bottom",
-                                color: "#91CC75",
-                                formatter({value}) {
-                                    return `${value}条`;
-                                },
-                            },
-                            itemStyle: {
-                                color: "#91CC75",
-                                borderWidth: 2,
-                                borderType: "solid",
-                                borderColor: "#91CC75",
-                            },
-                        },
-                        {
-                            value: 72,
-                            label: {
-                                show: true,
-                                position: "top",
-                                color: "#FF6900",
-                                formatter({value}) {
-                                    return `${value}条`;
-                                },
-                            },
-                            itemStyle: {
-                                color: "#FF6900",
-                                borderWidth: 2,
-                                borderType: "solid",
-                                borderColor: "#FF6900",
-                            },
-                        },
-                        32,
-                        16,
-                    ],
-
-                    // radius: ["85%", "100%"],
-                    avoidLabelOverlap: false,
+                    },
+                    itemStyle: {
+                        color: "#FF6900",
+                        borderWidth: 2,
+                        borderType: "solid",
+                        borderColor: "#FF6900",
+                    }
+                })),
+                 avoidLabelOverlap: false,
                     hoverAnimation: false,
 
                     // 统一设置其他的 未单独设置样式的 数据柱状图样式
@@ -526,15 +490,16 @@ $(function () {
                     labelLine: {
                         show: false,
                     },
-                },
-            ],
-
+            }]
         };
 
         myChart.setOption(option);
-        window.addEventListener("resize", function () {
-            myChart.resize();
-        });
-    }
+    };
+
+    window.addEventListener("resize", function () {
+        myChart.resize();
+    });
+}
+
 
 })

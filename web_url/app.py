@@ -469,6 +469,39 @@ async def week_day_count(websocket: WebSocket):
     finally:
         await websocket.close()
 
+@app.websocket("/top_five_dns_points")
+async def top_five_dns_points(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            collection = db2["test"]  # 替换成实际的collection名
+            pipeline = [
+                {"$unwind": "$mid_dns_point"},
+                {"$sort": {"mid_dns_point.count": -1}},
+                {"$limit": 5},
+                {"$project": {
+                    "name": "$mid_dns_point.name",
+                    "count": "$mid_dns_point.count"
+                }}
+            ]
+            cursor = collection.aggregate(pipeline)
+            result = await cursor.to_list(length=None)
+
+            # 创建前端需要的格式
+            names = [doc["name"] for doc in result]
+            counts = [doc["count"] for doc in result]
+            data = {"xAxis": names, "yAxis": counts}
+
+            await websocket.send_text(json.dumps(data))
+            await asyncio.sleep(10)  # 每10秒发送一次数据
+
+    except WebSocketDisconnect:
+        print("WebSocket connection closed")
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        await websocket.close()
+
 class DataToReceive(BaseModel):
     code_types: str
     new_model_value: str
