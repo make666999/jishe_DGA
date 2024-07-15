@@ -22,7 +22,7 @@ from starlette.responses import FileResponse
 app = FastAPI()
 
 # 连接到MongoDB数据库
-mongo_client = AsyncIOMotorClient("mongodb://886xt49626.goho.co:23904")
+mongo_client = AsyncIOMotorClient("mongodb://nl86309121.vicp.fun:30786")
 db = mongo_client["DGA"]
 db2 = mongo_client["Data_pro"]
 
