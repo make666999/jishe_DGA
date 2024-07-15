@@ -22,6 +22,8 @@ from starlette.responses import FileResponse
 app = FastAPI()
 
 # 连接到MongoDB数据库
+# mongo_client = AsyncIOMotorClient("mongodb://886xt49626.goho.co:23904")
+
 mongo_client = AsyncIOMotorClient("mongodb://nl86309121.vicp.fun:30786")
 db = mongo_client["DGA"]
 db2 = mongo_client["Data_pro"]
@@ -399,6 +401,60 @@ async def total_nineth_counts(websocket: WebSocket):
     finally:
         await websocket.close()
 
+
+
+@app.websocket("/websocket_top_five_messages")
+async def websocket_top_five_messages(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        # 计算当天的时间范围
+        now = datetime.now()
+        start_of_day = datetime(now.year, now.month, now.day)
+        end_of_day = start_of_day + timedelta(days=1)
+        start_of_day_ms = int(start_of_day.timestamp() * 1000)
+        end_of_day_ms = int(end_of_day.timestamp() * 1000)
+
+        # 定义针对"GPU-SERVER"集合的查询
+        collection = db["GPU-SERVER"]
+        # 使用聚合管道找出当天toName出现频率最高的前五个
+        pipeline = [
+            {
+                "$match": {
+                    "Timestamp": {"$gte": start_of_day_ms, "$lt": end_of_day_ms},
+                    "moveLines.toName": {"$exists": True}  # 确保toName字段存在
+                }
+            },
+            {
+                "$group": {
+                    "_id": "$moveLines.toName",
+                    "count": {"$sum": 1}
+                }
+            },
+            {
+                "$sort": {"count": -1}
+            },
+            {
+                "$limit": 5
+            }
+        ]
+        top_toNames = await collection.aggregate(pipeline).to_list(length=5)
+
+        # 准备数据以发送
+        top_toName_list = [
+            {"toName": item["_id"], "count": item["count"]}
+            for item in top_toNames
+        ]
+
+        # 发送聚合后的数据
+        await websocket.send_json(top_toName_list)
+        await asyncio.sleep(5)
+    except WebSocketDisconnect:
+        print("WebSocket connection closed")
+
+    finally:
+        await websocket.close()
+
+
 async def get_city_data():
     collection = db["GPU-SERVER"]
     pipeline = [
@@ -466,6 +522,39 @@ async def week_day_count(websocket: WebSocket):
 
     except Exception as e:
         print(f"获取DNS地址失败: {e}")
+    finally:
+        await websocket.close()
+
+@app.websocket("/top_five_dns_points")
+async def top_five_dns_points(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            collection = db2["test"]
+            pipeline = [
+                {"$unwind": "$mid_dns_point"},
+                {"$sort": {"mid_dns_point.count": -1}},
+                {"$limit": 5},
+                {"$project": {
+                    "name": "$mid_dns_point.name",
+                    "count": "$mid_dns_point.count"
+                }}
+            ]
+            cursor = collection.aggregate(pipeline)
+            result = await cursor.to_list(length=None)
+
+            # 创建前端需要的格式
+            names = [doc["name"] for doc in result]
+            counts = [doc["count"] for doc in result]
+            data = {"xAxis": names, "yAxis": counts}
+
+            await websocket.send_text(json.dumps(data))
+            await asyncio.sleep(10)  # 每10秒发送一次数据
+
+    except WebSocketDisconnect:
+        print("WebSocket connection closed")
+    except Exception as e:
+        print(f"Error: {e}")
     finally:
         await websocket.close()
 
