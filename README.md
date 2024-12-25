@@ -54,6 +54,6 @@
 ## kafka
 -   `zkServer.cmd` 启动zkServer
 -  `.\bin\windows\kafka-server-start.bat .\config\server.properties`启动kafka
--  `faust -A hello_world worker -l info`启动流处理
+-  `faust -A kafka_cus worker -l info`启动流处理
 
 

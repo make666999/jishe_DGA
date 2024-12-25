@@ -580,13 +580,13 @@ class SKConv(nn.Module):
         attention_vectors = [fc(feats_A_OUT) for fc in self.fcs]
 
         attention_vectors = torch.cat(attention_vectors, dim=1)
-
+        print(attention_vectors.shape,8)
         attention_vectors = attention_vectors.view(batch_size, self.M, self.features, 1)
-
+        print(attention_vectors.shape, -1-1)
         attention_vectors = self.softmax(attention_vectors)
-
+        print(attention_vectors.shape,00)
         feats_V = torch.sum(feats * attention_vectors, dim=1)
-
+        print(feats_V.shape,11)
         return feats_V + res_x
 
 
