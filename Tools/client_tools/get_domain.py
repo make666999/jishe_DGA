@@ -10,6 +10,7 @@ from Tools.database_tools import database_use
 from Tools.model_use_tools import predict_domain
 
 db_log = database_use.mongo_link_log()
+
 model = predict_domain.Predict_Domain()
 
 
@@ -56,7 +57,7 @@ async def dns_callback(packet):
         print("发生错误：", str(e))
 
 def sniff_dns():
-    sniff(filter="port 53", prn=lambda x: asyncio.run(dns_callback(x)), store=0, iface="以太网")
+    sniff(filter="port 53", prn=lambda x: asyncio.run(dns_callback(x)), store=0, iface="WLAN")
 
 
 async def main():

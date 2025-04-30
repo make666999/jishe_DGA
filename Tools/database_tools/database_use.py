@@ -24,7 +24,7 @@ loc_x_y=[ip_data["lon"],ip_data["lat"]]
 
 def mongo_link_database(database_name):
 
-    client = MongoClient("mongodb://nl86309121.vicp.fun:30786")
+    client = MongoClient("mongodb://127.0.0.1:27017/")
     # 选择数据库
     db = client["DGA"]
     # 选择集合

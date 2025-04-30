@@ -49,7 +49,12 @@
 ### mongo_spark.py
 - spark与mongodb联动数据分析任务
 
+### mongodb
 
+-   `net start MongoDB` 启动 MongoDB 服务
+
+
+-   `net stop MongoDB` 关闭 MongoDB 服务
 
 ## kafka
 -   `zkServer.cmd` 启动zkServer

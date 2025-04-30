@@ -27,7 +27,7 @@ def dns_callback(packet):
         print("error:", e)
 
 def sniff_dns():
-    sniff(filter="port 53", prn=dns_callback, store=0, iface="以太网")
+    sniff(filter="port 53", prn=dns_callback, store=0, iface="WLAN")
 
 if __name__ == "__main__":
     sniff_dns()
