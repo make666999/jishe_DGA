@@ -30,7 +30,7 @@ def send_fake_dns_response(src_ip, dst_ip, src_port, dst_port, qname, rdata):
     # 组装完整的DNS包
     packet = ip/udp/dns
     # 发送包
-    send(packet)
+    send(packet,iface='WLAN')
 
 def main():
     src_ip = '192.168.0.1'
