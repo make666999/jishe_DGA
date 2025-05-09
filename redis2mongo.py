@@ -22,7 +22,7 @@ from typing import Any
 
 import redis.asyncio as aioredis
 from motor.motor_asyncio import AsyncIOMotorClient
-
+hostname = socket.gethostname()
 # ---------------- 配置 ----------------
 STREAM_KEY = "dns_connections"
 GROUP_NAME = "dns_consumers"             # Consumer Group 名称
@@ -31,7 +31,7 @@ CONSUMER_ID = f"{socket.gethostname()}-{os.getpid()}"  # 本 Worker 的唯一 ID
 REDIS_URL = "redis://localhost:6379/0"     # Redis 连接串
 MONGO_URL = "mongodb://localhost:27017"     # MongoDB 连接串
 MONGO_DB = "DGA"                            # MongoDB 数据库
-MONGO_COL = "GPU-SERVER"                      # MongoDB 集合
+MONGO_COL = hostname                      # MongoDB 集合
 
 BATCH = 100       # 每次最多读取多少条消息
 BLOCK_MS = 5000   # XREADGROUP 阻塞时长（毫秒）
@@ -117,7 +117,7 @@ class RedisMongoSync:
 async def main():
     worker = RedisMongoSync()
 
-    # -------- 信号优雅退出 --------
+
     def _graceful_shutdown(*_):
         asyncio.create_task(worker.close())
 

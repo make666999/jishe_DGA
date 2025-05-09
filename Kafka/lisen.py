@@ -3,7 +3,7 @@ import websockets
 import socket
 import asyncio
 # 创建消费者，指定Kafka服务器地址和主题
-consumer = KafkaConsumer('processed_dns_data',
+consumer = KafkaConsumer('network_connections',
                          bootstrap_servers='localhost:9092',
                          auto_offset_reset='earliest')
 
@@ -19,19 +19,32 @@ def get_local_ip():
         return None
 
 serverIp = get_local_ip() + ":8000"
+
 async def send_to_websocket(message):
-    uri = f'ws://{serverIp}/lisen'  # 修改为你的WebSocket地址
+    uri = f'ws://{serverIp}/lisen'
     try:
         async with websockets.connect(uri) as websocket:
             await websocket.send(message)
-            print("Data sent to WebSocket")
+            print("Data sent to WebSocket:"+message)
     except Exception as e:
         print("Failed to send message via WebSocket:", e)
 
 async def consume_messages():
-    for message in consumer:
-        await send_to_websocket(message.value.decode('utf-8'))
-        print(f"Received message: {message.value.decode('utf-8')}")
+    message_count = 0
+    for _ in consumer:
+        message_count += 1
+        await send_to_websocket(str(message_count))
 
-# 运行消费者处理函数
+async def consume_and_send_messages(serverIp, consumer):
+    uri = f'ws://{serverIp}/lisen'
+    try:
+        async with websockets.connect(uri) as websocket:
+            message_count = 0
+            for _ in consumer:
+                message_count += 1
+                await websocket.send(str(message_count))
+                print("Data sent to WebSocket:" + str(message_count))
+    except Exception as e:
+        print("Failed to send message via WebSocket:", e)
+# 启动异步主程序
 asyncio.run(consume_messages())

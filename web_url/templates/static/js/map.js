@@ -36,8 +36,6 @@ $(function () {
    // backgroundColor: '#404a59',
 title: {
     text: '恶意域名IP定位分析',
-    subtext: '来源：360安全实验室',
-    sublink: 'https://gitee.com/iGaoWei/big-data-view',
     left: 'right', // 将标题靠右
     textStyle: {
         color: '#fff'

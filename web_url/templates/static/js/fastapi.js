@@ -1,119 +1,141 @@
 $(function () {
+    now_data();
     top_dns();
     day_dns();
     map();
-    head();
+
     salesChart();
     device_count();
     acc();
 
-    function top_dns (){
+    //表头数据
+    function now_data() {
+        var ws = new WebSocket(`ws://${serverIp}/lisen`);
+        ws.onmessage = function (event) {
+            // 解析从服务器接收到的数据
+            var data = JSON.parse(event.data);
+            // console.log(data);
+            document.querySelector('.data_counts').textContent = data.all_count; //集群域名访问量
+            document.querySelector('.dga_now').textContent = data.dga_count; //集群域名访问量
+            document.querySelector('.today_total_count').textContent = data.remote_domain_count;
 
-    // 获取图表容器并设置样式
-    var chartContainer = document.getElementById('domain_count');
-    chartContainer.style.width = '100%';
-    chartContainer.style.height = '100%';
-
-    // 实例化图表
-    var index_1 = echarts.init(chartContainer);
-
-    // 图表的选项
-    var option = {
-        tooltip: {
-            trigger: 'axis'
-        },
-        legend: {
-            top: 'bottom',
-            data: ['repend', 'attact']
-        },
-        toolbox: {
-            show: true,
-            right: 10,
-            top: 10,
-            feature: {}
-        },
-        xAxis: {
-            type: 'category',
-            boundaryGap: false,
-            data: [] // 初始化为空，稍后填充
-        },
-        yAxis: {
-            type: 'value'
-        },
-        series: [
-            {
-                name: 'repend',
-                type: 'line',
-                smooth: true,
-                data: [], // 初始化为空，稍后填充
-                lineStyle: {
-                    width: 3
-                },
-                itemStyle: {
-                    color: '#99CC99'
-                }
-            },
-            {
-                name: 'attact',
-                type: 'line',
-                smooth: true,
-                data: [], // 初始化为空，稍后填充
-                lineStyle: {
-                    width: 3
-                },
-                itemStyle: {
-                    color: '#FFCCCC'
-                }
-            }
-        ]
+            // console.log("ok");
+        }
     };
 
-    // 设置图表选项
-    index_1.setOption(option);
+    //恶意域名统计
+    function top_dns() {
 
-    // 监听窗口大小变化，重新渲染图表
-    window.addEventListener('resize', function () {
-        index_1.resize();
-    });
+        // 获取图表容器并设置样式
+        var chartContainer = document.getElementById('domain_count');
+        chartContainer.style.width = '100%';
+        chartContainer.style.height = '100%';
 
-    // 创建WebSocket连接
-    var ws = new WebSocket(`ws://${serverIp}/websocket_dns_traffic_security_analysis`);
+        // 实例化图表
+        var index_1 = echarts.init(chartContainer);
 
-    ws.onmessage = function (event) {
-
-
-        var data = JSON.parse(event.data);
-        var totalBenign = [];
-        var totalNonBenign = [];
-        var dates = [];
-        data.stats.forEach(function (stat) {
-            dates.push(stat.collection_name);
-            totalBenign.push(stat.benign_count);
-            totalNonBenign.push(stat.non_benign_count);
-        });
-        document.querySelector('.data_counts').textContent = data.day_counts;
-
-        // 更新图表数据
-        index_1.setOption({
+        // 图表的选项
+        var option = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                top: 'bottom',
+                data: ['repend', 'attact']
+            },
+            toolbox: {
+                show: true,
+                right: 10,
+                top: 10,
+                feature: {}
+            },
             xAxis: {
-                data: dates
+                type: 'category',
+                boundaryGap: false,
+                data: [] // 初始化为空，稍后填充
+            },
+            yAxis: {
+                type: 'value'
             },
             series: [
                 {
                     name: 'repend',
-                    data: totalBenign
+                    type: 'line',
+                    smooth: true,
+                    data: [], // 初始化为空，稍后填充
+                    lineStyle: {
+                        width: 3
+                    },
+                    itemStyle: {
+                        color: '#99CC99'
+                    }
                 },
                 {
                     name: 'attact',
-                    data: totalNonBenign
+                    type: 'line',
+                    smooth: true,
+                    data: [], // 初始化为空，稍后填充
+                    lineStyle: {
+                        width: 3
+                    },
+                    itemStyle: {
+                        color: '#FFCCCC'
+                    }
                 }
             ]
+        };
+
+        // 设置图表选项
+        index_1.setOption(option);
+
+        // 监听窗口大小变化，重新渲染图表
+        window.addEventListener('resize', function () {
+            index_1.resize();
         });
+
+        // 创建WebSocket连接
+        var ws = new WebSocket(`ws://${serverIp}/lisen_all`);
+
+        let latestData = null; // 保存最近一次的 payload 数据
+
+        ws.onmessage = function (event) {
+            latestData = JSON.parse(event.data); // 缓存数据，不立即渲染
+        };
+
+        setInterval(function () {
+            if (!latestData) return;
+
+            var totalBenign = [];
+            var totalNonBenign = [];
+            var dates = [];
+
+            latestData.stats.forEach(function (stat) {
+                dates.push(stat.collection_name);
+                totalBenign.push(stat.benign_count);
+                totalNonBenign.push(stat.non_benign_count);
+            });
+
+            index_1.setOption({
+                xAxis: {
+                    data: dates
+                },
+                series: [
+                    {
+                        name: 'repend',
+                        data: totalBenign
+                    },
+                    {
+                        name: 'attact',
+                        data: totalNonBenign
+                    }
+                ]
+            });
+
+        }, 3000); // 每 3 秒触发一次
+
     };
 
-};
-
-
+    //集群设备数据访问量
     function day_dns() {
         var chartDom = document.getElementById('domain_count3');
         var myChart = echarts.init(chartDom);
@@ -162,7 +184,7 @@ $(function () {
                 series: [
                     {
                         type: 'bar',
-                        data: data.map(item => item.daily_count) // 更新柱状图的数据
+                        data: data.map(item => item.benign_count + item.non_benign_count) // 更新柱状图的数据
                     }
                 ]
             });
@@ -170,19 +192,22 @@ $(function () {
 
 // 初始渲染图表
         option && myChart.setOption(option);
-
+        let latestData = null; // 用于缓存最近一次 WebSocket 收到的数据
 // 创建 WebSocket 连接
-        var ws = new WebSocket(`ws://${serverIp}/websocket_user_list_management`);
+        var ws = new WebSocket(`ws://${serverIp}/lisen_all`);
         ws.onmessage = function (event) {
             var responseData = JSON.parse(event.data);
+            latestData = responseData.stats; // 缓存 stats 数据
+        };
+        setInterval(function () {
+            if (!latestData) return;
 
-
-            updateChartData(responseData.collections_data); // 当收到 WebSocket 消息时更新图表数据
-        }
-
+            updateChartData(latestData);
+        }, 2000);
 
     };
 
+    //地图数据
     function map() {
         var myChart2 = echarts.init(document.getElementById('map'));
         myChart2.showLoading();
@@ -251,7 +276,7 @@ $(function () {
         var ws = new WebSocket(`ws://${serverIp}/city_map`);
         ws.onmessage = function (event) {
             var routes = JSON.parse(event.data); // Parse the JSON data received from the server
-            console.log(routes); // Log data for debugging
+            // console.log(routes); // Log data for debugging
 
             // Update the chart with new routes data
             myChart2.setOption({
@@ -269,33 +294,8 @@ $(function () {
             });
         });
 
-    }
+    };
 
-    function head() {
-        var ws = new WebSocket(`ws://${serverIp}/websocket_daily_top_remain_type`);
-        ws.onmessage = function (event) {
-            // 解析从服务器接收到的数据
-            var data = JSON.parse(event.data);
-            var topTypesDaily = data.top_types_daily;
-
-            document.querySelector('.today_total_count').textContent = data.today_total_count;
-
-
-            var ws2 = new WebSocket(`ws://${serverIp}/websocket_dns_traffic_security_analysis`);
-
-            ws2.onmessage = function (event) {
-                var data = JSON.parse(event.data);
-                var totalBenign = 0;
-                var totalNonBenign = 0;
-                data.stats.forEach(function (stat) {
-                    totalBenign += stat.benign_count;
-                    totalNonBenign += stat.non_benign_count;
-                });
-                var total = totalBenign + totalNonBenign
-                document.querySelector('.data_counts').textContent = total;
-            };
-        }
-    }
 
     function device_count() {
         var ws = new WebSocket(`ws://${serverIp}/websocket_get_data_formatted`);
@@ -331,175 +331,176 @@ $(function () {
 
     }
 
+    //十分钟数据统计
     function salesChart() {
-        var ws = new WebSocket(`ws://${serverIp}/websocket_poll_cluster_statistics`);
+        var ws = new WebSocket(`ws://${serverIp}/lisen_now_10min`);
+        var chart = echarts.init(document.getElementById('sales-chart'));
 
-        var chart; // 在函数外部声明图表变量
+        var latestData = null;  // 用于缓存最新数据
 
-        // 初始化图表
-        const options = {
-            series: [],
-            chart: {
-                height: 350,
-                type: 'line',
-                zoom: {
-                    enabled: false
-                }
+        var option = {
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '8%',
+                top: '15%',
+                containLabel: true
             },
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                width: 4,
-                curve: 'smooth'
-            },
-            xaxis: {
-                categories: [],
-            },
-            tooltip: {
-                y: {
-                    formatter: function (val) {
-                        return val + " units";
-                    }
-                }
-            },
+            tooltip: {trigger: 'axis'},
             legend: {
-                show: true
-            }
+                top: '5%',
+                data: []
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                axisLabel: {
+                    rotate: 0
+                },
+                data: []
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value} units'
+                }
+            },
+            series: []
         };
-        chart = new ApexCharts(document.querySelector("#sales-chart"), options);
-        chart.render();
 
+        chart.setOption(option);
+
+        // 接收数据后缓存
         ws.onmessage = function (event) {
-            var data = JSON.parse(event.data);
-            updateChart(data);
+            latestData = JSON.parse(event.data);
         };
+
+        // 每2秒刷新一次图表
+        setInterval(function () {
+            if (latestData) {
+                updateChart(latestData);
+            }
+        }, 2000);
 
         function updateChart(data) {
-            var newSeries = [];
-            var categories = Object.keys(data[Object.keys(data)[0]]).sort(); // 假设所有设备都有相同的时间标签
+            var categories = data.ts;
+            var legendData = Object.keys(data.counts);
+            var series = [];
 
-            Object.keys(data).slice(0, 5).forEach(function (device) { // 最多处理五个设备
-                var dataPoints = [];
-                categories.forEach(function (time) {
-                    dataPoints.push(data[device][time]);
-                });
-                newSeries.push({
+            legendData.forEach(function (device) {
+                series.push({
                     name: device,
-                    data: dataPoints
+                    type: 'line',
+                    smooth: true,
+                    data: data.counts[device]
                 });
             });
 
-            // 仅更新图表的数据系列，而不是整个图表
-            chart.updateSeries(newSeries);
-
-            // 仅在必要时更新分类轴（x轴）
-            chart.updateOptions({
-                xaxis: {
-                    categories: categories
-                }
-            }, true, false); // 第二个参数表示是否重绘动画，第三个参数表示是否更新所有配置项
+            chart.setOption({
+                legend: {data: legendData},
+                xAxis: {data: categories},
+                series: series
+            });
         }
-
     }
 
+
     function acc() {
-    var myChart = echarts.init(document.getElementById('echart4'));
-    var socket = new WebSocket(`ws://${serverIp}/websocket_top_five_messages`);
+        var myChart = echarts.init(document.getElementById('echart4'));
+        var socket = new WebSocket(`ws://${serverIp}/websocket_top_five_messages`);
 
-    socket.onmessage = function (event) {
-        var rawData = JSON.parse(event.data);
-        // 处理接收到的数据以适应 echarts 图表
-        var xAxisData = [];
-        var yAxisData = [];
-        rawData.forEach(function(item) {
-            xAxisData.push(item.toName);  // 将地名添加到x轴
-            yAxisData.push(item.count);   // 将对应计数添加到y轴
-        });
+        socket.onmessage = function (event) {
+            var rawData = JSON.parse(event.data);
+            // 处理接收到的数据以适应 echarts 图表
+            var xAxisData = [];
+            var yAxisData = [];
+            rawData.forEach(function (item) {
+                xAxisData.push(item.toName);  // 将地名添加到x轴
+                yAxisData.push(item.count);   // 将对应计数添加到y轴
+            });
 
-        var option = {
-            color: ["#FF4500", "#1E90FF", "#32CD32", "#FFD700", "#FF69B4"],
-            grid: {
-                left: "3%",
-                right: "4%",
-                bottom: "3%",
-                containLabel: true
-            },
-            xAxis: [{
-                type: "category",
-                data: xAxisData,  // 使用处理后的x轴数据
-                boundaryGap: true,
-                axisLine: {
-                    show: true,
+            var option = {
+                color: ["#FF4500", "#1E90FF", "#32CD32", "#FFD700", "#FF69B4"],
+                grid: {
+                    left: "3%",
+                    right: "4%",
+                    bottom: "3%",
+                    containLabel: true
                 },
-                axisLabel: {
-                    interval: 0,
-                    margin: 16,
-                    color: "#666666",
-                    fontSize: 12,
-                },
-                axisTick: {
+                xAxis: [{
+                    type: "category",
+                    data: xAxisData,  // 使用处理后的x轴数据
+                    boundaryGap: true,
+                    axisLine: {
+                        show: true,
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        margin: 16,
+                        color: "#666666",
+                        fontSize: 12,
+                    },
+                    axisTick: {
+                        show: false,
+                    },
+                }],
+                yAxis: [{
+                    type: "value",
                     show: false,
-                },
-            }],
-            yAxis: [{
-                type: "value",
-                show: false,
-            }],
-            series: [{
-                name: "地区",
-                type: "bar",
-                barWidth: "50%",
-                data: yAxisData.map(value => ({
-                    value: value,
+                }],
+                series: [{
+                    name: "地区",
+                    type: "bar",
+                    barWidth: "50%",
+                    data: yAxisData.map(value => ({
+                        value: value,
+                        label: {
+                            show: true,
+                            position: "top",
+                            color: "#FF6900",
+                            formatter({value}) {
+                                return `${value}条`;
+                            },
+                        },
+                        itemStyle: {
+                            color: "#FF6900",
+                            borderWidth: 2,
+                            borderType: "solid",
+                            borderColor: "#FF6900",
+                        }
+                    })),
+                    avoidLabelOverlap: false,
+                    hoverAnimation: false,
+
+                    // 统一设置其他的 未单独设置样式的 数据柱状图样式
+                    itemStyle: {
+                        borderRadius: [50, 50, 0, 0],
+                        borderWidth: 2,
+                        borderType: "solid",
+                        borderColor: "#4D94F1",
+                    },
                     label: {
                         show: true,
                         position: "top",
-                        color: "#FF6900",
+                        color: "#4D94F1",
                         formatter({value}) {
                             return `${value}条`;
                         },
                     },
-                    itemStyle: {
-                        color: "#FF6900",
-                        borderWidth: 2,
-                        borderType: "solid",
-                        borderColor: "#FF6900",
-                    }
-                })),
-                avoidLabelOverlap: false,
-                hoverAnimation: false,
 
-                // 统一设置其他的 未单独设置样式的 数据柱状图样式
-                itemStyle: {
-                    borderRadius: [50, 50, 0, 0],
-                    borderWidth: 2,
-                    borderType: "solid",
-                    borderColor: "#4D94F1",
-                },
-                label: {
-                    show: true,
-                    position: "top",
-                    color: "#4D94F1",
-                    formatter({value}) {
-                        return `${value}条`;
+                    labelLine: {
+                        show: false,
                     },
-                },
+                }]
+            };
 
-                labelLine: {
-                    show: false,
-                },
-            }]
+            myChart.setOption(option);
         };
 
-        myChart.setOption(option);
-    };
-
-    window.addEventListener("resize", function () {
-        myChart.resize();
-    });
-}
-
+        window.addEventListener("resize", function () {
+            myChart.resize();
+        });
+    }
 
 
 })

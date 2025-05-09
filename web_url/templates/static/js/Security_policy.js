@@ -1,4 +1,3 @@
-
 function updateTime() {
     var now = new Date();
     var hours = String(now.getHours()).padStart(2, '0');
@@ -13,12 +12,10 @@ updateTime();
 setInterval(updateTime, 1000);
 
 
+$('#range').on("input", function () {
 
-$('#range').on("input", function() {
-
-    $('.output').val(this.value +"，000条" );
-    }).trigger("change");
-
+    $('.output').val(this.value + "，000条");
+}).trigger("change");
 
 
 
@@ -28,31 +25,31 @@ var ctx = canvas.getContext('2d');
 var raf = requestAnimationFrame;
 var TAU = Math.PI * 2;
 
-var W = canvas.width = window.innerHeight/5;
-var H = canvas.height = window.innerHeight/5;
-var cX = W/2;//center point x
-var cY = H/2;//center point y
+var W = canvas.width = window.innerHeight / 5;
+var H = canvas.height = window.innerHeight / 5;
+var cX = W / 2;//center point x
+var cY = H / 2;//center point y
 var i = 0;
 var alpha;
-var rad = H/2;
-function Rardar(){
-  i += 1;
-  if(i==360)
-    i = 0;
-  alpha = TAU*i/360;
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-  ctx.fillRect(0,0,W,H);
+var rad = H / 2;
 
-  ctx.strokeStyle = 'rgba(0, 255, 255, 1)';
-  ctx.beginPath();
-  ctx.moveTo(cX,cY);
-  ctx.lineTo(cX+Math.cos(alpha)*rad,cY+Math.sin(alpha)*rad);
-  ctx.stroke();
-	window.setTimeout(Rardar, 10);
+function Rardar() {
+    i += 1;
+    if (i == 360)
+        i = 0;
+    alpha = TAU * i / 360;
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.strokeStyle = 'rgba(0, 255, 255, 1)';
+    ctx.beginPath();
+    ctx.moveTo(cX, cY);
+    ctx.lineTo(cX + Math.cos(alpha) * rad, cY + Math.sin(alpha) * rad);
+    ctx.stroke();
+    window.setTimeout(Rardar, 10);
 }
+
 raf(Rardar);
-
-
 
 
 var lineChart = echarts.init(document.getElementById('lineChart'));
@@ -62,7 +59,7 @@ option = {
     },
     xAxis: [{
         type: 'category',
-        data: ['07-12','7-13','7-14','7-15','7-16','7-17'],
+        data: ['07-12', '7-13', '7-14', '7-15', '7-16', '7-17'],
         axisLine: {
             lineStyle: {
                 color: "#999"
@@ -94,7 +91,7 @@ option = {
     series: [{
         name: '数量',
         type: 'line',
-        data: [23,60,20,36,23,85],
+        data: [23, 60, 20, 36, 23, 85],
         lineStyle: {
             normal: {
                 width: 8,
@@ -143,18 +140,20 @@ function toggleFeature(element, dataUsageId) {
         dataUsageText.textContent = "关闭"; // 关闭文本
     }
 }
+
 const levels = {
-        '安全等级': ['低', '中', '高'],
-        '漏洞预警': ['低', '中', '高'],
-        '风险巡航': ['低', '中', '高'],
-        '策略偏向': ['保守', '均衡', '积极']
-    };
+    '安全等级': ['低', '中', '高'],
+    '漏洞预警': ['低', '中', '高'],
+    '风险巡航': ['低', '中', '高'],
+    '策略偏向': ['保守', '均衡', '积极']
+};
+
 // 当文档加载完毕
 
 async function sendSettingToBackend(code_type, deploymentType) {
-    deploymentType=deploymentType.toString()
+    deploymentType = deploymentType.toString()
     const formData = {
-        code_types : code_type,
+        code_types: code_type,
         new_model_value: deploymentType
     };
 
@@ -210,8 +209,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } else {
                 if (currentLevelIndex > 0) {
-                     content.textContent = levels[title][currentLevelIndex - 1];
-                sendSettingToBackend(title, currentLevelIndex -1);
+                    content.textContent = levels[title][currentLevelIndex - 1];
+                    sendSettingToBackend(title, currentLevelIndex - 1);
 
                 }
             }
@@ -224,12 +223,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (currentLevelIndex < levels[title].length - 1) {
                     content.textContent = levels[title][currentLevelIndex + 1];
                     updateSwitches(); // 更新开关状态
-                sendSettingToBackend(title, currentLevelIndex + 1); // 发送设置到后端，第一个参数是标题，第二个参数是当前级别索引加二
+                    sendSettingToBackend(title, currentLevelIndex + 1); // 发送设置到后端，第一个参数是标题，第二个参数是当前级别索引加二
                 }
             } else {
                 if (currentLevelIndex < levels[title].length - 1) {
                     content.textContent = levels[title][currentLevelIndex + 1];
-                sendSettingToBackend(title, currentLevelIndex + 1); // 发送设置到后端，第一个参数是标题，第二个参数是当前级别索引加二
+                    sendSettingToBackend(title, currentLevelIndex + 1); // 发送设置到后端，第一个参数是标题，第二个参数是当前级别索引加二
                 }
             }
         };
@@ -238,7 +237,22 @@ document.addEventListener('DOMContentLoaded', () => {
         increaseButton.onclick = handleLevelIncrease;
     });
 });
+function now_data() {
+    var ws = new WebSocket(`ws://${serverIp}/lisen`);
+    ws.onmessage = function (event) {
+        // 解析从服务器接收到的数据
+        var data = JSON.parse(event.data);
+        // console.log(data);
 
+    document.getElementById('data_counts').textContent = data.dga_count; // 集群域名访问量
+    document.getElementById('dga_now').textContent = data.dga_domain_count; // 集群域名访问量
+    // document.getElementById('today_total_count').textContent = data.remote_domain_count;
+
+        // console.log("ok");
+    }
+};
+
+now_data();
 
 
 

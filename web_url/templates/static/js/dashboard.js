@@ -522,7 +522,7 @@ $(function () {
                 },
                 data: [
                     {
-                        value: 50,
+                        value: 63,
                         name: 'SCORE'
                     }
                 ]
@@ -573,7 +573,8 @@ $(function () {
 
     ws.onmessage = function (event) {
         var newData = JSON.parse(event.data);
-        updateChart(newData);
+        document.querySelector('.dga_num').textContent = newData.total_non_benign_count;
+        updateChart(newData.details);  // 只传 details 部分给图表处理
     };
 
     function updateChart(data) {
@@ -601,6 +602,7 @@ $(function () {
             value: aggregatedData[key]
         }));
     }
+
 
 // 第一个框的第三个图
 

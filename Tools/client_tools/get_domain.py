@@ -1,5 +1,6 @@
 import asyncio
 import json
+import socket
 import time
 from concurrent.futures import ThreadPoolExecutor
 
@@ -12,7 +13,7 @@ from scapy.layers.inet import IP
 from Tools.client_tools.iptables import block_ip, block_ip_new
 from Tools.database_tools import database_use
 from Tools.model_use_tools import predict_domain
-
+hostname = socket.gethostname()
 # ---------- Windows 环境建议 ----------
 # aiokafka + Windows 最稳定的组合是 SelectorEventLoop
 asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
@@ -79,6 +80,10 @@ async def process_connection(
     loc_ip: str,
     dns_type: str,
     domain_ip: str | None = None,
+    *,
+    use_kafka: bool = True,
+    use_redis: bool = True,
+    enable_block: bool = True,
 ) -> None:
     """一次 DNS 解析记录的完整处理流程."""
     global redis_client, kafka_producer
@@ -92,8 +97,8 @@ async def process_connection(
     loc = await loop.run_in_executor(None, database_use.get_ip_loc, domain_ip)
     # print(domain_type)
     # 1) 阻断恶意域名
-    if domain_type != "BENIGN":
-        await loop.run_in_executor(None,block_ip_new,domain_ip, domain_str)
+    if domain_type != "BENIGN" and enable_block:
+        await loop.run_in_executor(None, block_ip_new, domain_ip, domain_str)
         print(f"[!] 已阻止 {domain_str} ({domain_ip})，类型: {domain_type}")
 
     # 2) 构造统一数据结构
@@ -108,35 +113,34 @@ async def process_connection(
         "Timestamp": int(time.time() * 1000),
     }
 
-    # 3) 写入 Redis Stream
-    try:
-        stream_id = await redis_client.xadd(
-            STREAM_KEY, {"data": json.dumps(data)}
-        )
-        print(f"[*] Redis Stream <- {STREAM_KEY} {data}")
-    except Exception as e:
-        print("写 Redis Stream 出错：", e)
 
-    # 4) 推送 Kafka
-    try:
-        await kafka_producer.send_and_wait(
-            "network_connections", json.dumps(data).encode()
-        )
-        print("[*] Kafka <- network_connections")
-    except Exception as e:
-        print("推 Kafka 出错：", e)
 
-    # 5) 写入 MongoDB
-    await loop.run_in_executor(None, db_log.insert_one, data)
-    print(
-        f"[*] 完成: {dst_ip} <- {loc_ip}  {domain_str}({domain_ip})  {domain_type}"
-    )
+    if use_redis:
+        try:
+            await redis_client.xadd(STREAM_KEY, {"data": json.dumps(data)})
+            print(f"[*] Redis Stream <- {STREAM_KEY} {data}")
+        except Exception as e:
+            print("写 Redis Stream 出错：", e)
+
+    if use_kafka:
+        try:
+            data["device"] = hostname
+            await kafka_producer.send_and_wait("network_connections", json.dumps(data).encode())
+            print("[*] Kafka <- network_connections")
+        except Exception as e:
+            print("推 Kafka 出错：", e)
+
+    #
+    # # 5) 写入 MongoDB
+    # await loop.run_in_executor(None, db_log.insert_one, data)
+    # print(
+    #     f"[*] 完成: {dst_ip} <- {loc_ip}  {domain_str}({domain_ip})  {domain_type}"
+    # )
 # ==================================
 
 
 # ========== Scapy 抓包 ==========
-def packet_handler(pkt) -> None:
-    """同步回调：提取 DNS 记录并丢给主循环的协程处理."""
+def packet_handler(pkt, use_kafka, use_redis, enable_block) -> None:
     if not pkt.haslayer(DNS):
         return
 
@@ -145,42 +149,40 @@ def packet_handler(pkt) -> None:
     for i in range(dns_layer.ancount):
         try:
             dns_rr = dns_layer.an[i]
-            # 只处理 A(1) / AAAA(28) 记录
             if dns_rr.type not in (1, 28):
                 continue
-            print(dns_rr.rrname,
-                ip_layer.dst,
-                ip_layer.src,
-                "response",
-                str(dns_rr.rdata))
-            # 提交协程到主事件循环
+
             coro = process_connection(
                 dns_rr.rrname,
                 ip_layer.dst,
                 ip_layer.src,
                 "response",
                 str(dns_rr.rdata),
+                use_kafka=use_kafka,
+                use_redis=use_redis,
+                enable_block=enable_block,
             )
             asyncio.run_coroutine_threadsafe(coro, main_loop)
         except:
             pass
 
-def sniff_dns() -> None:
-    """在独立线程中执行的阻塞式抓包."""
-    sniff(filter="port 53", prn=packet_handler, store=False, iface="WLAN")
+def sniff_dns(handler) -> None:
+    sniff(filter="port 53", prn=handler, store=False, iface="WLAN")
 # ===============================
 
 
 # ========== 程序入口 ==========
-async def main() -> None:
-    """程序主入口：初始化，然后把 sniff 放到线程池里跑."""
+async def main(use_kafka: bool, use_redis: bool, enable_block: bool) -> None:
     await init_connections()
 
-    # 把 blocking 的 sniff 放线程池
+    # 将参数传入 sniff_dns，用 lambda 或 functools.partial 包装 packet_handler
+    from functools import partial
+
     executor = ThreadPoolExecutor(max_workers=1)
     loop = asyncio.get_running_loop()
-    await loop.run_in_executor(executor, sniff_dns)
+
+    handler = partial(packet_handler, use_kafka=use_kafka, use_redis=use_redis, enable_block=enable_block)
+    await loop.run_in_executor(executor, sniff_dns, handler)
 
 
-if __name__ == "__main__":
-    asyncio.run(main())
+

@@ -1,14 +1,15 @@
 import json
 import socket
 
+from aiokafka import AIOKafkaConsumer
 from pymongo import DESCENDING
 from starlette.websockets import WebSocketDisconnect
-
+from collections import deque
 import time
 import datetime
 from uvicorn import run
 from fastapi.websockets import WebSocketState
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta,timezone
 from fastapi import Request
 from motor.motor_asyncio import AsyncIOMotorClient
 from fastapi import FastAPI, WebSocket
@@ -32,7 +33,8 @@ db2 = mongo_client["Data_pro"]
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="templates/static"), name="static")
 day_counts = 0
-
+WINDOW_MINUTES=10
+WINDOW = timedelta(minutes=WINDOW_MINUTES)
 # 统计集合数量以及名字
 @app.websocket("/websocket_get_data_formatted")
 async def get_data_formatted(websocket: WebSocket):
@@ -80,6 +82,8 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while websocket.client_state == WebSocketState.CONNECTED:
             websocket_poll_cluster_statistics = await gather_statistics()
+
+            print(websocket_poll_cluster_statistics)
             await websocket.send_text(json.dumps(websocket_poll_cluster_statistics))
             await asyncio.sleep(10)
     except Exception as e:
@@ -125,7 +129,7 @@ class DataToReceive(BaseModel):
 
 # 管理集群设备列表和用户权限  ///优化
 @app.websocket("/websocket_user_list_management")
-async def websocket_websocket_user_list_management(websocket: WebSocket):
+async def websocket_user_list_management(websocket: WebSocket):
     await websocket.accept()
     try:
         while websocket.client_state == WebSocketState.CONNECTED:
@@ -175,7 +179,14 @@ async def websocket_websocket_user_list_management(websocket: WebSocket):
                 "total_collections": len(collection_names),
                 "collections_data": websocket_user_list_management_list
             }
-
+            # print(final_data)
+            # {'total_collections': 3, 'collections_data': [
+            #     {'collection_name': 'GPU-SERVER', 'daily_count': 16071, 'latest_loc_address': '192.168.1.100',
+            #      'latest_timestamp': '2025-05-06 16:46:02', 'latest_domain_type': 'BENIGN'},
+            #     {'collection_name': 'Elaine', 'daily_count': 0, 'latest_loc_address': 'No data found',
+            #      'latest_timestamp': 'No data found', 'latest_domain_type': 'No data found'},
+            #     {'collection_name': 'tabuaihua', 'daily_count': 0, 'latest_loc_address': 'No data found',
+            #      'latest_timestamp': 'No data found', 'latest_domain_type': 'No data found'}]}
             await websocket.send_text(json.dumps(final_data))
             await asyncio.sleep(5)
     except Exception as e:
@@ -183,58 +194,6 @@ async def websocket_websocket_user_list_management(websocket: WebSocket):
     finally:
         await websocket.close()
 
-# DNS流量数据安全状况统计分析   优化
-@app.websocket("/websocket_dns_traffic_security_analysis")
-async def websocket_dns_traffic_security_analysis(websocket: WebSocket):
-    await websocket.accept()
-    try:
-        while websocket.client_state == WebSocketState.CONNECTED:
-            stats_list = []
-            global day_counts
-            collection_names = await db.list_collection_names()
-            now = datetime.now()
-            start_of_day = datetime(now.year, now.month, now.day)
-            end_of_day = start_of_day + timedelta(days=1)
-            start_of_day_ms = int(start_of_day.timestamp() * 1000)
-            end_of_day_ms = int(end_of_day.timestamp() * 1000)
-
-            for collection_name in collection_names:
-                collection = db[collection_name]
-                benign_count = await collection.count_documents({
-                    "Timestamp": {
-                        "$gte": start_of_day_ms,
-                        "$lt": end_of_day_ms
-                    },
-                    "Domain_Type": "BENIGN"
-                })
-                non_benign_count = await collection.count_documents({
-                    "Timestamp": {
-                        "$gte": start_of_day_ms,
-                        "$lt": end_of_day_ms
-                    },
-                    "Domain_Type": {"$ne": "BENIGN"}
-                })
-                stats_list.append({
-                    "collection_name": collection_name,
-                    "benign_count": benign_count,
-                    "non_benign_count": non_benign_count
-                })
-
-            day_counts = stats_list[0]["benign_count"] + stats_list[0]["non_benign_count"]
-            final_data = {
-                "total_collections": len(collection_names),
-                "stats": stats_list,
-                "day_counts": day_counts
-            }
-
-            await websocket.send_text(json.dumps(final_data))
-            await asyncio.sleep(5)
-    except Exception as e:
-        print(f"DNS流量数据安全状况统计分析已关闭: {e}")
-    finally:
-        await websocket.close()
-
-# 提供集群内域名访问的排名--实时/////优化
 @app.websocket("/websocket_daily_top_remain_type")
 async def websocket_daily_top_remain_type(websocket: WebSocket):
     await websocket.accept()
@@ -303,8 +262,199 @@ async def websocket_daily_top_remain_type(websocket: WebSocket):
         print(f"访问的排名已关闭: {e}")
     finally:
         await websocket.close()
+async def create_consumer(topic: str) -> AIOKafkaConsumer:
+    consumer = AIOKafkaConsumer(
+        topic,
+        bootstrap_servers="localhost:9092",
+        auto_offset_reset="earliest",
+        enable_auto_commit=True,
+        value_deserializer=lambda b: json.loads(b.decode('utf-8'))
+    )
+    await consumer.start()
+    return consumer
+@app.websocket("/lisen")
+async def lisen(websocket: WebSocket):
+    """
+    1. 与浏览器建立 WebSocket 连接
+    2. 创建并启动 AIOKafkaConsumer（异步迭代器）
+    3. async for 循环读取 Kafka 消息，累计计数并推送给前端
+    """
+    await websocket.accept()
+
+    consumer = await create_consumer("network_connections")
+
+    message_count = 0
+    dga_count = 0
+    remote_domains = set()
+    dga_domains = set()
+    try:
+        # 只要 WebSocket 还连着，就持续消费 Kafka
+        async for msg in consumer:
+            if websocket.client_state != WebSocketState.CONNECTED:
+                break  # 防止前端断开后仍空转
+
+            message_count += 1
+            if msg.value["Domain_Type"]!="BENIGN":
+                dga_count += 1
+                dga_domains.add(msg.value["Remote_Domain"])
+            remote_domains.add(msg.value["Remote_Domain"])
+
+            payload = {
+                "all_count": message_count,
+                "dga_count": dga_count,
+                "remote_domain_count": len(remote_domains),
+                "dga_domain_count": len(dga_domains)
+            }
+
+            await websocket.send_text(json.dumps(payload))
+
+    except WebSocketDisconnect as e:
+        if e.code != 1000:
+            print(f"[lisen] WebSocket disconnected with code {e.code}")
+    finally:
+        # 关闭 KafkaConsumer，释放连接
+        await consumer.stop()
+        print("[lisen] WebSocket handler ended")
 
 
+@app.websocket("/lisen_all")
+async def lisen_all(websocket: WebSocket):
+    await websocket.accept()
+
+    consumer = await create_consumer("network_connections")
+
+    collection_names = await db.list_collection_names()
+    device_stats = {
+        name: {
+            "collection_name": name,
+            "benign_count": 0,
+            "non_benign_count": 0
+        }
+        for name in collection_names
+    }
+    total_messages = 0
+
+    try:
+        async for msg in consumer:
+            if websocket.client_state != WebSocketState.CONNECTED:
+                break
+
+            total_messages += 1
+            data = msg.value
+
+
+            hostname = data.get("device","GPU-SERVER")
+
+            domain_type = data.get("Domain_Type", "BENIGN")
+
+            if hostname not in device_stats:
+                device_stats[hostname] = {
+                    "collection_name": hostname,
+                    "benign_count": 0,
+                    "non_benign_count": 0
+                }
+
+            if domain_type == "BENIGN":
+                device_stats[hostname]["benign_count"] += 1
+            else:
+                device_stats[hostname]["non_benign_count"] += 1
+
+            payload = {
+                "total_collections": len(device_stats),
+                "stats": list(device_stats.values()),
+                "day_counts": total_messages
+            }
+            # print(payload)
+            # {'total_collections': 3,
+            #  'stats': [{'collection_name': 'GPU-SERVER', 'benign_count': 17662, 'non_benign_count': 59},
+            #            {'collection_name': 'Elaine', 'benign_count': 0, 'non_benign_count': 0},
+            #            {'collection_name': 'tabuaihua', 'benign_count': 0, 'non_benign_count': 0}], 'day_counts': 17721}
+            await websocket.send_text(json.dumps(payload))
+
+    except WebSocketDisconnect as e:
+        if e.code != 1000:
+            print(f"[lisen_all] WebSocket disconnected with code {e.code}")
+    finally:
+        await consumer.stop()
+        print("[lisen_all] WebSocket handler ended")
+
+@app.websocket("/lisen_now_10min")
+async def lisen_now_10min(websocket: WebSocket):
+    """统计 Kafka 中不同设备最近 10 分钟每分钟的数据量，并实时推送。"""
+    await websocket.accept()
+
+    # 初始化设备窗口
+    collection_names = await db.list_collection_names()
+    device_windows: dict[str, deque] = {name: deque() for name in collection_names}
+
+    consumer = await create_consumer("network_connections")
+
+    try:
+        async for msg in consumer:
+            if websocket.client_state != WebSocketState.CONNECTED:
+                break
+
+            # 解析 Kafka 消息
+            try:
+                data = msg.value  # 假设数据已是 dict 类型
+            except Exception as exc:
+                print(f"[lisen_now_10min] JSON 解析失败: {exc}")
+                continue
+
+            device = data.get("device", "GPU-SERVER")
+
+            # 确保窗口存在
+            dq = device_windows.setdefault(device, deque())
+            BEIJING_TZ = timezone(timedelta(hours=8))
+            # 获取时间戳
+            if "Timestamp" in data and isinstance(data["Timestamp"], (int, float)):
+                ts = datetime.fromtimestamp(data["Timestamp"] / 1000, tz=BEIJING_TZ)
+            else:
+                ts = datetime.now(BEIJING_TZ)
+
+            # 添加到当前设备窗口
+            dq.append(ts)
+
+            # 当前北京时间 & 截止时间（10分钟前）
+            now = datetime.now(BEIJING_TZ)
+            cutoff = now - WINDOW
+
+            # 当前分钟向下取整，作为时间桶的结束点
+            latest_time = now.replace(second=0, microsecond=0)
+
+            # 获取包含当前分钟在内的过去10个整点时间（最早的在前）
+            time_labels = [latest_time - timedelta(minutes=9 - i) for i in range(WINDOW_MINUTES)]
+            time_strs = [dt.strftime("%H:%M") for dt in time_labels]
+
+            # 清理过期数据 + 按分钟桶统计数量
+            bucket_counts: dict[str, list[int]] = {}
+
+            for dev, dq in device_windows.items():
+                while dq and dq[0] < cutoff:
+                    dq.popleft()
+
+                buckets = [0] * WINDOW_MINUTES
+                for t in dq:
+                    for idx, minute_ts in enumerate(time_labels):
+                        if minute_ts <= t < minute_ts + timedelta(minutes=1):
+                            buckets[idx] += 1
+                            break
+                bucket_counts[dev] = buckets
+
+            # 构造并发送数据（时间为北京时间）
+            payload = {
+                "ts": time_strs,
+                "counts": bucket_counts
+            }
+
+            await websocket.send_text(json.dumps(payload))
+
+    except WebSocketDisconnect as e:
+        if e.code != 1000:
+            print(f"[lisen_now_10min] WebSocket disconnected with code {e.code}")
+    finally:
+        await consumer.stop()
+        print("[lisen_now_10min] WebSocket handler ended")
 # customer.html.流量消息发送
 @app.websocket("/websocket_last_messages")
 async def websocket_last_messages(websocket: WebSocket):
@@ -414,7 +564,6 @@ async def websocket_top_five_messages(websocket: WebSocket):
         start_of_day_ms = int(start_of_day.timestamp() * 1000)
         end_of_day_ms = int(end_of_day.timestamp() * 1000)
 
-        # 定义针对"GPU-SERVER"集合的查询
         collection = db["GPU-SERVER"]
         # 使用聚合管道找出当天toName出现频率最高的前五个
         pipeline = [
@@ -461,7 +610,7 @@ async def get_city_data():
         {"$match": {"moveLines": {"$ne": None}, "moveLines.coords": {"$exists": True}}},
         {"$project": {"coords": "$moveLines.coords", "_id": 0}},
         {"$group": {"_id": "$coords"}},
-        {"$limit": 5000}
+        {"$limit": 1000}
     ]
     city_data = collection.aggregate(pipeline)
     unique_coords = set()
@@ -566,7 +715,7 @@ class DataToReceive(BaseModel):
 async def receive_data(data: DataToReceive):
     print("Received data:", data)
     collection = db2["test"]
-    first_doc = await collection.find_one({}, projection={'model': 1})
+    first_doc = await collection.find_one({}, projection={'model': 1, '_id': 0})
     print('原始数据：', first_doc)
     original_model = 0
     safer_model = ['安全等级', '漏洞预警', '风险巡航', '策略偏向']
@@ -678,7 +827,6 @@ async def week_day_count_type(websocket: WebSocket):
     finally:
         await websocket.close()
 
-
 @app.websocket("/Count_Map_Data")
 async def Count_Map_Data(websocket: WebSocket):
     await websocket.accept()
@@ -748,30 +896,64 @@ async def Dns_Address_Type(websocket: WebSocket):
         print(f"Dns_Address_Type断开连接: {e}")
     finally:
         await websocket.close()
+@app.websocket("/DGA_COUNT")
+async def DGA_COUNT(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while websocket.client_state == WebSocketState.CONNECTED:
+            collection = db2["test"]
+            cursor = collection.find({}, {"_id": 0, "DGA_type_analyze": 1})
+            total_non_benign = 0
+
+            # 遍历每个设备文档
+            async for doc in cursor:
+                dga_list = doc.get("DGA_type_analyze", [])
+                for item in dga_list:
+                    if item.get("Domain_Type") != "BENIGN":
+                        total_non_benign += item.get("Count", 0)
+            print(total_non_benign)
+            await websocket.send_text(json.dumps({
+                "non_benign_total": total_non_benign
+            }))
+            await asyncio.sleep(10)
+
+    except WebSocketDisconnect:
+        print("WebSocket连接断开")
+    except Exception as e:
+        print(f"DGA_COUNT 错误: {e}")
+    finally:
+        await websocket.close()
 
 @app.websocket("/dga_type_analyze")
 async def dga_type_analyze(websocket: WebSocket):
     await websocket.accept()
     try:
         while websocket.client_state == WebSocketState.CONNECTED:
-            collection = db2["test"]  # 假设数据存储在名为 'test' 的集合中
-
+            collection = db2["test"]
             cursor = collection.find({}, {"DGA_type_analyze": 1, "_id": 0})
             result = await cursor.to_list(length=None)
 
-            # 整理结果，将其转换为前端需要的格式
             results_list = []
+            total_count = 0
+
             for item in result:
                 for dga in item.get("DGA_type_analyze", []):
-                    if(dga["Domain_Type"]!="BENIGN"):
+                    if dga["Domain_Type"] != "BENIGN":
+                        count = dga.get("Count", 0)
+                        total_count += count
                         results_list.append({
                             "Domain_Type": dga["Domain_Type"],
-                            "Count": dga["Count"]
+                            "Count": count
                         })
 
-            # 发送整理后的数据
-            await websocket.send_text(json.dumps(results_list))
-            await asyncio.sleep(10)  # 每10秒更新一次
+            # 封装结构：包含每项明细 + 总计
+            output = {
+                "details": results_list,
+                "total_non_benign_count": total_count
+            }
+
+            await websocket.send_text(json.dumps(output))
+            await asyncio.sleep(10)
 
     except Exception as e:
         print(f"DGA_type_analyze断开连接: {e}")
@@ -839,21 +1021,6 @@ async def mid_dns_point_data(websocket: WebSocket):
         await websocket.close()
 
 
-@app.websocket("/lisen")
-async def websocket_endpoint(websocket: WebSocket):
-    await websocket.accept()
-    try:
-        while True:
-            data = await websocket.receive_text()
-            print("Received data via WebSocket:", data)
-    except WebSocketDisconnect as e:
-        # 检查是否为正常的关闭
-        if e.code == 1000:
-            print("WebSocket was closed normally.")
-        else:
-            print(f"WebSocket disconnected with exception code: {e.code}")
-    finally:
-        print("WebSocket connection handling ended")
 
 @app.get("/")
 async def read_root(request: Request):
